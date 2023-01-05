@@ -3,6 +3,7 @@ import notFoundMiddleware from "./middleware/not-found.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
 import dotenv from "dotenv";
 import connectDB from "./db/connect.js";
+import 'express-async-errors'
 //routers
 import authRouter from "./routes/authRoutes.js"
 import appointmentRouter from "./routes/appointmentsRoutes.js"
@@ -38,4 +39,4 @@ const start = async () => {
   }
 };
 
-start();
+start();``
