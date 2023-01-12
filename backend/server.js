@@ -19,6 +19,7 @@ app.get("/", (req, res) => {
 
 // routes
 app.use('/api/v1/auth/', authRouter)
+
 app.use('/api/v1/appointments',appointmentRouter )
 //middleware
 
@@ -39,4 +40,4 @@ const start = async () => {
   }
 };
 
-start();``
+start();

@@ -40,17 +40,21 @@ const UserSchema = new mongoose.Schema({
         message: "Please provide valid phone number"
     },
   },
-  city: {
-    type: String,
-    trim: true,
-    default: 'Tashkent'
-  },
   address: {
-    type: String,
-    trim: true,
-    default: 'Address'
+    city: {
+      type: String,
+      default: 'Tashkent'
+    },
+    street:{
+      type: String,
+      default: 'Street'
+    }
   },
-});
+  role:{
+    type: String, enum: ['User', 'Admin']
+  }
+
+}, {timestamps: true});
 // hashing passwords
 
 UserSchema.pre('save', async function(){
