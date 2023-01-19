@@ -1,7 +1,7 @@
 import Appointment from "../models/Appointment.js";
 import { StatusCodes } from "http-status-codes";
 import { BadRequest, NotFound } from "../error/index.js";
-
+import checkPermissions from "../utils/checkPermissions.js";
 const createAppointment = async (req, res) => {
   const { StartDate, EndDate, Doctor } = req.body;
   if (!StartDate || !EndDate || !Doctor) {
@@ -30,6 +30,7 @@ const updateAppointment = async (req, res) => {
   if (!appointment) {
     throw new NotFound(`No appointment with id ${appointmentId}`);
   }
+  checkPermissions(req.user, appointment.CreatedBy)
   const updateAppointment = await Appointment.findOneAndUpdate(
     { _id: appointmentId },
     req.body,
@@ -38,7 +39,14 @@ const updateAppointment = async (req, res) => {
   res.status(StatusCodes.OK).json({ updateAppointment });
 };
 const deleteAppointment = async (req, res) => {
-  res.send("delete appointment");
+  const { id: appointmentId } = req.params;
+  const appointment = await Appointment.findOne({_id: appointmentId})
+  if (!appointment) {
+    throw new NotFound(`No appointment with id ${appointmentId}`);
+  }
+  checkPermissions(req.user, appointment.CreatedBy)
+  await appointment.remove()
+  res.status(StatusCodes.OK).json({msg: 'Success! Appointment was removed'})
 };
 const showDetails = async (req, res) => {
   res.send("show appointment");
