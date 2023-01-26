@@ -5,4 +5,6 @@ import Clinics from "./ClinicsPage";
 import Error from "./ErrorPage";
 import Doctors from "./DoctorsPage";
 import About from "./AboutPage";
-export { Landing, SingleDoctor, SingleClinic, Clinics, Error, Doctors , About};
+import SharedLayout from "./SharedLayout";
+
+export { Landing, SingleDoctor, SingleClinic, Clinics, Error, Doctors , About, SharedLayout};
