@@ -1,33 +1,18 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-const Dropdown = (props) => {
+const Dropdown = (submenu) => {
   return (
-    <Wrapper>
-      <ul className="dropdown-list">
-        {props.submenu.map((sublink) => {
-          const { id, text, url } = sublink;
-          return (
-            <li key={id} className="dropdown-item">
-              <NavLink
-                to={url}
-                style={({ isActive }) => {
-                  return {
-                    color: isActive ? "var(--primary-700)" : "black",
-                  };
-                }}
-              >
-                {text}
-              </NavLink>
-            </li>
-          );
-        })}
-      </ul>
-    </Wrapper>
+    <ul className="dropdown-list">
+      {submenu.map((sublink) => {
+        const { id, text, url } = sublink;
+        return (
+          <li key={id} className="link">
+            <NavLink to={url}>{text}</NavLink>
+          </li>
+        );
+      })}
+    </ul>
   );
 };
-const Wrapper = styled.div`
-position: absolute;
 
-
-`
 export default Dropdown;

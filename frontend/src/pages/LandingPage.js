@@ -1,10 +1,14 @@
+import styled from "styled-components";
+
 const LandingPage = () => {
   return (
-    <>
-    <h2>Landing page</h2>
-    </>
-  
-  )
-}
+    <Wrapper>
+      <div className="main">
+        <h3> Landing page</h3>
+      </div>
+    </Wrapper>
+  );
+};
 
-export default LandingPage
+const Wrapper = styled.main``;
+export default LandingPage;
