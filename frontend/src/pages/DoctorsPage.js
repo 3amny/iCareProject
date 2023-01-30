@@ -1,9 +1,12 @@
-import React from 'react'
+import styled from "styled-components";
 
 const DoctorsPage = () => {
   return (
-    <h4> Doctors Page e</h4>
-  )
-}
+    <Wrapper>
+      <h4> Doctors page</h4>
+    </Wrapper>
+  );
+};
 
-export default DoctorsPage
+const Wrapper = styled.main``;
+export default DoctorsPage;

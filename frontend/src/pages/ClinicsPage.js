@@ -1,9 +1,13 @@
-import React from 'react'
+import styled from "styled-components";
 
 const ClinicsPage = () => {
   return (
-    <h4> Clinics Page</h4>
-  )
-}
+    <Wrapper>
+      <h4> About page</h4>
+    </Wrapper>
+  );
+};
 
-export default ClinicsPage
+const Wrapper = styled.main``;
+export default ClinicsPage;
+

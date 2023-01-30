@@ -1,9 +1,12 @@
-import React from 'react'
+import styled from "styled-components";
 
 const AboutPage = () => {
   return (
-    <h4> About page</h4>
-  )
-}
+    <Wrapper>
+      <h4> About page</h4>
+    </Wrapper>
+  );
+};
 
-export default AboutPage
+const Wrapper = styled.main``;
+export default AboutPage;
