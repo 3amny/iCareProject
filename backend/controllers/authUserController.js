@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { BadRequest, UnAuthenticated } from "../error/index.js";
 
 const register = async (req, res) => {
-  const { firstName, lastName, email, password, phone } = req.body;
+  const { firstName, lastName, email, password, phone, role } = req.body;
   if (!firstName || !lastName || !email || !password || !phone) {
     throw new BadRequest("Please provide all information");
   }
@@ -17,6 +17,7 @@ const register = async (req, res) => {
     email,
     password,
     phone,
+    role,
   });
   const token = user.createJWT();
   res.status(StatusCodes.CREATED).json({
@@ -25,18 +26,17 @@ const register = async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       phone: user.phone,
+      role: user.role,
       address: {
         city: user.address.city,
         street: user.address.street,
       },
-      role: user.role
     },
     token,
     address: {
       city: user.address.city,
       street: user.address.street,
     },
-    role: user.role
   });
 };
 
@@ -54,7 +54,7 @@ const login = async (req, res) => {
     throw new UnAuthenticated("Invalid Credentials");
   }
   const token = user.createJWT();
-  user.password = undefined
+  user.password = undefined;
   res.status(StatusCodes.OK).json({
     user,
     token,
@@ -71,14 +71,14 @@ const update = async (req, res) => {
   if (!firstName || !lastName || !email || !phone || !address) {
     throw new BadRequest("Please provide all information");
   }
- 
-  const user = await User.findOne({_id: req.user.userId});
-  user.email = email
-  user.firstName = firstName
-  user.lastName = lastName
-  user.phone = phone
-  user.address = address
-  await user.save()
+
+  const user = await User.findOne({ _id: req.user.userId });
+  user.email = email;
+  user.firstName = firstName;
+  user.lastName = lastName;
+  user.phone = phone;
+  user.address = address;
+  await user.save();
 
   const token = user.createJWT();
   res.status(StatusCodes.OK).json({
@@ -89,8 +89,6 @@ const update = async (req, res) => {
       street: user.address.street,
     },
   });
-
 };
-
 
 export { register, login, update };

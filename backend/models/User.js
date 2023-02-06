@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
+import AppointmentSchema from "./Appointment.js";
 import jwt from "jsonwebtoken";
 
 const UserSchema = new mongoose.Schema(
@@ -28,6 +29,9 @@ const UserSchema = new mongoose.Schema(
       },
       unique: true,
     },
+    dateOfBirth: {
+      type: Date,
+    },
     password: {
       type: String,
       required: [true, "Please provide your password"],
@@ -52,6 +56,17 @@ const UserSchema = new mongoose.Schema(
         default: "Street",
       },
     },
+    role: {
+      type: String,
+      enum: ["Admin", "User"],
+      default: "User",
+    },
+    appointments: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Appointment",
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -64,9 +79,13 @@ UserSchema.pre("save", async function () {
 });
 
 UserSchema.methods.createJWT = function () {
-  return jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_LIFETIME,
-  });
+  return jwt.sign(
+    { userId: this._id, role: this.role },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_LIFETIME,
+    }
+  );
 };
 UserSchema.methods.comparePassword = async function (userPassword) {
   const isMatch = await bcrypt.compare(userPassword, this.password);

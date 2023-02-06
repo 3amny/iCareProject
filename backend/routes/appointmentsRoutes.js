@@ -12,7 +12,6 @@ const router = express.Router();
 
 router.route('/').post(createAppointment).get(getAllAppointments);
 // :id
-router.route('/details').get(showDetails);
 router.route('/:id').delete(deleteAppointment).patch(updateAppointment);
 
 export default router;

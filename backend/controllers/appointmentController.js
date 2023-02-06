@@ -2,60 +2,38 @@ import Appointment from "../models/Appointment.js";
 import { StatusCodes } from "http-status-codes";
 import { BadRequest, NotFound } from "../error/index.js";
 import checkPermissions from "../utils/checkPermissions.js";
+import Doctor from "../models/Doctor.js";
+
 const createAppointment = async (req, res) => {
-  const { StartDate, EndDate, Doctor } = req.body;
-  if (!StartDate || !EndDate || !Doctor) {
-    throw new BadRequest("Please provide all values");
+  const { date, timeSlot, notes } = req.body;
+  const { id: _doctorId } = req.params;
+  const doctor = await Doctor.findOne({ _id: _doctorId });
+
+  if (!date || !timeSlot) {
+    throw new BadRequest("Please provide required information");
   }
-  req.body.CreatedBy = req.user.userId;
-  console.log(req.user.userId);
-  const appointment = await Appointment.create(req.body);
-  res.status(StatusCodes.CREATED).json({ appointment });
-};
-const getAllAppointments = async (req, res) => {
-  const appointments = await Appointment.find({ CreatedBy: req.user.userId });
-  res.status(StatusCodes.OK).json({
-    appointments,
-    totalAppointments: appointments.length,
-    numOfPages: 1,
+  req.body.patient = req.user.userId;
+  const patient = req.body.patient;
+  req.body.doctorId = req.params.id;
+  const doctorId = req.body.doctorId;
+
+  req.body.timeSlot = await doctor.timeSlots[timeSlot];
+  const appointment = await Appointment.create({
+    doctorId,
+    patient,
+    date,
+    timeSlot,
+    notes,
+  });
+  res.status(StatusCodes.CREATED).json({
+    appointment: {
+      doctor: appointment.doctorId,
+      patient: appointment.patient,
+      date: appointment.date,
+      timeSlot: appointment.timeSlot,
+      notes: appointment.notes,
+    },
   });
 };
-const updateAppointment = async (req, res) => {
-  const { id: appointmentId } = req.params;
-  const { StartDate, EndDate, Doctor } = req.body;
-  if (!StartDate || !EndDate || !Doctor) {
-    throw new BadRequest("Please provide all values");
-  }
-  const appointment = await Appointment.findOne({ _id: appointmentId });
-  if (!appointment) {
-    throw new NotFound(`No appointment with id ${appointmentId}`);
-  }
-  checkPermissions(req.user, appointment.CreatedBy)
-  const updateAppointment = await Appointment.findOneAndUpdate(
-    { _id: appointmentId },
-    req.body,
-    { new: true, runValidators: true }
-  );
-  res.status(StatusCodes.OK).json({ updateAppointment });
-};
-const deleteAppointment = async (req, res) => {
-  const { id: appointmentId } = req.params;
-  const appointment = await Appointment.findOne({_id: appointmentId})
-  if (!appointment) {
-    throw new NotFound(`No appointment with id ${appointmentId}`);
-  }
-  checkPermissions(req.user, appointment.CreatedBy)
-  await appointment.remove()
-  res.status(StatusCodes.OK).json({msg: 'Success! Appointment was removed'})
-};
-const showDetails = async (req, res) => {
-  res.send("show appointment");
-};
 
-export {
-  createAppointment,
-  getAllAppointments,
-  updateAppointment,
-  deleteAppointment,
-  showDetails,
-};
+export { createAppointment };

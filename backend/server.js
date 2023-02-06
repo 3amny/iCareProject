@@ -3,35 +3,33 @@ import notFoundMiddleware from "./middleware/not-found.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
 import dotenv from "dotenv";
 import connectDB from "./db/connect.js";
-import 'express-async-errors'
+import "express-async-errors";
 import morgan from "morgan";
-import authenticateUser from './middleware/auth.js'
-//routers
-import authUserRoutes from "./routes/authUserRoutes.js"
-import appointmentRouter from "./routes/appointmentsRoutes.js"
 
+//routers
+import authDoctorRoutes from './routes/authDoctorRoutes.js'
+import authUserRoutes from "./routes/authUserRoutes.js";
+import timeSlotRoutes from './routes/timeSlotRouter.js'
+import doctorRoutes from './routes/doctorRoutes.js'
 const app = express();
-if(process.env.NODE_ENV !== 'production'){
-  app.use(morgan('dev'))
+if (process.env.NODE_ENV !== "production") {
+  app.use(morgan("dev"));
 }
 app.use(express.json());
 dotenv.config();
 
 
-app.get("/", (req, res) => {
-  res.send("Welcome");
-});
-
 // routes
-app.use('/api/v1/auth/', authUserRoutes)
-
-app.use('/api/v1/appointments', authenticateUser, appointmentRouter )
+app.use("/api/v1/auth", authUserRoutes);
+app.use("/api/v1/doctor/auth", authDoctorRoutes);
+app.use("/api/v1/doctors", doctorRoutes);
+app.use("/api/v1/doctor/timeslots", timeSlotRoutes);
 //middleware
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
-// start server 
+// start server
 const port = process.env.PORT || 5000;
 
 const start = async () => {
