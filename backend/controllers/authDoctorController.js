@@ -1,8 +1,6 @@
 import Doctor from "../models/Doctor.js";
 import { StatusCodes } from "http-status-codes";
 import { BadRequest, UnAuthenticated } from "../error/index.js";
-import TimeSlot from "../models/TimeSlot.js";
-import checkPermissions from "../utils/checkPermissions.js";
 const register = async (req, res) => {
   const {
     firstName,
@@ -35,7 +33,9 @@ const register = async (req, res) => {
     throw new BadRequest("Email is already in use");
   }
   req.body.timeSlots = Doctor.generateTimeSlots(startTime, endTime, interval);
+
   const timeSlots = req.body.timeSlots;
+  console.log(timeSlots);
   const doctor = await Doctor.create({
     firstName,
     lastName,

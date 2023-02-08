@@ -3,7 +3,7 @@ import {Logo} from '../../../shared/ui'
 import { Link } from "react-router-dom";
 import FooterList from "../../../features/footer/FooterList.js";
 import SocialList from "../../../features/footer/SocialList.js";
-const Footer = () => {
+export const Footer = () => {
   return (
     <Wrapper>
       <div className="container">
@@ -102,4 +102,4 @@ const Wrapper = styled.footer`
   }
 `;
 
-export default Footer;
+

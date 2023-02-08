@@ -1,6 +1,6 @@
 import banner from '../../assets/images/404.svg'
 
-const Banner = () => {
+export const Banner = () => {
   return  <img src={banner} alt="banner" className="banner" />
 }
 

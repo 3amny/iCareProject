@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import moment from 'moment'
 const DoctorSchema = new mongoose.Schema(
   {
     firstName: {
@@ -91,12 +92,12 @@ const DoctorSchema = new mongoose.Schema(
       default: false,
     },
     startTime: {
-      type: Date,
-      required: [true, "Please provide start of the shift"],
+      type: /* Date*/ String,
+      require: [true, "Please provide start time"],
     },
     endTime: {
-      type: Date,
-      required: [true, "Please provide end of the shift"],
+      type: /* Date*/ String,
+      require: [true, "Please provide end time"],
     },
     interval: { type: Number, default: 30 },
     timeSlots: {
@@ -127,33 +128,24 @@ DoctorSchema.methods.comparePassword = async function (doctorPassword) {
   return isMatch;
 };
 
+
+
 DoctorSchema.statics.generateTimeSlots = function (
   startTime,
   endTime,
   interval
 ) {
-  const start = new Date(startTime);
-  const end = new Date(endTime);
-
-  const intervalDuration = interval * 60 * 1000; // interval in minutes, converted to milliseconds
-  const duration = Math.floor(end.getHours() - start.getHours());
-  if (start.getHours() >= end.getHours()) {
+  let timeSlots = [];
+  startTime = moment(startTime, "HH:mm");
+  endTime = moment(endTime, "HH:mm");
+  if (startTime.isSameOrAfter(endTime)) {
     return new BadRequest("End time can not be equal or less than start time");
   }
-  const numIntervals = Math.floor(
-    (duration * 60 * 60 * 1000) / intervalDuration
-  );
-
-  // Generate the time slots
-  const timeSlots = [];
-  for (let i = 0; i < numIntervals; i++) {
-    const slotStartTime = new Date(start.getTime() + i * intervalDuration);
-    const slotEndTime = new Date(slotStartTime.getTime() + intervalDuration);
-    timeSlots.push({
-      startTime: slotStartTime.toLocaleTimeString(),
-      endTime: slotEndTime.toLocaleTimeString(),
-    });
+  while (startTime <= endTime) {
+    timeSlots.push(startTime.format("HH:mm"));
+    startTime.add(interval, "minutes");
   }
+
   return timeSlots;
 };
 

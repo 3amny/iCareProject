@@ -7,10 +7,10 @@ import "express-async-errors";
 import morgan from "morgan";
 
 //routers
-import authDoctorRoutes from './routes/authDoctorRoutes.js'
+import authDoctorRoutes from "./routes/authDoctorRoutes.js";
 import authUserRoutes from "./routes/authUserRoutes.js";
-import timeSlotRoutes from './routes/timeSlotRouter.js'
-import doctorRoutes from './routes/doctorRoutes.js'
+import timeSlotRoutes from "./routes/timeSlotRouter.js";
+import doctorRoutes from "./routes/doctorRoutes.js";
 const app = express();
 if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));

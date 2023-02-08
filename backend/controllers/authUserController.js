@@ -17,7 +17,7 @@ const register = async (req, res) => {
     email,
     password,
     phone,
-    role,
+    role
   });
   const token = user.createJWT();
   res.status(StatusCodes.CREATED).json({
@@ -33,10 +33,7 @@ const register = async (req, res) => {
       },
     },
     token,
-    address: {
-      city: user.address.city,
-      street: user.address.street,
-    },
+    role: user.role
   });
 };
 
@@ -58,10 +55,6 @@ const login = async (req, res) => {
   res.status(StatusCodes.OK).json({
     user,
     token,
-    address: {
-      city: user.address.city,
-      street: user.address.street,
-    },
   });
 };
 
@@ -84,10 +77,7 @@ const update = async (req, res) => {
   res.status(StatusCodes.OK).json({
     user,
     token,
-    address: {
-      city: user.address.city,
-      street: user.address.street,
-    },
+    role
   });
 };
 

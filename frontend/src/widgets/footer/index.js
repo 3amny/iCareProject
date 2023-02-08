@@ -1,3 +1,3 @@
-import Footer from "./ui/Footer.js";
+import { Footer } from "./ui/Footer";
 
-export { Footer };
+export {Footer}
