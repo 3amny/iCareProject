@@ -1,7 +1,7 @@
-
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { FormRow, Alert } from "../../../shared/ui";
+import { FormRow } from "../../../shared/ui/Input";
+import { Alert } from "../../../shared/ui/Alert";
 import { useAppContext } from "../../../context/appContext";
 import { Link, useNavigate } from "react-router-dom";
 import Wrapper from "./Wrapper.js";
@@ -50,7 +50,7 @@ export const SignupPage = () => {
           value={values.firstName}
           handleChange={handleChange}
         />
-        
+
         <FormRow
           type="text"
           labelText="Last Name"
@@ -58,7 +58,7 @@ export const SignupPage = () => {
           value={values.lastName}
           handleChange={handleChange}
         />
-      
+
         <FormRow
           type="text"
           labelText="Phone"
@@ -66,7 +66,7 @@ export const SignupPage = () => {
           value={values.phone}
           handleChange={handleChange}
         />
-        
+
         <FormRow
           type="email"
           name="email"
@@ -94,6 +94,3 @@ export const SignupPage = () => {
     </Wrapper>
   );
 };
-
-
-

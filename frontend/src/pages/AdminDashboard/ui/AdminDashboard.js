@@ -3,7 +3,7 @@ import Wrapper from './Wrapper'
 export const AdminDashboard = () => {
   return (
     <Wrapper>
-      <h4> DASHBOARD</h4>
+    <h1>Dashboard</h1>
     </Wrapper>
   )
 }

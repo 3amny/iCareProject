@@ -19,6 +19,9 @@ const DoctorSchema = new mongoose.Schema(
       maxlength: 20,
       trim: true,
     },
+    dateOfBirth: {
+      type: Date,
+    },
     email: {
       type: String,
       required: [true, "Please provide your email"],
@@ -127,8 +130,6 @@ DoctorSchema.methods.comparePassword = async function (doctorPassword) {
   const isMatch = await bcrypt.compare(doctorPassword, this.password);
   return isMatch;
 };
-
-
 
 DoctorSchema.statics.generateTimeSlots = function (
   startTime,

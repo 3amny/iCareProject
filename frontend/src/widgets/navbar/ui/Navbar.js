@@ -1,10 +1,10 @@
-import { NavLink, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { navLinks } from "../../../utils/constants/nav/nav.constants";
 import { useState } from "react";
-import { Logo } from "../../../shared/ui";
-import DropdownList from "../../../features/navbar/DropdownList";
-import { ToggleButton } from "../../../shared/ui/Button/component";
+import { Logo } from "../../../shared/ui/Image";
+import { LinkButton, ToggleButton } from "../../../shared/ui/Button";
+import { NavList } from "../../../shared/ui/List";
 
 export const Navbar = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -16,7 +16,6 @@ export const Navbar = () => {
   }
   const [isOpened, setIsOpened] = useState(false);
   const openSidebar = () => setIsOpened(!isOpened);
-
   return (
     <Wrapper data-overlay={isOpened}>
       <div className="container">
@@ -32,50 +31,32 @@ export const Navbar = () => {
             ariaControls="primary-navigation"
           />
           <nav
-            className="primary-navigation"
+            className="primary-navigation "
             id="primary-navigation"
             data-visible={isOpened}
           >
-            <ul className="nav-links">
-              {navLinks.map((link) => {
-                const { id, text, url, submenu, iClassOpen, iClassClose } =
-                  link;
-                return (
-                  <li
-                    key={id}
-                    className="link"
-                    onMouseEnter={submenu && showDropdown}
-                    onMouseLeave={closeDropdown}
-                  >
-                    <NavLink
-                      to={url}
-                      onClick={
-                        submenu ? (event) => event.preventDefault() : null
-                      }
-                    >
-                      {text}
-                      {submenu && isHovered ? (
-                        <i className={iClassClose} />
-                      ) : submenu ? (
-                        <i className={iClassOpen} />
-                      ) : null}
-                    </NavLink>
-
-                    {isHovered && submenu ? (
-                      <DropdownList submenu={submenu} />
-                    ) : null}
-                  </li>
-                );
-              })}
-            </ul>
+            <NavList
+              isHovered={isHovered}
+              items={navLinks}
+              showDropdown={showDropdown}
+              closeDropdown={closeDropdown}
+              classNameLi="link"
+              classNameUl="nav-links"
+            />
           </nav>
           <div className="nav-btn">
-            <Link to="/account/signin">
-              <button className="button signin">Sign in</button>
-            </Link>
-            <Link to="/account/signup">
-              <button className="button signup">Sign up</button>
-            </Link>
+            <LinkButton
+              url="/account/signin"
+              className="button signin"
+              text="Sign in"
+              type="button"
+            />
+            <LinkButton
+              url="/account/signup"
+              className="button signup"
+              text="Sign up"
+              type="button"
+            />
           </div>
         </div>
       </div>
@@ -84,7 +65,7 @@ export const Navbar = () => {
 };
 const Wrapper = styled.header`
   padding-top: 1.5rem;
-  .logo {
+  svg {
     width: 150px;
   }
   .nav-wrapper {

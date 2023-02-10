@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import { footerLinks } from "../../utils/constants/footer/footer.constants.js";
+import { footerLinks } from "../../../../../utils/constants";
 
-const FooterList= () => {
+export const FooterList= () => {
   return (
     <Wrapper>
       <ul className="flow" aria-label="Footer">
@@ -34,4 +34,4 @@ const Wrapper = styled.nav`
     width: fit-content;
   }
 `;
-export default FooterList;
+

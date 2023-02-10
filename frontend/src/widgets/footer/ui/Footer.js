@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import {Logo} from '../../../shared/ui'
+import { Logo } from "../../../shared/ui/Image";
 import { Link } from "react-router-dom";
-import FooterList from "../../../features/footer/FooterList.js";
-import SocialList from "../../../features/footer/SocialList.js";
+import { FooterList, SocialList } from "../../../shared/ui/List";
+
 export const Footer = () => {
   return (
     <Wrapper>
@@ -29,8 +29,7 @@ export const Footer = () => {
 const Wrapper = styled.footer`
   background-color: var(--grey-50);
   padding-block: var(--size-500);
-
-  .logo {
+  svg {
     width: 100px;
   }
   .primary-footer-nav {
@@ -75,7 +74,6 @@ const Wrapper = styled.footer`
   }
 
   @media (min-width: 45em) {
-  
     .primary-footer-wrapper {
       width: 100%;
       grid-template-areas: "logo-social footer-nav" "footer-copyrights footer-copyrights";
@@ -96,10 +94,6 @@ const Wrapper = styled.footer`
   @media (max-width: 45em) {
     .primary-footer-wrapper > * {
       margin-inline: auto;
-      
     }
-
   }
 `;
-
-

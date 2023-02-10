@@ -44,10 +44,6 @@ const ClinicSchema = new mongoose.Schema({
       ref: "Review",
     },
   ],
-  isVerified: {
-    type: Boolean,
-    default: false,
-  },
   doctor: [
     {
       type: mongoose.Schema.Types.ObjectId,

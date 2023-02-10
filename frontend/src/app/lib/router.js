@@ -16,6 +16,7 @@ import { SharedLayout } from "../../pages/SharedLayout";
 import { AdminSharedLayout } from "../../pages/AdminSharedLayout";
 import { AdminDashboard } from "../../pages/AdminDashboard";
 import { DoctorSignUp } from "../../pages/DoctorSingUp";
+import { ProtectedRouteAdmin } from "./ProtectedRoutes";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -33,11 +34,18 @@ export const router = createBrowserRouter(
         </Route>
         <Route path="*" element={<ErrorPage />} />
       </Route>
-      <Route path="/admin/dashboard" element={<AdminSharedLayout />}>
+
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRouteAdmin>
+            <AdminSharedLayout />
+          </ProtectedRouteAdmin>
+        }
+      >
         <Route index element={<AdminDashboard />} />
       </Route>
-      <Route path="/account/doctor/singup" element={<DoctorSignUp />}/>
-      <Route path="/doctor/dashboard" element={<AdminDashboard/>}/>
+      <Route path="/account/doctor/singup" element={<DoctorSignUp />} />
     </>
   )
 );

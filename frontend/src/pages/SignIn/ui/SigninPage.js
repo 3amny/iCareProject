@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import { FormRow, Alert } from "../../../shared/ui";
+import { FormRow } from "../../../shared/ui/Input";
+import { Alert } from "../../../shared/ui/Alert";
 import { useNavigate } from "react-router-dom";
-
 import { useEffect, useState } from "react";
 import { useAppContext } from "../../../context/appContext";
 import Wrapper from "./Wrapper.js";
-import { ClinicPage } from "../../Clinic";
+
 const initialState = {
   firstName: "",
   lastName: "",
@@ -18,7 +18,7 @@ const initialState = {
 export const SigninPage = () => {
   const [values, setValues] = useState(initialState);
   const navigate = useNavigate();
-  const { user, isLoading, showAlert, displayAlert, loginUser } =
+  const { user, isLoading, showAlert, displayAlert, loginUser, role } =
     useAppContext();
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -35,12 +35,12 @@ export const SigninPage = () => {
   };
 
   useEffect(() => {
-    if (user) {
-      if (user.role === "User") {
+    if (role) {
+      if (role === "User") {
         setTimeout(() => {
           navigate("/");
         }, 2000);
-      } else if (user.role === "Admin") {
+      } else if (role === "Admin") {
         setTimeout(() => {
           navigate("/admin/dashboard");
         }, 2000);

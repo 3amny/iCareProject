@@ -1,6 +1,6 @@
-import { socialLinks } from "../../utils/constants/footer/footer.constants.js";
+import { socialLinks } from "../../../../../utils/constants/footer/footer.constants.js";
 
-const SocialList = () => {
+export const SocialList = () => {
   return (
     <ul className="social-list">
     {socialLinks.map((link) => {
@@ -17,4 +17,4 @@ const SocialList = () => {
   )
 }
 
-export default SocialList
+

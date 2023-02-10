@@ -11,19 +11,18 @@ import {
   LOGIN_USER_SUCCESS,
   LOGIN_USER_ERROR,
 } from "./action";
+
 const token = localStorage.getItem("token");
 const user = localStorage.getItem("user");
-const doctor = localStorage.getItem("doctor");
 const role = localStorage.getItem("role");
 const initialState = {
   isLoading: false,
   showAlert: false,
   alertText: "",
   alertType: "",
-  user: null ,
-  doctor: null ,
+  user: user ? JSON.stringify(user) : null,
   token: token,
-  role: "",
+  role: role || '',
 };
 
 const AppContext = React.createContext();
@@ -39,15 +38,13 @@ const AppProvider = ({ children }) => {
       dispatch({ type: CLEAR_ALERT });
     }, 2000);
   };
-  const addUserToLocalStorage = ({ user, token, role , doctor}) => {
+  const addUserToLocalStorage = ({ user, token, role}) => {
     localStorage.setItem("user", JSON.stringify(user));
-    localStorage.setItem("doctor",JSON.stringify(doctor))
     localStorage.setItem("token", token);
     localStorage.setItem("role", role);
   };
   const removeUserFromLocalStorage = ({ user, token, role }) => {
     localStorage.removeItem("user", JSON.stringify(user));
-    localStorage.removeItem("doctor", JSON.stringify(doctor));
     localStorage.removeItem("token", token);
     localStorage.removeItem("role", role);
   };
@@ -55,8 +52,8 @@ const AppProvider = ({ children }) => {
     dispatch({ type: REGISTER_USER_BEGIN });
     try {
       const { data } = await axios.post("/api/v1/auth/register", currentUser);
-      const { user, token, role } = data;
-     console.log(data)
+      const { user, token, role} = data;
+      console.log(data);
       dispatch({
         type: REGISTER_USER_SUCCESS,
         payload: { user, token, role },
@@ -76,36 +73,14 @@ const AppProvider = ({ children }) => {
     dispatch({ type: LOGIN_USER_BEGIN });
     try {
       const { data } = await axios.post("/api/v1/auth/login", currentUser);
-      const { user, token } = data;
-      dispatch({
-        type: LOGIN_USER_SUCCESS,
-        payload: { user, token },
-      });
-      addUserToLocalStorage({ user, token });
-    } catch (error) {
-      console.log(error.response);
-      dispatch({
-        type: LOGIN_USER_ERROR,
-        payload: { msg: error.response.data.msg },
-      });
-    }
-    clearAlert();
-  };
-  const loginAdmin = async (currentUser) => {
-    dispatch({ type: LOGIN_USER_BEGIN });
-    try {
-      const { data } = await axios.post("/api/v1/auth/login", currentUser);
-      const { user, token, role } = data;
-      if (user.role !== "Admin") {
-        console.log(user.role);
-        return;
-      }
+      const { user, token , role} = data;
       dispatch({
         type: LOGIN_USER_SUCCESS,
         payload: { user, token, role },
       });
       addUserToLocalStorage({ user, token, role });
     } catch (error) {
+      console.log(error.response);
       dispatch({
         type: LOGIN_USER_ERROR,
         payload: { msg: error.response.data.msg },
@@ -121,14 +96,14 @@ const AppProvider = ({ children }) => {
         "/api/v1/doctor/auth/register",
         currentUser
       );
-      const { doctor, token, role } = data;
-      
-      console.log(data)
+      const { user, token, role } = data;
+
+      console.log(data);
       dispatch({
         type: REGISTER_USER_SUCCESS,
         payload: { user, token, role },
       });
-      addUserToLocalStorage({ doctor, token, role });
+      addUserToLocalStorage({ user, token, role });
     } catch (error) {
       console.log(error.response);
       dispatch({
@@ -166,7 +141,6 @@ const AppProvider = ({ children }) => {
         ...state,
         displayAlert,
         registerUser,
-        loginAdmin,
         loginUser,
         registerDoctor,
         loginDoctor,

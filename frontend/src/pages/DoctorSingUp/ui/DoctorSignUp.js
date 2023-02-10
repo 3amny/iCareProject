@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { FormRow, Alert } from "../../../shared/ui";
+import { FormRow } from "../../../shared/ui/Input";
+import { Alert } from "../../../shared/ui/Alert";
 import { useAppContext } from "../../../context/appContext";
 import { useNavigate } from "react-router-dom";
 import { initialState, list } from "../lib";

@@ -9,7 +9,6 @@ import morgan from "morgan";
 //routers
 import authDoctorRoutes from "./routes/authDoctorRoutes.js";
 import authUserRoutes from "./routes/authUserRoutes.js";
-import timeSlotRoutes from "./routes/timeSlotRouter.js";
 import doctorRoutes from "./routes/doctorRoutes.js";
 const app = express();
 if (process.env.NODE_ENV !== "production") {
@@ -23,7 +22,6 @@ dotenv.config();
 app.use("/api/v1/auth", authUserRoutes);
 app.use("/api/v1/doctor/auth", authDoctorRoutes);
 app.use("/api/v1/doctors", doctorRoutes);
-app.use("/api/v1/doctor/timeslots", timeSlotRoutes);
 //middleware
 
 app.use(notFoundMiddleware);
