@@ -1,4 +1,4 @@
-export const ToggleButton = ({type, onClick, isOpened, className, color}) => {
+export const ToggleButton = ({type, onClick, isOpened, className}) => {
   return (
     <>
       <button
@@ -9,7 +9,7 @@ export const ToggleButton = ({type, onClick, isOpened, className, color}) => {
         {isOpened ? (
           <i className="fa-solid fa-xmark"></i>
         ) : (
-          <i className="fa-solid fa-bars" color={color}></i>
+          <i className="fa-solid fa-bars" color="white"></i>
         )}
         <span className="sr-only">Menu</span>
       </button>

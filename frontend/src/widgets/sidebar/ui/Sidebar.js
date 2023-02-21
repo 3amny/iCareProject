@@ -1,15 +1,26 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { NavList } from "../../../shared/ui/List";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { adminSideBarLinks } from "../../../utils/constants";
 import { Logo } from "../../../shared/ui/Image";
 import { IconButton } from "../../../shared/ui/Button";
 import { ProfileSigned } from "../../../shared/ui/Profile";
-
+import { useAppContext } from "../../../context/appContext.js"
 export const Sidebar = () => {
   const [isOpened, setIsOpened] = useState(false);
   const openSidebar = () => setIsOpened(!isOpened);
+  const { logoutUser, user } = useAppContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    }
+  });
+   
   return (
     <Wrapper className={isOpened ? "active" : null}>
       <div className="container">
@@ -37,7 +48,10 @@ export const Sidebar = () => {
           <ProfileSigned
             firstName="John"
             lastName="Wattson"
-            icon="fa-solid fa-right-from-bracket"
+            type="button"
+            iconClass="fa-solid fa-right-from-bracket"
+            btnClass="profile-logout"
+            onClick={logoutUser}
           />
         </div>
       </div>
@@ -91,7 +105,7 @@ const Wrapper = styled.aside`
     top: 37px;
   }
   &.active .sidebar-toggle {
-    left: 80%;
+    left: 85%;
   }
   ul {
     margin-top: 30px;
@@ -195,20 +209,28 @@ const Wrapper = styled.aside`
     font-weight: 400;
     font-size: 15px;
   }
-  .profile i {
+
+  .profile .profile-logout {
     position: absolute;
-    left: 40%;
-    top: 50%;
+    background: transparent;
+    border: none;
+    padding: 0;
+    height: 60px;
     transform: translateY(-50%);
+    top: 50%;
+    left: 40%;
+    transition: all 0.5s ease;
+  }
+  .profile-logout i {
     width: 100%;
     height: 60px;
     line-height: 60px;
     border-radius: 0px;
-    transition: all 0.5s ease;
     font-size: 20px;
+    color: white;
   }
-  &.active .profile i {
-    left: 80%;
+  &.active .profile-logout {
+    left: 85%;
     pointer-events: auto;
   }
 `;

@@ -10,6 +10,10 @@ import {
   LOGIN_USER_BEGIN,
   LOGIN_USER_SUCCESS,
   LOGIN_USER_ERROR,
+  UPDATE_USER_BEGIN,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_ERROR,
+  LOGOUT_USER,
 } from "./action";
 
 const token = localStorage.getItem("token");
@@ -20,15 +24,40 @@ const initialState = {
   showAlert: false,
   alertText: "",
   alertType: "",
-  user: user ? JSON.stringify(user) : null,
-  token: token,
-  role: role || '',
+  user: user ? JSON.parse(user) : null,
+  token: token || "",
+  role: role || "",
 };
 
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const authFetch = axios.create({
+    baseURL: "/api/v1",
+  });
+  authFetch.interceptors.request.use(
+    (config) => {
+      config.headers["Authorization"] = `Bearer ${state.token}`;
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+  authFetch.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      console.log(error.response);
+      if (error.response === 401) {
+        logoutUser();
+      }
+      return Promise.reject(error);
+    }
+  );
+
   const displayAlert = () => {
     dispatch({ type: DISPLAY_ALERT });
     clearAlert();
@@ -38,22 +67,23 @@ const AppProvider = ({ children }) => {
       dispatch({ type: CLEAR_ALERT });
     }, 2000);
   };
-  const addUserToLocalStorage = ({ user, token, role}) => {
+  const addUserToLocalStorage = ({ user, token, role }) => {
     localStorage.setItem("user", JSON.stringify(user));
     localStorage.setItem("token", token);
     localStorage.setItem("role", role);
   };
-  const removeUserFromLocalStorage = ({ user, token, role }) => {
+
+  const removeUserFromLocalStorage = () => {
     localStorage.removeItem("user", JSON.stringify(user));
     localStorage.removeItem("token", token);
     localStorage.removeItem("role", role);
   };
+
   const registerUser = async (currentUser) => {
     dispatch({ type: REGISTER_USER_BEGIN });
     try {
-      const { data } = await axios.post("/api/v1/auth/register", currentUser);
-      const { user, token, role} = data;
-      console.log(data);
+      const { data } = await authFetch.post("/auth/register", currentUser);
+      const { user, token, role } = data;
       dispatch({
         type: REGISTER_USER_SUCCESS,
         payload: { user, token, role },
@@ -73,7 +103,8 @@ const AppProvider = ({ children }) => {
     dispatch({ type: LOGIN_USER_BEGIN });
     try {
       const { data } = await axios.post("/api/v1/auth/login", currentUser);
-      const { user, token , role} = data;
+      const { user, token, role } = data;
+      console.log(user.firstName);
       dispatch({
         type: LOGIN_USER_SUCCESS,
         payload: { user, token, role },
@@ -88,7 +119,30 @@ const AppProvider = ({ children }) => {
     }
     clearAlert();
   };
+  const updateUser = async (currentUser) => {
+    dispatch({ type: UPDATE_USER_BEGIN });
+    try {
+      const { data } = await authFetch.patch("/auth/update", currentUser);
 
+      const { user, role, token } = data;
+
+      dispatch({ type: UPDATE_USER_SUCCESS, payload: { user, role, token } });
+      addUserToLocalStorage({ user, role, token });
+    } catch (error) {
+      if (error.response.status !== 401) {
+        dispatch({
+          type: UPDATE_USER_ERROR,
+          payload: { msg: error.response.data.msg },
+        });
+      }
+    }
+    clearAlert();
+  };
+
+  const logoutUser = () => {
+    dispatch({ type: LOGOUT_USER });
+    removeUserFromLocalStorage();
+  };
   const registerDoctor = async (currentUser) => {
     dispatch({ type: REGISTER_USER_BEGIN });
     try {
@@ -98,7 +152,6 @@ const AppProvider = ({ children }) => {
       );
       const { user, token, role } = data;
 
-      console.log(data);
       dispatch({
         type: REGISTER_USER_SUCCESS,
         payload: { user, token, role },
@@ -144,6 +197,8 @@ const AppProvider = ({ children }) => {
         loginUser,
         registerDoctor,
         loginDoctor,
+        updateUser,
+        logoutUser,
       }}
     >
       {children}

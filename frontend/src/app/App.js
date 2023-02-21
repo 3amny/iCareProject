@@ -1,8 +1,20 @@
-import { RouterProvider } from "react-router-dom";
-import { router } from "./lib/router";
+import React, { Suspense } from "react";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+} from "react-router-dom";
+import { Root } from "./lib/Root";
+const router = createBrowserRouter(createRoutesFromElements(Root));
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <React.StrictMode>
+      <Suspense fallback={<>Loading....</>}>
+        <RouterProvider router={router} />
+      </Suspense>
+    </React.StrictMode>
+  );
 }
 
 export default App;

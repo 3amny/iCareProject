@@ -1,2 +1,3 @@
 import { ProtectedRouteAdmin } from "./AdminRoute/ProtectedRouteAdmin.js";
-export { ProtectedRouteAdmin };
+import { ProtectedRouteDoctor } from "./DoctorRoute/ProtectedRouteDoctor.js";
+export { ProtectedRouteAdmin, ProtectedRouteDoctor};

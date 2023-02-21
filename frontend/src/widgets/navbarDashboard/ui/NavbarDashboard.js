@@ -18,9 +18,7 @@ export const NavbarDashboard = () => {
       />
       <div className="container">
         <div className="nav-wrapper">
-          <Link to="/admin/dashboard">
-            <Logo />
-          </Link>
+          
         </div>
       </div>
     </Wrapper>

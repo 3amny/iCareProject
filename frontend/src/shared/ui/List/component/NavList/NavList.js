@@ -25,12 +25,14 @@ export const NavList = ({
               onClick={item.submenu ? (event) => event.preventDefault() : null}
             >
               {item.icon ? <i className={item.icon} /> : null}
-              <span className="text">{item.text}</span>
-              {item.submenu && isHovered ? (
-                <i className={item.iClassClose} />
-              ) : item.submenu ? (
-                <i className={item.iClassOpen} />
-              ) : null}
+              <span className="text">
+                {item.text}
+                {item.submenu && isHovered ? (
+                  <i className={item.iClassClose} />
+                ) : item.submenu ? (
+                  <i className={item.iClassOpen} />
+                ) : null}
+              </span>
             </NavLink>
 
             {isHovered && item.submenu ? (
