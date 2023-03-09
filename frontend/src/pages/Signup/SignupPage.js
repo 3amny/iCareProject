@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { FormRow } from "../../shared/ui/Input";
-import { Alert } from "../../shared/ui/Alert";
+import { FormRow } from "shared/Input";
+import { Alert } from "shared/Alert";
 import { useAppContext } from "../../context/appContext";
 import { Link, useNavigate } from "react-router-dom";
 import Wrapper from "./Wrapper.js";

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
-import AppointmentSchema from "./Appointment.js";
+
 import jwt from "jsonwebtoken";
 
 const UserSchema = new mongoose.Schema(
@@ -72,10 +72,13 @@ const UserSchema = new mongoose.Schema(
 );
 // hashing passwords
 
-UserSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
+UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+  next();
 });
 
 UserSchema.methods.createJWT = function () {
@@ -88,6 +91,9 @@ UserSchema.methods.createJWT = function () {
   );
 };
 UserSchema.methods.comparePassword = async function (userPassword) {
+  if (!this.password) {
+    return false;
+  }
   const isMatch = await bcrypt.compare(userPassword, this.password);
   return isMatch;
 };

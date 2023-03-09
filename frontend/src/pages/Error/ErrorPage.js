@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Wrapper  from "./Wrapper.js";
-import { Banner } from "../../shared/ui/Image";
+import { Banner } from "shared/Image";
 
 export const ErrorPage = () => {
   return (

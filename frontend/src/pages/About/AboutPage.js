@@ -2,7 +2,12 @@ import Wrapper from "./Wrapper";
 const AboutPage = () => {
   return (
     <Wrapper>
-      <h4> About page</h4>
+      <h3> About us</h3>
+      <p>iCare provides a service for both patients and clinics.
+        Blablblalbalblallablabl
+        vkaovkwoakvowvkaoawkvoakwpoikeif
+        jfoawjfoajwofjawfnknbikednkbv
+      </p>
     </Wrapper>
   );
 };

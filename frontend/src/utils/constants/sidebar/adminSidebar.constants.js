@@ -1,32 +1,33 @@
+import {FaHospital, FaUserAlt, FaUserMd, FaCalendarCheck, FaCommentAlt} from 'react-icons/fa'
 export const adminSideBarLinks = [
   {
     id: 1,
     text: "User",
-    url: "/user",
-    icon: "fa-regular fa-user",
+    url: "admin/users",
+    icon: <FaUserAlt/>,
   },
   {
     id: 2,
     text: "Clinic",
     url: "/clinic",
-    icon: "fa-regular fa-hospital",
+    icon: <FaHospital/>,
   },
   {
     id: 3,
     text: "Doctor",
     url: "/doctor",
-    icon:"fa-solid fa-user-doctor",
+    icon:<FaUserMd/>,
   },
   {
     id: 4,
     text: "Appointment",
     url: "/appointment",
-    icon: "fa-regular fa-calendar-check",
+    icon: <FaCalendarCheck/>,
   },
   {
     id: 5,
     text: "Messages",
     url: "/message",
-    icon: "fa-regular fa-comment",
+    icon: <FaCommentAlt/>,
   },
 ];

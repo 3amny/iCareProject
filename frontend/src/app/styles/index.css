@@ -38,6 +38,7 @@ html {
   --grey-800: #243b53;
   --grey-900: #102a43;
   --grey-icon: #404040;
+  --off-white: #f5f5f5;
   /* rest of the colors */
   --black: #222;
   --white: #fff;
@@ -52,6 +53,7 @@ html {
   --small-text: 0.875rem;
   --extra-small-text: 0.7em;
   --fontColor: #404040;
+  --fontSmColor: #A7A7A7;
   /* rest of the vars */
   --backgroundColor: var(--white);
   --textColor: var(--grey-900);
@@ -94,7 +96,8 @@ body {
 
 main{
   min-height: calc(100vh - 7rem);
-  padding: 3rem;
+  padding: 2rem;
+  
 }
 
 p {
@@ -238,7 +241,7 @@ ul {
   max-width: clamp(var(--fixed-width), 60vw ,var(--fluid-width));
   background: var(--white);
   border-radius: var(--borderRadius);
-  box-shadow: var(--shadow-2);
+  box-shadow: var(--shadow-3);
   padding: 2rem 2.5rem;
   margin: 2rem auto;
   transition: var(--transition);

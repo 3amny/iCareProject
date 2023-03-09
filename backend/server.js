@@ -10,6 +10,7 @@ import morgan from "morgan";
 import authDoctorRoutes from "./routes/authDoctorRoutes.js";
 import authUserRoutes from "./routes/authUserRoutes.js";
 import doctorRoutes from "./routes/doctorRoutes.js";
+import usersRoutes from "./routes/usersRoutes.js";
 const app = express();
 if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
@@ -17,10 +18,10 @@ if (process.env.NODE_ENV !== "production") {
 app.use(express.json());
 dotenv.config();
 
-
 // routes
 app.use("/api/v1/auth", authUserRoutes);
 app.use("/api/v1/doctor/auth", authDoctorRoutes);
+app.use("/api/v1/admin/users", usersRoutes);
 app.use("/api/v1/doctors", doctorRoutes);
 //middleware
 

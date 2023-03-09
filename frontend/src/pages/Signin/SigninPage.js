@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { FormRow } from "../../shared/ui/Input";
-import { Alert } from "../../shared/ui/Alert";
+import { FormRow } from "shared/Input";
+import { Alert } from "shared/Alert";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useAppContext } from "../../context/appContext";
+import { useAppContext } from "context/appContext";
 import Wrapper from "./Wrapper.js";
 
 const initialState = {

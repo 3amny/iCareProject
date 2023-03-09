@@ -1,9 +1,11 @@
-import express from "express";
+
 import Doctor from "../models/Doctor.js";
 import { StatusCodes } from "http-status-codes";
 import { BadRequest, NotFound } from "../error/index.js";
 
+
 const getAll = async (req, res) => {
+
   const doctors = await Doctor.find();
   res.status(StatusCodes.OK).json({
     doctors,
