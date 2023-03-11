@@ -7,7 +7,6 @@ import { cardItems } from "utils/constants/index.js";
 export const LandingPage = () => {
   const [isChecked, setIsChecked] = useState(false);
   const handleChange = () => setIsChecked(!isChecked);
-  console.log("Re-render");
   return (
     <Wrapper>
       <div className="container">

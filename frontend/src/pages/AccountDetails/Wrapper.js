@@ -12,9 +12,6 @@ const Wrapper = styled.main`
   input.visually-hidden:is(:focus, :focus-within) + label {
     outline: thin dotted;
   }
-  .form {
-    background: var(--grey-50);
-  }
   .account {
     display: grid;
     grid-template-columns: 40% 60%;

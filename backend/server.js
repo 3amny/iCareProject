@@ -22,7 +22,8 @@ dotenv.config();
 app.use("/api/v1/auth", authUserRoutes);
 app.use("/api/v1/doctor/auth", authDoctorRoutes);
 app.use("/api/v1/admin/users", usersRoutes);
-app.use("/api/v1/doctors", doctorRoutes);
+app.use("/api/v1/admin/clinics", usersRoutes);
+app.use("/api/v1/admin/doctors", doctorRoutes);
 //middleware
 
 app.use(notFoundMiddleware);

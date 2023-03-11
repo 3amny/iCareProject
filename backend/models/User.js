@@ -46,16 +46,15 @@ const UserSchema = new mongoose.Schema(
         message: "Please provide valid phone number",
       },
     },
-    address: {
-      city: {
+    city: {
         type: String,
         default: "Tashkent",
-      },
-      street: {
+    },
+     street: {
         type: String,
         default: "Street",
-      },
-    },
+     },
+  
     role: {
       type: String,
       enum: ["Admin", "User"],

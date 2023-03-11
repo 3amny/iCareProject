@@ -27,10 +27,8 @@ const register = async (req, res) => {
       lastName: user.lastName,
       phone: user.phone,
       role: user.role,
-      address: {
-        city: user.address.city,
-        street: user.address.street,
-      },
+      city: user.city,
+      street: user.street,
     },
     token,
     role: user.role,
@@ -40,7 +38,6 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(req.body);
     if (!email || !password) {
       throw new BadRequest("Please provide all values");
     }
@@ -65,49 +62,20 @@ const login = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    email,
-    phone,
-    address
-  } = req.body;
+  const { firstName, lastName, email, phone, city, street } = req.body;
 
-  if (!firstName || !lastName || !email || !phone || !address) {
+  if (!firstName || !lastName || !email || !phone || !city || !street) {
     throw new BadRequest("Please provide all information");
   }
 
-  const user = await User.findOne({ _id: req.user.userId }); //.select("+password");
-
-  // Check if current password is provided and is correct
-  /*if (currentPassword) {
-    const isMatch = await user.comparePassword(currentPassword);
-    if (!isMatch) {
-      throw new UnAuthenticated("Incorrect current password");
-    }
-  }
-
-  // Check if new password is provided and is valid
-  if (newPassword && confirmPassword) {
-    if (newPassword !== confirmPassword) {
-      throw new BadRequest("New password and confirmation do not match");
-    }
-
-    if (newPassword.length < 7) {
-      throw new BadRequest("New password must be at least 7 characters long");
-    }
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
-    user.password = hashedPassword;
-  }*/
+  const user = await User.findOne({ _id: req.user.userId });
 
   user.email = email;
   user.firstName = firstName;
   user.lastName = lastName;
   user.phone = phone;
-  user.address = address;
-
-  // Set password only if provided
+  user.city = city;
+  user.street = street;
 
   await user.save();
 

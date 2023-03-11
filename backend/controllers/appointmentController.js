@@ -8,7 +8,7 @@ const createAppointment = async (req, res) => {
   const { date, timeSlot, notes } = req.body;
   const { id: _doctorId } = req.params;
   const doctor = await Doctor.findOne({ _id: _doctorId });
-
+  
   if (!date || !timeSlot) {
     throw new BadRequest("Please provide required information");
   }

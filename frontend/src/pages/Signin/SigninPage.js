@@ -42,7 +42,7 @@ const initialState = {
         }, 2000);
       } else if (role === "Admin") {
         setTimeout(() => {
-          navigate("/admin/dashboard");
+          navigate("/admin");
         }, 2000);
       }
     }

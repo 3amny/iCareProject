@@ -1,32 +1,41 @@
 import React from "react";
-import profileImage from "../../assets/images/profile.jpg";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import Wrapper from "./Wrapper";
+import Wrapper from "pages/AccountDetails/Wrapper";
+import { useAppContext } from "context/appContext";
+import profileImage from "assets/images/profile.jpg";
 import { FormRow } from "shared/Input";
 import { Alert } from "shared/Alert";
-import { useAppContext } from "context/appContext";
-
-const AccountDetailsPage = () => {
-  const { user, isLoading, showAlert, displayAlert, updateUser } =
-    useAppContext();
-  const [firstName, setFirstName] = useState(user?.firstName);
-  const [lastName, setLastName] = useState(user?.lastName);
-  const [phone, setPhoneNum] = useState(user?.phone);
-  const [email, setEmail] = useState(user?.email);
-  const [city, setCity] = useState(user?.city);
-  const [street, setStreet] = useState(user?.street);
+const AdminUserEditPage = () => {
+  const {
+    isLoading,
+    showAlert,
+    displayAlert,
+    email,
+    firstName,
+    lastName,
+    phone,
+    city,
+    street,
+    clearValues,
+    appointments,
+    updateUserAdmin,
+    handleChange,
+  } = useAppContext();
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!email || !firstName || !lastName || !phone || !city || !street) {
       displayAlert();
       return;
     }
-    updateUser({ firstName, lastName, email, phone, street, city });
+    updateUserAdmin();
+  };
+  const handleUserInput = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    handleChange({ name, value });
   };
   return (
     <Wrapper>
-      <form className="form" onSubmit={handleSubmit}>
+      <form className="form">
         {showAlert && <Alert />}
         <div className="account">
           <div className="account-img-container">
@@ -60,7 +69,7 @@ const AccountDetailsPage = () => {
                 name="firstName"
                 labelText="First Name"
                 value={firstName}
-                handleChange={(e) => setFirstName(e.target.value)}
+                handleChange={handleUserInput}
               />
 
               <FormRow
@@ -68,7 +77,7 @@ const AccountDetailsPage = () => {
                 labelText="Last Name"
                 name="lastName"
                 value={lastName}
-                handleChange={(e) => setLastName(e.target.value)}
+                handleChange={handleUserInput}
               />
 
               <FormRow
@@ -76,7 +85,7 @@ const AccountDetailsPage = () => {
                 labelText="Phone"
                 name="phone"
                 value={phone}
-                handleChange={(e) => setPhoneNum(e.target.value)}
+                handleChange={handleUserInput}
               />
 
               <FormRow
@@ -84,29 +93,39 @@ const AccountDetailsPage = () => {
                 name="email"
                 labelText="Email"
                 value={email}
-                handleChange={(e) => setEmail(e.target.value)}
+                handleChange={handleUserInput}
               />
               <FormRow
                 type="text"
                 labelText="City"
                 name="city"
                 value={city}
-                handleChange={(e) => setCity(e.target.value)}
+                handleChange={handleUserInput}
               />
               <FormRow
                 type="text"
                 labelText="Street"
                 name="street"
                 value={street}
-                handleChange={(e) => setStreet(e.target.value)}
+                handleChange={handleUserInput}
               />
-
+              {/*add appointments array if exist */}
               <button
                 type="submit"
                 className="btn btn-block"
                 disabled={isLoading}
+                onClick={handleSubmit}
               >
                 {isLoading ? "Please wait..." : "Save"}
+              </button>
+              <button
+                className="btn btn-block clear-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  clearValues();
+                }}
+              >
+                Clear
               </button>
             </div>
           </div>
@@ -116,4 +135,4 @@ const AccountDetailsPage = () => {
   );
 };
 
-export default AccountDetailsPage;
+export default AdminUserEditPage;

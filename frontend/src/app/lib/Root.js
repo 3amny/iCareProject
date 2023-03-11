@@ -15,6 +15,7 @@ import { DoctorSignPageAsync } from "pages/Doctor/DoctorSingUp/DoctorSignPage.as
 import { ErrorPage } from "pages/Error/ErrorPage";
 import { ProtectedRouteAdmin } from "./ProtectedRoutes";
 import { AdminUsersAsync } from "pages/Admin/AdminUsers/AdminUsersPage.async";
+import { AdminUserEditAsync } from "pages/Admin/AdminUserEdit/AdminUserEditPage.async";
 
 export const Root = (
   <>
@@ -33,7 +34,7 @@ export const Root = (
       <Route path="*" element={<ErrorPage />} />
     </Route>
     <Route
-      path="admin/dashboard"
+      path="/admin"
       element={
         <ProtectedRouteAdmin>
           <AdminSharedLayout />
@@ -41,7 +42,9 @@ export const Root = (
       }
     >
       <Route index element={<AdminDashboardAsync />} />
-      <Route path="admin/users" element={<AdminUsersAsync />} />
+
+      <Route path="users" element={<AdminUsersAsync />} />
+      <Route path="users/edit" element={<AdminUserEditAsync />} />
     </Route>
     <Route path="/account/doctor/singup" element={<DoctorSignPageAsync />} />
   </>

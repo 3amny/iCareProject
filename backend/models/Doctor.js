@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import moment from 'moment'
+import dayjs from "dayjs";
+import BadRequest from '../error/bad-request.js'
 const DoctorSchema = new mongoose.Schema(
   {
     firstName: {
@@ -137,14 +138,17 @@ DoctorSchema.statics.generateTimeSlots = function (
   interval
 ) {
   let timeSlots = [];
-  startTime = moment(startTime, "HH:mm");
-  endTime = moment(endTime, "HH:mm");
-  if (startTime.isSameOrAfter(endTime)) {
-    return new BadRequest("End time can not be equal or less than start time");
+  startTime = dayjs(startTime, "HH:mm");
+  endTime = dayjs(endTime, "HH:mm");
+  if(startTime.isSame(endTime)){
+    return new BadRequest("End time can not be equal to start time");
   }
-  while (startTime <= endTime) {
+  if (startTime.isAfter(endTime)) {
+    return new BadRequest("End time can not be less than start time");
+  }
+  while (startTime < endTime) {
     timeSlots.push(startTime.format("HH:mm"));
-    startTime.add(interval, "minutes");
+    startTime = startTime.add(interval, "minute");
   }
 
   return timeSlots;
