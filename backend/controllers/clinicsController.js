@@ -4,14 +4,14 @@ import { BadRequest, NotFound } from "../error/index.js";
 import checkRolePermission from "../utils/checkRolePermission.js";
 
 const createClinic = async (req, res) => {
-  const { organization, email, phone, address, reviews, isVerified, doctor } =
-    req.body;
-  if (!organization || !email || !phone || !address) {
+  const { organization, email, phone } = req.body;
+  req.body.createdBy = req.user.userId;
+  if (!organization || !email || !phone) {
     throw new BadRequest("Please provide all values");
   }
   checkRolePermission(req.user, "Admin");
-  const appointment = await Clinic.create(req.body);
-  res.status(StatusCodes.CREATED).json({ appointment });
+  const clinic = await Clinic.create(req.body);
+  res.status(StatusCodes.CREATED).json({ clinic });
 };
 const getAllClinics = async (req, res) => {
   const clinics = await Clinic.find();
@@ -23,22 +23,22 @@ const getAllClinics = async (req, res) => {
 };
 const updateClinic = async (req, res) => {
   const { id: clinicId } = req.params;
-  const { organization, email, phone, address, reviews, isVerified, doctor } =
-    req.body;
+  console.log(req.params);
+  const { organization, email, phone, street, city } = req.body;
   checkRolePermission(req.user, "Admin");
-  if (!organization || !email || !phone || !address) {
+  if (!organization || !email || !phone || !street || !city) {
     throw new BadRequest("Please provide all values");
   }
   const clinic = await Clinic.findOne({ _id: clinicId });
   if (!clinic) {
     throw new NotFound(`No clinic with id ${clinic}`);
   }
-  const updateClinic = await Clinic.findOneAndUpdate(
+  const updatedClinic = await Clinic.findOneAndUpdate(
     { _id: clinicId },
     req.body,
     { new: true, runValidators: true }
   );
-  res.status(StatusCodes.OK).json({ updateClinic });
+  res.status(StatusCodes.OK).json({ updatedClinic });
 };
 
 const deleteClinic = async (req, res) => {
@@ -48,7 +48,6 @@ const deleteClinic = async (req, res) => {
   if (!clinic) {
     throw new NotFound(`No appointment with id ${clinicId}`);
   }
-  checkRolePermission(req.user.role, "Admin");
   await clinic.remove();
   res.status(StatusCodes.OK).json({ msg: "Success! Clinic was removed" });
 };

@@ -3,7 +3,7 @@ import validator from "validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dayjs from "dayjs";
-import BadRequest from '../error/bad-request.js'
+import BadRequest from "../error/bad-request.js";
 const DoctorSchema = new mongoose.Schema(
   {
     firstName: {
@@ -96,11 +96,11 @@ const DoctorSchema = new mongoose.Schema(
       default: false,
     },
     startTime: {
-      type: /* Date*/ String,
+      type: String,
       require: [true, "Please provide start time"],
     },
     endTime: {
-      type: /* Date*/ String,
+      type: String,
       require: [true, "Please provide end time"],
     },
     interval: { type: Number, default: 30 },
@@ -139,8 +139,9 @@ DoctorSchema.statics.generateTimeSlots = function (
 ) {
   let timeSlots = [];
   startTime = dayjs(startTime, "HH:mm");
+  console.log(startTime);
   endTime = dayjs(endTime, "HH:mm");
-  if(startTime.isSame(endTime)){
+  if (startTime.isSame(endTime)) {
     return new BadRequest("End time can not be equal to start time");
   }
   if (startTime.isAfter(endTime)) {

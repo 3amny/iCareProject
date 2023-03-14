@@ -1,3 +1,4 @@
 import { FormRow } from "./component/FormRow/FormRow";
 import { Slider } from "./component/Checkbox/Slider/Slider";
-export { FormRow, Slider };
+import { Checkbox } from "./component/Checkbox/Checkbox/Checkbox";
+export { FormRow, Slider, Checkbox };

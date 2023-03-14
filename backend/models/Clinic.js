@@ -1,32 +1,32 @@
 import mongoose from "mongoose";
 import validator from "validator";
 
-const ClinicSchema = new mongoose.Schema({
-  organization: {
-    type: String,
-    required: [true, "Please provide your organization name"],
-    minlength: 3,
-    maxlength: 20,
-    trim: true,
-  },
-  email: {
-    type: String,
-    required: [true, "Please provide your email"],
-    validate: {
-      validator: validator.isEmail,
-      message: "Please provide valid email",
+const ClinicSchema = new mongoose.Schema(
+  {
+    organization: {
+      type: String,
+      required: [true, "Please provide your organization name"],
+      minlength: 3,
+      maxlength: 20,
+      trim: true,
     },
-    unique: true,
-  },
-  phone: {
-    type: String,
-    required: [true, "Please provide your phone number"],
-    validate: {
-      validator: validator.isMobilePhone,
-      message: "Please provide valid phone number",
+    email: {
+      type: String,
+      required: [true, "Please provide your email"],
+      validate: {
+        validator: validator.isEmail,
+        message: "Please provide valid email",
+      },
+      unique: true,
     },
-  },
-  address: {
+    phone: {
+      type: String,
+      required: [true, "Please provide your phone number"],
+      validate: {
+        validator: validator.isMobilePhone,
+        message: "Please provide valid phone number",
+      },
+    },
     city: {
       type: String,
       default: "Tashkent",
@@ -35,21 +35,22 @@ const ClinicSchema = new mongoose.Schema({
       type: String,
       default: "Street",
     },
-    required: [true, "Please provide address"],
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
   },
-  
-  reviews: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Review",
-    },
-  ],
-  doctor: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Doctor"
-    },
-  ],
-});
+  { timestamps: true }
+);
 
 export default mongoose.model("Clinic", ClinicSchema);

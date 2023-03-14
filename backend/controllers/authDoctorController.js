@@ -37,6 +37,7 @@ const register = async (req, res) => {
   req.body.timeSlots = Doctor.generateTimeSlots(startTime, endTime, interval);
 
   const timeSlots = req.body.timeSlots;
+  console.log(timeSlots);
   const doctor = await Doctor.create({
     firstName,
     lastName,
@@ -70,6 +71,7 @@ const register = async (req, res) => {
       timeSlots: doctor.timeSlots,
     },
     token,
+    role: doctor.role,
   });
 };
 

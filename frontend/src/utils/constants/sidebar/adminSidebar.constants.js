@@ -15,25 +15,25 @@ export const adminSideBarLinks = [
   {
     id: 2,
     text: "Clinic",
-    url: "/admin//clinic",
+    url: "/admin/clinics",
     icon: <FaHospital />,
   },
   {
     id: 3,
     text: "Doctor",
-    url: "/admin//doctor",
+    url: "/admin/doctors",
     icon: <FaUserMd />,
   },
   {
     id: 4,
     text: "Appointment",
-    url: "/admin//appointment",
+    url: "/admin/appointments",
     icon: <FaCalendarCheck />,
   },
   {
     id: 5,
     text: "Messages",
-    url: "/admin//message",
+    url: "/admin//messages",
     icon: <FaCommentAlt />,
   },
 ];

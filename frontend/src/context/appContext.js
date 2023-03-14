@@ -23,22 +23,52 @@ import {
   CLEAR_VALUES,
   UPDATE_USER_ADMIN_ERROR,
   DELETE_USER_ADMIN_BEGIN,
+  GET_ALL_DOCTORS_BEGIN,
+  GET_ALL_DOCTORS_SUCCESS,
+  GET_ALL_CLINICS_BEGIN,
+  GET_ALL_CLINICS_SUCCESS,
+  CREATE_CLINIC_ADMIN_BEGIN,
+  CREATE_CLINIC_ADMIN_SUCCESS,
+  CREATE_CLINIC_ADMIN_ERROR,
+  SET_EDIT_CLINIC,
+  UPDATE_CLINIC_ADMIN_BEGIN,
+  UPDATE_CLINIC_ADMIN_SUCCESS,
+  UPDATE_CLINIC_ADMIN_ERROR,
+  UPDATE_DOCTOR_ADMIN_BEGIN,
+  UPDATE_DOCTOR_ADMIN_SUCCESS,
+  UPDATE_DOCTOR_ADMIN_ERROR,
+  SET_EDIT_DOCTOR,
 } from "./action";
 
 const token = localStorage.getItem("token");
 const user = localStorage.getItem("user");
+const doctor = localStorage.getItem("user");
 const role = localStorage.getItem("role");
 const initialState = {
   isLoading: false,
   showAlert: false,
+  isEditing: false,
+  editClinicId: "",
+  editDoctorId: "",
   editUserId: "",
   alertText: "",
   alertType: "",
   user: user ? JSON.parse(user) : null,
+  doctor: doctor ? JSON.parse(doctor) : null,
   token: token || "",
   role: role || "",
   users: [],
+  clinics: [],
+  doctors: [],
   totalUsers: 0,
+  totalDoctors: 0,
+  totalClinics: 0,
+  organization: "",
+  email: "",
+  phone: "",
+  city: "",
+  street: "",
+  isVerified: false,
   numOfPages: 1,
   page: 1,
 };
@@ -81,8 +111,11 @@ const AppProvider = ({ children }) => {
       dispatch({ type: CLEAR_ALERT });
     }, 2000);
   };
-  const addUserToLocalStorage = ({ user, token, role }) => {
-    localStorage.setItem("user", JSON.stringify(user));
+  const addUserToLocalStorage = ({ user, token, role, doctor }) => {
+    user === undefined
+      ? localStorage.setItem("doctor", JSON.stringify(doctor))
+      : localStorage.setItem("user", JSON.stringify(user));
+
     localStorage.setItem("token", token);
     localStorage.setItem("role", role);
   };
@@ -91,6 +124,7 @@ const AppProvider = ({ children }) => {
     localStorage.removeItem("user", JSON.stringify(user));
     localStorage.removeItem("token", token);
     localStorage.removeItem("role", role);
+    localStorage.removeItem("doctor", JSON.stringify(doctor));
   };
 
   const registerUser = async (currentUser) => {
@@ -159,17 +193,17 @@ const AppProvider = ({ children }) => {
   const registerDoctor = async (currentUser) => {
     dispatch({ type: REGISTER_USER_BEGIN });
     try {
-      const { data } = await authFetch.post(
-        "/doctor/auth/register",
+      const { data } = await axios.post(
+        "/api/v1/doctor/auth/register",
         currentUser
       );
-      const { user, token, role } = data;
-
+      const { doctor, token, role } = data;
+      console.log(data);
       dispatch({
         type: REGISTER_USER_SUCCESS,
-        payload: { user, token, role },
+        payload: { doctor, token, role },
       });
-      addUserToLocalStorage({ user, token, role });
+      addUserToLocalStorage({ doctor, token, role });
     } catch (error) {
       console.log(error.response);
       dispatch({
@@ -206,6 +240,7 @@ const AppProvider = ({ children }) => {
     dispatch({ type: GET_ALL_USERS_BEGIN });
     try {
       const { data } = await authFetch(url);
+      console.log(data);
       const { users, totalUsers, numOfPages } = data;
       dispatch({
         type: GET_ALL_USERS_SUCCESS,
@@ -220,6 +255,68 @@ const AppProvider = ({ children }) => {
     }
     clearAlert();
   };
+  const getDoctors = async () => {
+    let url = `/admin/doctors`;
+    dispatch({ type: GET_ALL_DOCTORS_BEGIN });
+    try {
+      const { data } = await authFetch(url);
+      const { doctors, totalDoctors, numOfPages } = data;
+      dispatch({
+        type: GET_ALL_DOCTORS_SUCCESS,
+        payload: {
+          doctors,
+          totalDoctors,
+          numOfPages,
+        },
+      });
+    } catch (error) {
+      console.log(error.response);
+    }
+    clearAlert();
+  };
+  const getClinics = async () => {
+    let url = `/admin/clinics`;
+    dispatch({ type: GET_ALL_CLINICS_BEGIN });
+    try {
+      const { data } = await authFetch(url);
+      const { clinics, totalClinics, numOfPages } = data;
+      dispatch({
+        type: GET_ALL_CLINICS_SUCCESS,
+        payload: {
+          clinics,
+          totalClinics,
+          numOfPages,
+        },
+      });
+    } catch (error) {
+      console.log(error.response);
+    }
+    clearAlert();
+  };
+  const createClinic = async () => {
+    dispatch({ type: CREATE_CLINIC_ADMIN_BEGIN });
+    try {
+      const { organization, email, phone, city, street, isVerified } = state;
+      await authFetch.post("/admin/clinics", {
+        organization,
+        email,
+        phone,
+        city,
+        street,
+        isVerified,
+      });
+      dispatch({ type: CREATE_CLINIC_ADMIN_SUCCESS });
+      dispatch({ type: CLEAR_VALUES });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: CREATE_CLINIC_ADMIN_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+
+    clearAlert();
+  };
   const handleChange = ({ name, value }) => {
     dispatch({
       type: HANDLE_CHANGE,
@@ -228,6 +325,36 @@ const AppProvider = ({ children }) => {
   };
   const setEditUser = (id) => {
     dispatch({ type: SET_EDIT_USER, payload: { id } });
+  };
+  const setEditDoctor = (id) => {
+    dispatch({ type: SET_EDIT_DOCTOR, payload: { id } });
+  };
+  const setEditClinic = (id) => {
+    dispatch({ type: SET_EDIT_CLINIC, payload: { id } });
+  };
+  const updateClinicAdmin = async () => {
+    dispatch({ type: UPDATE_CLINIC_ADMIN_BEGIN });
+    try {
+      const { organization, email, phone, city, street, isVerified } = state;
+      await authFetch.patch(`/admin/clinics/${state.editClinicId}`, {
+        organization,
+        email,
+        phone,
+        city,
+        street,
+        isVerified,
+      });
+      dispatch({
+        type: UPDATE_CLINIC_ADMIN_SUCCESS,
+      });
+      dispatch({ type: CLEAR_VALUES });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: UPDATE_CLINIC_ADMIN_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
   };
   const updateUserAdmin = async () => {
     dispatch({ type: UPDATE_USER_ADMIN_BEGIN });
@@ -262,11 +389,72 @@ const AppProvider = ({ children }) => {
       });
     }
   };
+  const updateDoctorAdmin = async () => {
+    dispatch({ type: UPDATE_DOCTOR_ADMIN_BEGIN });
+    try {
+      const {
+        firstName,
+        lastName,
+        dateOfBirth,
+        phone,
+        role,
+        email,
+        docType,
+        clinic,
+        startTime,
+        endTime,
+        interval,
+        experience,
+      } = state;
+      await authFetch.patch(`/admin/doctors/${state.editDoctorId}`, {
+        firstName,
+        lastName,
+        dateOfBirth,
+        phone,
+        role,
+        email,
+        docType,
+        clinic,
+        startTime,
+        endTime,
+        interval,
+        experience,
+      });
+      dispatch({
+        type: UPDATE_DOCTOR_ADMIN_SUCCESS,
+      });
+      dispatch({ type: CLEAR_VALUES });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: UPDATE_DOCTOR_ADMIN_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+  };
   const deleteUserAdmin = async (id) => {
     dispatch({ type: DELETE_USER_ADMIN_BEGIN });
     try {
       await authFetch.delete(`/admin/users/${id}`);
       getUsers();
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+  const deleteDoctorAdmin = async (id) => {
+    dispatch({ type: DELETE_USER_ADMIN_BEGIN });
+    try {
+      await authFetch.delete(`/admin/doctors/${id}`);
+      getDoctors();
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+  const deleteClinicAdmin = async (id) => {
+    dispatch({ type: DELETE_USER_ADMIN_BEGIN });
+    try {
+      await authFetch.delete(`/admin/clinics/${id}`);
+      getClinics();
     } catch (error) {
       console.log(error.response);
     }
@@ -287,9 +475,19 @@ const AppProvider = ({ children }) => {
         logoutUser,
         getUsers,
         updateUserAdmin,
+        updateDoctorAdmin,
+        updateClinicAdmin,
         deleteUserAdmin,
+        deleteClinicAdmin,
+        deleteDoctorAdmin,
         setEditUser,
+        setEditDoctor,
+        setEditClinic,
         handleChange,
+        getDoctors,
+        getClinics,
+        clearValues,
+        createClinic,
       }}
     >
       {children}

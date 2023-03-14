@@ -11,7 +11,7 @@ const DoctorSignPage = () => {
   const [values, setValues] = useState(initialState);
   const navigate = useNavigate();
   const {
-    user,
+    doctor,
     isLoading,
     showAlert,
     displayAlert,
@@ -73,12 +73,12 @@ const DoctorSignPage = () => {
     }
   };
   useEffect(() => {
-    if (user) {
+    if (doctor) {
       setTimeout(() => {
         navigate(`/`);
       }, 2000);
     }
-  }, [user, navigate]);
+  }, [doctor, navigate]);
   return (
     <Wrapper>
       <form className="form" onSubmit={onSubmit}>

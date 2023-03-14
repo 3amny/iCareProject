@@ -16,6 +16,10 @@ import { ErrorPage } from "pages/Error/ErrorPage";
 import { ProtectedRouteAdmin } from "./ProtectedRoutes";
 import { AdminUsersAsync } from "pages/Admin/AdminUsers/AdminUsersPage.async";
 import { AdminUserEditAsync } from "pages/Admin/AdminUserEdit/AdminUserEditPage.async";
+import { AdminDoctorsAsync } from "pages/Admin/AdminDoctors/AdminDoctorsPage.async";
+import { AdminClinicsAsync } from "pages/Admin/AdminClinics/AdminClinicsPage.async";
+import { AdminAddClinicAsync } from "pages/Admin/AdminAddClinic/AdminAddClinicPage.async";
+import { AdminDoctorEditAsync } from "pages/Admin/AdminDoctorEdit/AdminDoctorEditPage.async";
 
 export const Root = (
   <>
@@ -32,6 +36,7 @@ export const Root = (
         <Route path=":doctorId" element={<DoctorPageAsync />} />
       </Route>
       <Route path="*" element={<ErrorPage />} />
+      <Route path="account/doctor/signup" element={<DoctorSignPageAsync />} />
     </Route>
     <Route
       path="/admin"
@@ -45,7 +50,10 @@ export const Root = (
 
       <Route path="users" element={<AdminUsersAsync />} />
       <Route path="users/edit" element={<AdminUserEditAsync />} />
+      <Route path="clinics" element={<AdminClinicsAsync />} />
+      <Route path="clinics/create" element={<AdminAddClinicAsync />} />
+      <Route path="doctors" element={<AdminDoctorsAsync />} />
+      <Route path="doctors/edit" element={<AdminDoctorEditAsync />} />
     </Route>
-    <Route path="/account/doctor/singup" element={<DoctorSignPageAsync />} />
   </>
 );

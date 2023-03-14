@@ -2,22 +2,28 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import { useAppContext } from "context/appContext";
-export const CardUser = ({
+export const CardDoctor = ({
   firstName,
   lastName,
-  city,
-  street,
   phone,
   role,
+  dateOfBirth,
+  experience,
+  startTime,
+  endTime,
+  interval,
   email,
   _id,
   createdAt,
+  docType,
+  clinic,
 }) => {
-  const { setEditUser, deleteUserAdmin } = useAppContext();
+  const { setEditDoctor, deleteDoctorAdmin } = useAppContext();
   let date = dayjs(createdAt).format("MMMM D, YYYY");
+  console.log(setEditDoctor);
   return (
     <Wrapper className="container">
-      <div className="user-primary-info">
+      <div className="doctor-primary-info">
         <h5>
           Id: <span>{_id}</span>
         </h5>
@@ -25,24 +31,25 @@ export const CardUser = ({
           Created at: <span>{date}</span>
         </h5>
       </div>
-      <div className="user-info">
-        <div className="user-name">
+      <div className="doctor-info">
+        <div className="doctor-name">
           <h5>
-            Full Name:{" "}
+            Full Name:
             <span>
-              {" "}
               {firstName} {lastName}
             </span>
           </h5>
-        </div>
-        <div className="user-location">
           <h5>
-            City: <span>{city}</span>
+            <span>Specialty: {docType}</span>
           </h5>
           <h5>
-            Street: <span>{street}</span>
+            <span>Experience: {experience}</span>
+          </h5>
+          <h5>
+            <span>Clinic: {clinic}</span>
           </h5>
         </div>
+        <h5>DOB: {dateOfBirth}</h5>
         <h5>
           Phone: <span>{phone}</span>
         </h5>
@@ -50,21 +57,30 @@ export const CardUser = ({
           Email: <span>{email}</span>
         </h5>
         <h5>
+          Start Time: <span>{startTime}</span>
+        </h5>
+        <h5>
+          End Time: <span>{endTime}</span>
+        </h5>
+        <h5>
+          Interval: <span>{interval}</span>
+        </h5>
+        <h5>
           Role: <span>{role}</span>
         </h5>
       </div>
-      <div className="user-actions">
+      <div className="doctor-actions">
         <Link
-          to="/admin/users/edit"
+          to="/admin/doctors/edit"
           className="btn edit-btn"
-          onClick={() => setEditUser(_id)}
+          onClick={() => setEditDoctor(_id)}
         >
           Edit
         </Link>
         <button
           type="button"
           className="btn delete-btn"
-          onClick={() => deleteUserAdmin(_id)}
+          onClick={() => deleteDoctorAdmin(_id)}
         >
           Delete
         </button>
@@ -85,14 +101,13 @@ const Wrapper = styled.div`
     margin-bottom: 0;
     font-size: 18px;
     font-weight: 700;
-    text-transform: none;
   }
   span {
     font-size: 16px;
     font-weight: 400;
   }
 
-  .user-primary-info {
+  .doctor-primary-info {
     padding: 1rem 1.5rem;
     border-bottom: 1px solid var(--grey-100);
     display: grid;
@@ -100,11 +115,11 @@ const Wrapper = styled.div`
     align-items: center;
     gap: 1rem;
   }
-  .user-info {
+  .doctor-info {
     padding: 1rem 1.5rem;
     align-items: center;
   }
-  .user-actions {
+  .doctor-actions {
     padding: 0 1.5rem;
     padding-bottom: 1rem;
   }
@@ -123,7 +138,7 @@ const Wrapper = styled.div`
     color: var(--red-dark);
     background: var(--red-light);
   }
-  &:hover .user-actions {
+  &:hover .doctor-actions {
     visibility: visible;
   }
 `;

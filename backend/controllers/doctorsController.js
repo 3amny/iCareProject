@@ -13,29 +13,34 @@ const getAll = async (req, res) => {
   });
 };
 
-const getOne = async (req, res) => {
+const updateDoctor = async (req, res) => {
   checkRolePermission(req.user, "Admin");
   const { id: doctorId } = req.params;
+  const {
+    firstName,
+    lastName,
+    phone,
+    role,
+    dateOfBirth,
+    experience,
+    startTime,
+    endTime,
+    interval,
+    email,
+    createdAt,
+    docType,
+    clinic,
+  } = req.body;
+  console.log(req.body);
+  if (!firstName || !lastName || !email || !phone || !experience) {
+    throw new BadRequest("Please provide all information");
+  }
+
   const doctor = await Doctor.findOne({ _id: doctorId });
   if (!doctor) {
     throw new NotFound(`No doctor with id ${doctorId}`);
   }
-  res.status(StatusCodes.OK).json({
-    doctor,
-  });
-};
-const updateDoctor = async (req, res) => {
-  checkRolePermission(req.user, "Admin");
-  const { id: doctorId } = req.params;
-  const { firstName, lastName, email, phone, city, street } = req.body;
-  if (!firstName || !lastName || !email || !phone || !city || !street) {
-    throw new BadRequest("Please provide all information");
-  }
-  const doctor = await Doctor.findOne({ _id: doctorId });
-  if (!doctor) {
-    throw new NotFound(`No user with id ${doctorId}`);
-  }
-  const updatedDoctor = await Doctor.findOneAndUpdate(
+  const updatedDoctor = await User.findOneAndUpdate(
     { _id: doctorId },
     req.body,
     {
@@ -52,7 +57,7 @@ const deleteDoctor = async (req, res) => {
   if (!doctor) {
     throw new NotFound(`No user with id ${doctorId}`);
   }
-  await user.remove();
+  await doctor.remove();
   res.status(StatusCodes.OK).json({ msg: "Success! User is removed!" });
 };
-export { getAll, getOne, deleteDoctor, updateDoctor };
+export { getAll, deleteDoctor, updateDoctor };

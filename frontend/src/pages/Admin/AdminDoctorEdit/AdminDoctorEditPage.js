@@ -4,28 +4,33 @@ import { useAppContext } from "context/appContext";
 import profileImage from "assets/images/profile.jpg";
 import { FormRow } from "shared/Input";
 import { Alert } from "shared/Alert";
-const AdminUserEditPage = () => {
+const AdminDoctorEditPage = () => {
   const {
     isLoading,
     showAlert,
     displayAlert,
-    email,
     firstName,
     lastName,
+    dateOfBirth,
     phone,
-    city,
-    street,
+    experience,
+    startTime,
+    endTime,
+    interval,
+    email,
+    docType,
     clearValues,
-    updateUserAdmin,
+    updateDoctorAdmin,
     handleChange,
   } = useAppContext();
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!email || !firstName || !lastName || !phone || !city || !street) {
+    if (!firstName || !lastName || !phone || !email || !experience) {
       displayAlert();
       return;
     }
-    updateUserAdmin();
+    updateDoctorAdmin();
   };
   const handleUserInput = (e) => {
     const name = e.target.name;
@@ -78,7 +83,13 @@ const AdminUserEditPage = () => {
                 value={lastName}
                 handleChange={handleUserInput}
               />
-
+              <FormRow
+                type="date"
+                labelText="Date of Birth"
+                name="dateOfBirth"
+                value={dateOfBirth}
+                handleChange={handleUserInput}
+              />
               <FormRow
                 type="text"
                 labelText="Phone"
@@ -86,7 +97,13 @@ const AdminUserEditPage = () => {
                 value={phone}
                 handleChange={handleUserInput}
               />
-
+              <FormRow
+                type="text"
+                labelText="Phone"
+                name="phone"
+                value={phone}
+                handleChange={handleUserInput}
+              />
               <FormRow
                 type="email"
                 name="email"
@@ -96,19 +113,40 @@ const AdminUserEditPage = () => {
               />
               <FormRow
                 type="text"
-                labelText="City"
-                name="city"
-                value={city}
+                labelText="Specialty"
+                name="docType"
+                value={docType}
                 handleChange={handleUserInput}
               />
               <FormRow
                 type="text"
-                labelText="Street"
-                name="street"
-                value={street}
+                labelText="Experience"
+                name="experience"
+                value={experience}
                 handleChange={handleUserInput}
               />
-              {/*add appointments array if exist */}
+              <FormRow
+                type="time"
+                labelText="Start Time"
+                name="startTime"
+                value={startTime}
+                handleChange={handleUserInput}
+              />
+              <FormRow
+                type="time"
+                labelText="End Time"
+                name="endTime"
+                value={endTime}
+                handleChange={handleUserInput}
+              />
+              <FormRow
+                type="text"
+                labelText="Interval"
+                name="interval"
+                value={interval}
+                handleChange={handleUserInput}
+              />
+
               <button
                 type="submit"
                 className="btn btn-block"
@@ -134,4 +172,4 @@ const AdminUserEditPage = () => {
   );
 };
 
-export default AdminUserEditPage;
+export default AdminDoctorEditPage;

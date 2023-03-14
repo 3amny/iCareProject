@@ -1,7 +1,7 @@
 import React from "react";
 import { SearchUser } from "shared/Search";
 import Wrapper from "./Wrapper";
-import { UsersContainer } from "shared/Container/component/UsersContainer";
+import { UsersContainer } from "shared/Container";
 const AdminUsersPage = () => {
   return (
     <Wrapper>

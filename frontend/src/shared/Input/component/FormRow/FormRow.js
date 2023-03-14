@@ -6,6 +6,7 @@ export const FormRow = ({
   labelText,
   placeholder,
   readOnly,
+  checked
 }) => {
   return (
     <div className="form-row">
@@ -15,10 +16,11 @@ export const FormRow = ({
       <input
         type={type}
         value={value}
+        checked={checked}
         name={name}
         onChange={handleChange}
         readOnly={readOnly}
-        className="form-input"
+        className={type === "checkbox" ? "form-input-checkbox" : "form-input"}
         placeholder={placeholder ? placeholder : null}
       />
     </div>

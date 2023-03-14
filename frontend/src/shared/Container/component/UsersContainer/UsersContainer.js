@@ -12,12 +12,14 @@ export const UsersContainer = () => {
   if (isLoading) {
     return <h5>Loading...</h5>;
   }
-  if (totalUsers.length === 0) {
+  if (totalUsers === 0) {
     return <h2>No users to display....</h2>;
   }
   return (
     <Wrapper>
-      <h5>{totalUsers} users were found</h5>
+      <h5>
+        {totalUsers} user{totalUsers > 1 ? "s were" : " was"} found
+      </h5>
       <div className="users">
         {users.map((user) => {
           return <CardUser key={user._id} {...user} />;
@@ -28,9 +30,7 @@ export const UsersContainer = () => {
 };
 const Wrapper = styled.div`
   margin-top: 4rem;
-  h2 {
-    text-transform: none;
-  }
+
   & > h5 {
     font-weight: 700;
   }
