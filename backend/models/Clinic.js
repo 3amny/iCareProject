@@ -3,7 +3,7 @@ import validator from "validator";
 
 const ClinicSchema = new mongoose.Schema(
   {
-    organization: {
+    name: {
       type: String,
       required: [true, "Please provide your organization name"],
       minlength: 3,

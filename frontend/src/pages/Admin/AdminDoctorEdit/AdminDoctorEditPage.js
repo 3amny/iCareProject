@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Wrapper from "pages/AccountDetails/Wrapper";
-import { useAppContext } from "context/appContext";
 import profileImage from "assets/images/profile.jpg";
-import { FormRow } from "shared/Input";
-import { Alert } from "shared/Alert";
+import { FormRow, FormRowSelect } from "shared/Input";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearValues,
+  handleChange,
+  updateDoctorAdmin,
+  fetchClinicsOptions,
+  fetchSpecialtiesOptions,
+  fetchRolesOptions,
+} from "features/Admin/Doctor/CRUD/doctorAdminSlice";
 const AdminDoctorEditPage = () => {
   const {
     isLoading,
-    showAlert,
-    displayAlert,
     firstName,
     lastName,
     dateOfBirth,
@@ -19,28 +25,52 @@ const AdminDoctorEditPage = () => {
     interval,
     email,
     docType,
-    clearValues,
-    updateDoctorAdmin,
-    handleChange,
-  } = useAppContext();
-
+    clinic,
+    editDoctorId,
+    clinicsOptions,
+    specialtiesOptions,
+    rolesOptions,
+    role,
+  } = useSelector((store) => store.doctorAdmin);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchClinicsOptions());
+    dispatch(fetchSpecialtiesOptions());
+    dispatch(fetchRolesOptions());
+  }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!firstName || !lastName || !phone || !email || !experience) {
-      displayAlert();
+      toast.error("Please fill all fields");
       return;
     }
-    updateDoctorAdmin();
+    dispatch(
+      updateDoctorAdmin({
+        doctorId: editDoctorId,
+        doctor: {
+          firstName,
+          lastName,
+          dateOfBirth,
+          phone,
+          experience,
+          startTime,
+          endTime,
+          interval,
+          email,
+          docType,
+          clinic,
+        },
+      })
+    );
   };
   const handleUserInput = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    handleChange({ name, value });
+    dispatch(handleChange({ name, value }));
   };
   return (
     <Wrapper>
       <form className="form">
-        {showAlert && <Alert />}
         <div className="account">
           <div className="account-img-container">
             <h5 className="account-title">Profile image</h5>
@@ -98,25 +128,32 @@ const AdminDoctorEditPage = () => {
                 handleChange={handleUserInput}
               />
               <FormRow
-                type="text"
-                labelText="Phone"
-                name="phone"
-                value={phone}
-                handleChange={handleUserInput}
-              />
-              <FormRow
                 type="email"
                 name="email"
                 labelText="Email"
                 value={email}
                 handleChange={handleUserInput}
               />
-              <FormRow
-                type="text"
+              <FormRowSelect
                 labelText="Specialty"
                 name="docType"
                 value={docType}
                 handleChange={handleUserInput}
+                list={specialtiesOptions}
+              />
+              <FormRowSelect
+                labelText="Clinic"
+                name="clinic"
+                value={clinic}
+                handleChange={handleUserInput}
+                list={clinicsOptions}
+              />
+              <FormRowSelect
+                labelText="Role"
+                name="role"
+                value={role}
+                handleChange={handleUserInput}
+                list={rolesOptions}
               />
               <FormRow
                 type="text"
@@ -158,8 +195,7 @@ const AdminDoctorEditPage = () => {
               <button
                 className="btn btn-block clear-btn"
                 onClick={(e) => {
-                  e.preventDefault();
-                  clearValues();
+                  dispatch(clearValues());
                 }}
               >
                 Clear

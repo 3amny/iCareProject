@@ -4,12 +4,12 @@ import { BadRequest, NotFound } from "../error/index.js";
 import checkRolePermission from "../utils/checkRolePermission.js";
 
 const createClinic = async (req, res) => {
-  const { organization, email, phone } = req.body;
+  const { name, email, phone } = req.body;
   req.body.createdBy = req.user.userId;
-  if (!organization || !email || !phone) {
+  if (!name || !email || !phone) {
     throw new BadRequest("Please provide all values");
   }
-  checkRolePermission(req.user, "Admin");
+  checkRolePermission(req.user, "642509136383af1ca69c2e99");
   const clinic = await Clinic.create(req.body);
   res.status(StatusCodes.CREATED).json({ clinic });
 };
@@ -23,10 +23,9 @@ const getAllClinics = async (req, res) => {
 };
 const updateClinic = async (req, res) => {
   const { id: clinicId } = req.params;
-  console.log(req.params);
-  const { organization, email, phone, street, city } = req.body;
-  checkRolePermission(req.user, "Admin");
-  if (!organization || !email || !phone || !street || !city) {
+  const { name, email, phone, street, city } = req.body;
+  checkRolePermission(req.user, "642509136383af1ca69c2e99");
+  if (!name || !email || !phone || !street || !city) {
     throw new BadRequest("Please provide all values");
   }
   const clinic = await Clinic.findOne({ _id: clinicId });
@@ -42,7 +41,7 @@ const updateClinic = async (req, res) => {
 };
 
 const deleteClinic = async (req, res) => {
-  checkRolePermission(req.user, "Admin");
+  checkRolePermission(req.user, "642509136383af1ca69c2e99");
   const { id: clinicId } = req.params;
   const clinic = await Clinic.findOne({ _id: clinicId });
   if (!clinic) {

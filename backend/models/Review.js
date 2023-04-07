@@ -5,11 +5,16 @@ const ReviewSchema = new mongoose.Schema(
   {
     rating: { type: Number, required: true },
     comment: { type: String, required: true },
-    user: {
+    createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "User",
     },
+    doctor: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Doctor",
+    }
   },
   {
     timestamps: true,

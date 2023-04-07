@@ -5,7 +5,8 @@ import { useState } from "react";
 import { Logo } from "shared/Image";
 import { LinkButton, ToggleButton } from "shared/Button";
 import { NavList } from "shared/List";
-import { useAppContext } from "context/appContext.js";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "features/User/Auth/userSlice";
 import { ProfileSignedNav } from "shared/Profile";
 import { MdLogout } from "react-icons/md";
 import { FiUser } from "react-icons/fi";
@@ -18,8 +19,9 @@ export const Navbar = () => {
   const openSidebar = () => setIsOpened(!isOpened);
   const [isOpenedProfile, setIsOpenedProfile] = useState(false);
   const openProfileInfo = () => setIsOpenedProfile(!isOpenedProfile);
-  const { user, logoutUser } = useAppContext();
+  const dispatch = useDispatch();
 
+  const { user} = useSelector((store) => store.user);
   return (
     <Wrapper data-overlay={isOpened}>
       <div className="container">
@@ -50,7 +52,7 @@ export const Navbar = () => {
                 classNameUl="nav-links"
               />
             </nav>
-            {!user || user.role !== "User" ? (
+            {!user || user.role !== "642509196383af1ca69c2e9b" ? (
               <div className="nav-btn">
                 <LinkButton
                   url="/account/signin"
@@ -82,7 +84,10 @@ export const Navbar = () => {
                       <Link to="account/appointments" className="profile-link">
                         Appointments
                       </Link>
-                      <button className="profile-logout" onClick={logoutUser}>
+                      <button
+                        className="profile-logout"
+                        onClick={() => dispatch(logoutUser())}
+                      >
                         <MdLogout className="logout-icon" />
                         Logout
                       </button>

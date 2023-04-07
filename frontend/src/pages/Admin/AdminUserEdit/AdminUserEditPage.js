@@ -1,41 +1,50 @@
 import React from "react";
 import Wrapper from "pages/AccountDetails/Wrapper";
-import { useAppContext } from "context/appContext";
 import profileImage from "assets/images/profile.jpg";
-import { FormRow } from "shared/Input";
-import { Alert } from "shared/Alert";
+import { FormRow, FormRowSelect } from "shared/Input";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearValues,
+  handleChange,
+  updateUserAdmin,
+} from "features/Admin/User/CRUD/userAdminSlice";
+import { toast } from "react-toastify";
 const AdminUserEditPage = () => {
   const {
     isLoading,
-    showAlert,
-    displayAlert,
     email,
     firstName,
     lastName,
     phone,
     city,
     street,
-    clearValues,
-    updateUserAdmin,
-    handleChange,
-  } = useAppContext();
+    role,
+    editUserId,
+    rolesOptions
+  } = useSelector((store) => store.userAdmin);
+  const dispatch = useDispatch();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!email || !firstName || !lastName || !phone || !city || !street) {
-      displayAlert();
+      toast.error("Please fill all fields");
       return;
     }
-    updateUserAdmin();
+    dispatch(
+      updateUserAdmin({
+        userId: editUserId,
+        user: { email, firstName, lastName, phone, city, street, role },
+      })
+    );
   };
   const handleUserInput = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    handleChange({ name, value });
+    dispatch(handleChange({ name, value }));
   };
   return (
     <Wrapper>
       <form className="form">
-        {showAlert && <Alert />}
         <div className="account">
           <div className="account-img-container">
             <h5 className="account-title">Profile image</h5>
@@ -108,6 +117,14 @@ const AdminUserEditPage = () => {
                 value={street}
                 handleChange={handleUserInput}
               />
+              <FormRowSelect
+                type="text"
+                labelText="Role"
+                name="role"
+                value={role}
+                list={rolesOptions}
+                handleChange={handleUserInput}
+              />
               {/*add appointments array if exist */}
               <button
                 type="submit"
@@ -119,9 +136,9 @@ const AdminUserEditPage = () => {
               </button>
               <button
                 className="btn btn-block clear-btn"
-                onClick={(e) => {
-                  e.preventDefault();
-                  clearValues();
+                disabled={isLoading}
+                onClick={() => {
+                  dispatch(clearValues());
                 }}
               >
                 Clear

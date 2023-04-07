@@ -4,7 +4,7 @@ import checkRolePermission from "../utils/checkRolePermission.js";
 import { BadRequest, NotFound } from "../error/index.js";
 
 const getAll = async (req, res) => {
-  checkRolePermission(req.user, "Admin");
+  checkRolePermission(req.user, "642509136383af1ca69c2e99");
   const doctors = await Doctor.find();
   res.status(StatusCodes.OK).json({
     doctors,
@@ -14,7 +14,7 @@ const getAll = async (req, res) => {
 };
 
 const updateDoctor = async (req, res) => {
-  checkRolePermission(req.user, "Admin");
+  checkRolePermission(req.user, "642509136383af1ca69c2e99");
   const { id: doctorId } = req.params;
   const {
     firstName,
@@ -51,7 +51,7 @@ const updateDoctor = async (req, res) => {
   res.status(StatusCodes.OK).json({ updatedDoctor });
 };
 const deleteDoctor = async (req, res) => {
-  checkRolePermission(req.user, "Admin");
+  checkRolePermission(req.user, "642509136383af1ca69c2e99");
   const { id: doctorId } = req.params;
   const doctor = await Doctor.findOne({ _id: doctorId });
   if (!doctor) {

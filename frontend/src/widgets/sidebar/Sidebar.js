@@ -6,23 +6,16 @@ import { adminSideBarLinks } from "utils/constants";
 import { Logo } from "shared/Image";
 import { IconButton } from "shared/Button";
 import { ProfileSigned } from "shared/Profile";
-import { useAppContext } from "context/appContext.js";
 import { MdLogout } from "react-icons/md";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutUser } from "features/User/Auth/userSlice";
 export const Sidebar = () => {
   const [isOpened, setIsOpened] = useState(false);
   const openSidebar = () => setIsOpened(!isOpened);
-  const { logoutUser, user } = useAppContext();
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!user) {
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
-    }
-  });
-
   return (
     <Wrapper className={isOpened ? "active" : null}>
       <div className="container">
@@ -53,7 +46,7 @@ export const Sidebar = () => {
             type="button"
             icon={<MdLogout />}
             btnClass="profile-logout"
-            onClick={logoutUser}
+            onClick={() => dispatch(logoutUser())}
           />
         </div>
       </div>

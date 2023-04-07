@@ -3,8 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import checkRolePermission from "../utils/checkRolePermission.js";
 
 const getAllUsers = async (req, res) => {
-  checkRolePermission(req.user, "Admin");
-
+  checkRolePermission(req.user, "642509136383af1ca69c2e99");
   const users = await User.find();
   // includes all users expect the requested one
   const filteredUsers = users.filter(
@@ -19,7 +18,7 @@ const getAllUsers = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  checkRolePermission(req.user, "Admin");
+  checkRolePermission(req.user, "642509136383af1ca69c2e99");
   const { id: userId } = req.params;
   const user = await User.findOne({ _id: userId });
 
@@ -31,7 +30,7 @@ const getUser = async (req, res) => {
   });
 };
 const updateUser = async (req, res) => {
-  checkRolePermission(req.user, "Admin");
+  checkRolePermission(req.user, "642509136383af1ca69c2e99");
   const { id: userId } = req.params;
   const { firstName, lastName, email, phone, city, street, role } = req.body;
   if (
@@ -56,7 +55,7 @@ const updateUser = async (req, res) => {
   res.status(StatusCodes.OK).json({ updatedUser });
 };
 const deleteUser = async (req, res) => {
-  checkRolePermission(req.user, "Admin");
+  checkRolePermission(req.user, "642509136383af1ca69c2e99");
   const { id: userId } = req.params;
   const user = await User.findOne({ _id: userId });
   if (!user) {

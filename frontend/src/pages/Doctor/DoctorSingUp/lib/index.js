@@ -1,3 +1,3 @@
-import { initialState, list } from "./data/signupData.js";
+import { list } from "./data/signupData.js";
 
-export{initialState, list}
+export { list };

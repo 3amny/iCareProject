@@ -20,6 +20,10 @@ import { AdminDoctorsAsync } from "pages/Admin/AdminDoctors/AdminDoctorsPage.asy
 import { AdminClinicsAsync } from "pages/Admin/AdminClinics/AdminClinicsPage.async";
 import { AdminAddClinicAsync } from "pages/Admin/AdminAddClinic/AdminAddClinicPage.async";
 import { AdminDoctorEditAsync } from "pages/Admin/AdminDoctorEdit/AdminDoctorEditPage.async";
+import RolesPage from "pages/Admin/Roles/RolesPage";
+import { CreateRoleAsync } from "pages/Admin/CreateRole/CreateRolePage.async";
+import { SpecialtiesPageAsync } from "pages/Admin/Specialties/SpecialtiesPage.async";
+import { CreateSpecialtyAsync } from "pages/Admin/CreateSpecialty/CreateSpecialtyPage.async";
 
 export const Root = (
   <>
@@ -54,6 +58,10 @@ export const Root = (
       <Route path="clinics/create" element={<AdminAddClinicAsync />} />
       <Route path="doctors" element={<AdminDoctorsAsync />} />
       <Route path="doctors/edit" element={<AdminDoctorEditAsync />} />
+      <Route path="roles" element={<RolesPage />} />
+      <Route path="roles/create" element={<CreateRoleAsync />} />
+      <Route path="specialties" element={<SpecialtiesPageAsync />} />
+      <Route path="specialties/create" element={<CreateSpecialtyAsync />} />
     </Route>
   </>
 );

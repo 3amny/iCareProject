@@ -1,57 +1,70 @@
 import React from "react";
-import { useAppContext } from "context/appContext";
 import { Link } from "react-router-dom";
 import Wrapper from "./Wrapper";
 import { FormRow } from "shared/Input";
-import { Alert } from "shared/Alert";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  handleChange,
+  clearValues,
+  createClinicAdmin,
+  updateClinicAdmin,
+} from "features/Admin/Clinic/CRUD/clinicAdminSlice";
 function AdminAddClinicPage() {
   const {
+    isLoading,
     isEditing,
-    organization,
+    name,
     email,
     phone,
     city,
     street,
     isVerified,
-    handleChange,
-    showAlert,
-    displayAlert,
-    isLoading,
-    clearValues,
-    createClinic,
-    updateClinicAdmin,
-  } = useAppContext();
-
+    editClinicId,
+  } = useSelector((store) => store.clinicAdmin);
+  const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!organization || !phone || !city || !street || !email) {
-      displayAlert();
+    if (!name || !phone || !city || !street || !email) {
+      toast.error("Please fill out all fields");
+      return;
+    }
+    if (isEditing) {
+      dispatch(
+        updateClinicAdmin({
+          clinicId: editClinicId,
+          clinic: { name, email, phone, city, street, isVerified },
+        })
+      );
       return;
     }
 
-    if (isEditing) {
-      updateClinicAdmin();
-      return;
-    }
-    createClinic();
+    dispatch(
+      createClinicAdmin({
+        name,
+        email,
+        phone,
+        city,
+        street,
+        isVerified,
+      })
+    );
   };
-  const handleUserInput = (e) => {
+  const handleClinicInput = (e) => {
     const name = e.target.name;
     const value =
       e.target.type === "checkbox" ? e.target.checked : e.target.value;
-    handleChange({ name, value });
+    dispatch(handleChange({ name, value }));
   };
   return (
     <Wrapper>
       <form className="form">
         <h5>{isEditing ? "Edit Clinic" : "Add Clinic"}</h5>
-        {showAlert && <Alert />}
         <FormRow
           type="text"
-          name="organization"
+          name="name"
           labelText="Organization"
-          value={organization}
-          handleChange={handleUserInput}
+          value={name}
+          handleChange={handleClinicInput}
         />
 
         <FormRow
@@ -59,7 +72,7 @@ function AdminAddClinicPage() {
           labelText="Email"
           name="email"
           value={email}
-          handleChange={handleUserInput}
+          handleChange={handleClinicInput}
         />
 
         <FormRow
@@ -67,28 +80,28 @@ function AdminAddClinicPage() {
           labelText="Phone"
           name="phone"
           value={phone}
-          handleChange={handleUserInput}
+          handleChange={handleClinicInput}
         />
         <FormRow
           type="text"
           labelText="City"
           name="city"
           value={city}
-          handleChange={handleUserInput}
+          handleChange={handleClinicInput}
         />
         <FormRow
           type="text"
           labelText="Street"
           name="street"
           value={street}
-          handleChange={handleUserInput}
+          handleChange={handleClinicInput}
         />
         <FormRow
           type="checkbox"
           labelText="Verified"
           name="isVerified"
           checked={isVerified}
-          handleChange={handleUserInput}
+          handleChange={handleClinicInput}
         />
 
         <div className="btn-container">

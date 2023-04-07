@@ -1,46 +1,46 @@
 import { Link } from "react-router-dom";
 import { FormRow } from "shared/Input";
-import { Alert } from "shared/Alert";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useAppContext } from "context/appContext";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "features/User/Auth/userSlice.js";
 import Wrapper from "./Wrapper.js";
-
+import { toast } from "react-toastify";
 const initialState = {
-  firstName: "",
-  lastName: "",
   password: "",
   email: "",
-  phone: "",
-  isMember: true,
 };
 
- const SigninPage = () => {
+const SigninPage = () => {
   const [values, setValues] = useState(initialState);
+  const dispatch = useDispatch();
+  const { isLoading, user, role } = useSelector((store) => store.user);
   const navigate = useNavigate();
-  const { user, isLoading, showAlert, displayAlert, loginUser, role } =
-    useAppContext();
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
   const onSubmit = (e) => {
     e.preventDefault();
-    const { firstName, lastName, password, email, phone } = values;
+    const { password, email } = values;
     if (!email || !password) {
-      displayAlert();
+      toast.error("Please fill out the fields");
       return;
     }
-    const currentUser = { firstName, lastName, password, email, phone };
-    loginUser(currentUser);
+    dispatch(
+      loginUser({
+        email: email,
+        password: password,
+      })
+    );
   };
 
   useEffect(() => {
     if (role) {
-      if (role === "User") {
+      if (role === "642509196383af1ca69c2e9b") {
         setTimeout(() => {
           navigate("/");
         }, 2000);
-      } else if (role === "Admin") {
+      } else if (role === "642509136383af1ca69c2e99") {
         setTimeout(() => {
           navigate("/admin");
         }, 2000);
@@ -51,7 +51,6 @@ const initialState = {
     <Wrapper>
       <form className="form" onSubmit={onSubmit}>
         <h5>SING IN</h5>
-        {showAlert && <Alert />}
         <FormRow
           type="email"
           name="email"
@@ -81,5 +80,4 @@ const initialState = {
   );
 };
 
-
-export default SigninPage
+export default SigninPage;

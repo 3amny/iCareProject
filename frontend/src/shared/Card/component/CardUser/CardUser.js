@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import dayjs from "dayjs";
-import { useAppContext } from "context/appContext";
+import { useDispatch } from "react-redux";
+import {
+  deleteUserAdmin,
+  setEditUser,
+} from "features/Admin/User/CRUD/userAdminSlice";
 export const CardUser = ({
   firstName,
   lastName,
@@ -13,7 +17,7 @@ export const CardUser = ({
   _id,
   createdAt,
 }) => {
-  const { setEditUser, deleteUserAdmin } = useAppContext();
+  const dispatch = useDispatch();
   let date = dayjs(createdAt).format("MMMM D, YYYY");
   return (
     <Wrapper className="container">
@@ -28,9 +32,8 @@ export const CardUser = ({
       <div className="user-info">
         <div className="user-name">
           <h5>
-            Full Name:{" "}
+            Full Name:
             <span>
-              {" "}
               {firstName} {lastName}
             </span>
           </h5>
@@ -57,14 +60,27 @@ export const CardUser = ({
         <Link
           to="/admin/users/edit"
           className="btn edit-btn"
-          onClick={() => setEditUser(_id)}
+          onClick={() =>
+            dispatch(
+              setEditUser({
+                editUserId: _id,
+                firstName,
+                lastName,
+                city,
+                street,
+                phone,
+                role,
+                email,
+              })
+            )
+          }
         >
           Edit
         </Link>
         <button
           type="button"
           className="btn delete-btn"
-          onClick={() => deleteUserAdmin(_id)}
+          onClick={() => dispatch(deleteUserAdmin(_id))}
         >
           Delete
         </button>

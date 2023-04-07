@@ -3,9 +3,13 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import { Checkbox, FormRow } from "shared/Input";
-import { useAppContext } from "context/appContext";
+import { useDispatch } from "react-redux";
+import {
+  deleteClinicAdmin,
+  setEditClinic,
+} from "features/Admin/Clinic/CRUD/clinicAdminSlice";
 export const CardClinic = ({
-  organization,
+  name,
   email,
   city,
   street,
@@ -16,8 +20,7 @@ export const CardClinic = ({
   isVerified,
 }) => {
   let date = dayjs(createdAt).format("MMMM D, YYYY");
-  const { setEditClinic, deleteClinicAdmin } = useAppContext();
-
+  const dispatch = useDispatch();
   return (
     <Wrapper className="container">
       <div className="clinic-primary-info">
@@ -32,7 +35,7 @@ export const CardClinic = ({
       <div className="clinic-info">
         <div className="clinic-name">
           <h5>
-            Organization: <span>{organization}</span>
+            Organization: <span>{name}</span>
           </h5>
         </div>
         <div className="clinic-location">
@@ -60,14 +63,26 @@ export const CardClinic = ({
         <Link
           to="/admin/clinics/create"
           className="btn edit-btn"
-          onClick={() => setEditClinic(_id)}
+          onClick={() =>
+            dispatch(
+              setEditClinic({
+                editClinicId: _id,
+                organization,
+                email,
+                city,
+                street,
+                phone,
+                isVerified,
+              })
+            )
+          }
         >
           Edit
         </Link>
         <button
           type="button"
           className="btn delete-btn"
-          onClick={() => deleteClinicAdmin(_id)}
+          onClick={() => dispatch(deleteClinicAdmin(_id))}
         >
           Delete
         </button>

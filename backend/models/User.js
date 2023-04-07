@@ -46,26 +46,20 @@ const UserSchema = new mongoose.Schema(
         message: "Please provide valid phone number",
       },
     },
-    city: {
-        type: String,
-        default: "Tashkent",
-    },
-     street: {
-        type: String,
-        default: "Street",
-     },
-  
+    // Default basic User role
     role: {
-      type: String,
-      enum: ["Admin", "User"],
-      default: "User",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Role",
+      default: "642509196383af1ca69c2e9b"
     },
-    appointments: [
-      {
-        type: mongoose.Types.ObjectId,
-        ref: "Appointment",
-      },
-    ],
+    city: {
+      type: String,
+      default: "Tashkent",
+    },
+    street: {
+      type: String,
+      default: "Street",
+    },
   },
   { timestamps: true }
 );

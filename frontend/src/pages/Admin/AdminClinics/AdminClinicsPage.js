@@ -5,10 +5,10 @@ import Wrapper from "./Wrapper";
 const AdminClinicsPage = () => {
   return (
     <Wrapper>
-   
+      <div className="container">
         <SearchClinic />
         <ClinicsContainer />
-  
+      </div>
     </Wrapper>
   );
 };

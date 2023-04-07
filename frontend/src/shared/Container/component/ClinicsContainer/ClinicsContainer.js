@@ -1,20 +1,26 @@
 import { useEffect } from "react";
-import { useAppContext } from "context/appContext";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { CardClinic } from "shared/Card/component/CardClinic/CardClinic";
 import { IoAddCircleSharp } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
+
+import { getAllClinics } from "features/Admin/Clinic/getAll/allClinicsSlice";
+
 export const ClinicsContainer = () => {
-  const { clinics, getClinics, numOfPages, totalClinics, isLoading } =
-    useAppContext();
+  const { clinics, totalClinics, isLoading } = useSelector(
+    (store) => store.allClinics
+  );
+ 
+  const dispatch = useDispatch();
   useEffect(() => {
-    getClinics();
+    dispatch(getAllClinics());
   }, []);
 
   if (isLoading) {
     return <h5>Loading...</h5>;
   }
-  if (totalClinics === 0) {
+  if (clinics.length === 0) {
     return <h2>No clinic to display....</h2>;
   }
 
@@ -22,7 +28,7 @@ export const ClinicsContainer = () => {
     <Wrapper>
       <div className="info">
         <h5>
-          {totalClinics} clinic{totalClinics > 1 ? "s were" : " was"} found
+          {clinics.length} clinic{clinics.length > 1 ? "s were" : " was"} found
         </h5>
         <Link to="/admin/clinics/create" className="btn add-btn">
           <IoAddCircleSharp />

@@ -9,7 +9,6 @@ const register = async (req, res) => {
     email,
     password,
     phone,
-    role,
     experience,
     docType,
     clinic,
@@ -35,9 +34,9 @@ const register = async (req, res) => {
   }
 
   req.body.timeSlots = Doctor.generateTimeSlots(startTime, endTime, interval);
-
   const timeSlots = req.body.timeSlots;
-  console.log(timeSlots);
+  req.body.role = "6425091d6383af1ca69c2e9d";
+  const role = req.body.role;
   const doctor = await Doctor.create({
     firstName,
     lastName,

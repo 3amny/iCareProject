@@ -4,6 +4,8 @@ import {
   createRoutesFromElements,
   RouterProvider,
 } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Root } from "./lib/Root";
 const router = createBrowserRouter(createRoutesFromElements(Root));
 
@@ -11,7 +13,8 @@ function App() {
   return (
     <React.StrictMode>
       <Suspense fallback={<>Loading....</>}>
-        <RouterProvider router={router} />
+        <ToastContainer position="top-center" />
+        <RouterProvider router={router}/>
       </Suspense>
     </React.StrictMode>
   );

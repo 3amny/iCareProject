@@ -1,7 +1,8 @@
 import User from "../models/User.js";
 import { StatusCodes } from "http-status-codes";
 import { BadRequest, UnAuthenticated } from "../error/index.js";
-import bcrypt from "bcryptjs";
+
+
 const register = async (req, res) => {
   const { firstName, lastName, email, password, phone, role } = req.body;
   if (!firstName || !lastName || !email || !password || !phone) {
@@ -36,7 +37,6 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  try {
     const { email, password } = req.body;
     if (!email || !password) {
       throw new BadRequest("Please provide all values");
@@ -56,9 +56,6 @@ const login = async (req, res) => {
       token,
       role: user.role,
     });
-  } catch (error) {
-    console.log(error);
-  }
 };
 
 const update = async (req, res) => {

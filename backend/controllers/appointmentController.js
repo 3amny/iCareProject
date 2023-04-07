@@ -3,37 +3,56 @@ import { StatusCodes } from "http-status-codes";
 import { BadRequest, NotFound } from "../error/index.js";
 import checkPermissions from "../utils/checkPermissions.js";
 import Doctor from "../models/Doctor.js";
+import dayjs from "dayjs";
+const createAppointment = async (req, res, next) => {
+  const { doctorId, date, notes } = req.body;
+const userId = req.user.id;
 
-const createAppointment = async (req, res) => {
-  const { date, timeSlot, notes } = req.body;
-  const { id: _doctorId } = req.params;
-  const doctor = await Doctor.findOne({ _id: _doctorId });
-  
-  if (!date || !timeSlot) {
-    throw new BadRequest("Please provide required information");
+try {
+  // Check if the doctor exists
+  const doctor = await Doctor.findOne({ _id: doctorId });
+  if (!doctor) {
+    return res.status(404).json({ message: "Doctor not found" });
   }
-  req.body.patient = req.user.userId;
-  const patient = req.body.patient;
-  req.body.doctorId = req.params.id;
-  const doctorId = req.body.doctorId;
-
-  req.body.timeSlot = await doctor.timeSlots[timeSlot];
-  const appointment = await Appointment.create({
-    doctorId,
-    patient,
+  
+  // Check if the time slot is available for the specific date
+  const appointmentExists = await Appointment.exists({
+    doctor: doctorId,
     date,
-    timeSlot,
+  });
+  if (appointmentExists) {
+    return res
+      .status(400)
+      .json({ message: "The selected time slot is not available" });
+  }
+
+  // Create the appointment
+  const appointment = await Appointment.create({
+    doctor: doctorId,
+    createdBy: userId,
+    date,
     notes,
   });
-  res.status(StatusCodes.CREATED).json({
+
+  return res.status(StatusCodes.CREATED).json({
     appointment: {
-      doctor: appointment.doctorId,
-      patient: appointment.patient,
+      doctor: appointment.doctor,
+      createdBy: appointment.createdBy,
       date: appointment.date,
-      timeSlot: appointment.timeSlot,
       notes: appointment.notes,
     },
   });
+} catch (err) {
+  return next(err);
+}
 };
 
-export { createAppointment };
+const getAllAppointments = async (req, res, next) => {
+  const appointments = await Appointment.find();
+  res.status(StatusCodes.OK).json({
+    appointments,
+    totalAppointments: appointments.length,
+    numOfPages: 1,
+  });
+};
+export { createAppointment, getAllAppointments };

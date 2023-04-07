@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { FormRow } from "shared/Input";
-import { Alert } from "shared/Alert";
-import { useAppContext } from "../../context/appContext";
+import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import Wrapper from "./Wrapper.js";
+import { useDispatch, useSelector } from "react-redux";
+import { store } from "store.js";
+import { registerUser } from "features/User/Auth/userSlice.js";
 const initialState = {
   firstName: "",
   lastName: "",
@@ -15,34 +17,46 @@ const initialState = {
 
 const SignupPage = () => {
   const [values, setValues] = useState(initialState);
+  const dispatch = useDispatch();
+  const { isLoading, user } = useSelector((store) => store.user);
+
   const navigate = useNavigate();
-  const { user, isLoading, showAlert, displayAlert, registerUser } =
-    useAppContext();
+
   const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
+    const name = e.target.name;
+    const value = e.target.value;
+    setValues({ ...values, [name]: value });
   };
   const onSubmit = (e) => {
     e.preventDefault();
     const { firstName, lastName, password, email, phone } = values;
     if (!email || !password || !firstName || !lastName || !phone) {
-      displayAlert();
+      toast.error("Please fill out the fields");
       return;
     }
-    const currentUser = { firstName, lastName, password, email, phone };
-    registerUser(currentUser);
+    dispatch(
+      registerUser({
+        firstName,
+        lastName,
+        password,
+        email,
+        phone,
+      })
+    );
   };
+
   useEffect(() => {
     if (user) {
       setTimeout(() => {
         navigate("/");
-      }, 2000);
+      }, 3000);
     }
   }, [user, navigate]);
   return (
     <Wrapper>
       <form className="form" onSubmit={onSubmit}>
         <h5>SIGN UP</h5>
-        {showAlert && <Alert />}
+        {/* {showAlert && <Alert />} */}
         <FormRow
           type="text"
           name="firstName"
@@ -82,7 +96,7 @@ const SignupPage = () => {
           handleChange={handleChange}
         />
         <button type="submit" className="btn btn-block" disabled={isLoading}>
-          Submit
+          {isLoading ? "Please wait..." : "Submit"}
         </button>
         <div className="link">
           <p>Already a memeber? </p>
@@ -95,5 +109,4 @@ const SignupPage = () => {
   );
 };
 
-
-export default SignupPage
+export default SignupPage;

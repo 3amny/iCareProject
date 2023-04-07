@@ -4,30 +4,42 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Wrapper from "./Wrapper";
 import { FormRow } from "shared/Input";
-import { Alert } from "shared/Alert";
-import { useAppContext } from "context/appContext";
+import { store } from "store";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { updateUser } from "features/User/Auth/userSlice";
 
 const AccountDetailsPage = () => {
-  const { user, isLoading, showAlert, displayAlert, updateUser } =
-    useAppContext();
-  const [firstName, setFirstName] = useState(user?.firstName);
-  const [lastName, setLastName] = useState(user?.lastName);
-  const [phone, setPhoneNum] = useState(user?.phone);
-  const [email, setEmail] = useState(user?.email);
-  const [city, setCity] = useState(user?.city);
-  const [street, setStreet] = useState(user?.street);
+  const { isLoading, user } = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+
+  const [userData, setUserData] = useState({
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    phone: user?.phone || "",
+    email: user?.email || "",
+    city: user?.city || "",
+    street: user?.street || "",
+  });
+
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setUserData({ ...userData, [name]: value });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    const { firstName, lastName, phone, email, city, street } = userData;
     if (!email || !firstName || !lastName || !phone || !city || !street) {
-      displayAlert();
+      toast.error(`Please fill out all fields`);
       return;
     }
-    updateUser({ firstName, lastName, email, phone, street, city });
+    dispatch(updateUser(userData));
   };
   return (
     <Wrapper>
       <form className="form" onSubmit={handleSubmit}>
-        {showAlert && <Alert />}
         <div className="account">
           <div className="account-img-container">
             <h5 className="account-title">Profile image</h5>
@@ -59,46 +71,46 @@ const AccountDetailsPage = () => {
                 type="text"
                 name="firstName"
                 labelText="First Name"
-                value={firstName}
-                handleChange={(e) => setFirstName(e.target.value)}
+                value={userData.firstName}
+                handleChange={handleChange}
               />
 
               <FormRow
                 type="text"
                 labelText="Last Name"
                 name="lastName"
-                value={lastName}
-                handleChange={(e) => setLastName(e.target.value)}
+                value={userData.lastName}
+                handleChange={handleChange}
               />
 
               <FormRow
                 type="text"
                 labelText="Phone"
                 name="phone"
-                value={phone}
-                handleChange={(e) => setPhoneNum(e.target.value)}
+                value={userData.phone}
+                handleChange={handleChange}
               />
 
               <FormRow
                 type="email"
                 name="email"
                 labelText="Email"
-                value={email}
-                handleChange={(e) => setEmail(e.target.value)}
+                value={userData.email}
+                handleChange={handleChange}
               />
               <FormRow
                 type="text"
                 labelText="City"
                 name="city"
-                value={city}
-                handleChange={(e) => setCity(e.target.value)}
+                value={userData.city}
+                handleChange={handleChange}
               />
               <FormRow
                 type="text"
                 labelText="Street"
                 name="street"
-                value={street}
-                handleChange={(e) => setStreet(e.target.value)}
+                value={userData.street}
+                handleChange={handleChange}
               />
 
               <button

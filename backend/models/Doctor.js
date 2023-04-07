@@ -1,95 +1,24 @@
 import mongoose from "mongoose";
-import validator from "validator";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import dayjs from "dayjs";
 import BadRequest from "../error/bad-request.js";
+import User from "./User.js";
+
 const DoctorSchema = new mongoose.Schema(
   {
-    firstName: {
-      type: String,
-      required: [true, "Please provide your name"],
-      minlength: 3,
-      maxlength: 20,
-      trim: true,
-    },
-    lastName: {
-      type: String,
-      required: [true, "Please provide your last name"],
-      minlength: 3,
-      maxlength: 20,
-      trim: true,
-    },
-    dateOfBirth: {
-      type: Date,
-    },
-    email: {
-      type: String,
-      required: [true, "Please provide your email"],
-      validate: {
-        validator: validator.isEmail,
-        message: "Please provide valid email",
-      },
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: [true, "Please provide your password"],
-      minlength: 7,
-      select: false,
-    },
-    phone: {
-      type: String,
-      required: [true, "Please provide your phone number"],
-      validate: {
-        validator: validator.isMobilePhone,
-        message: "Please provide valid phone number",
-      },
-    },
     experience: {
       type: String,
       enum: ["1 year", "3 years", "5 years", "7+ years"],
       required: [true, "Please provide years of experience..."],
     },
     docType: {
-      type: String,
-      enum: [
-        "Pediatrician",
-        "Neurologist",
-        "Dermatologist",
-        "Psychiatrist",
-        "Gynechologist",
-        "General Practioner",
-        "Dentist",
-        "Family Doctor",
-        "Surgeon",
-        "Pulmonologist",
-        "Cardiologist",
-        "Epidemiologist",
-        "Urologist",
-        "Optometrist",
-        "Radiologist",
-        "Surgeon",
-        "Gastroenterologist",
-        "Endocrinologist",
-        "Cardiologist,",
-        "Oncologist",
-        "---Select---",
-      ],
-      default: "---Select---",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Specialty",
+      required: [true, "Specify your specialty"],
     },
     clinic: {
-      // type: mongoose.Schema.Types.ObjectId,
-      // ref: "Clinic",
-      // required: [true, "Should be employed by a clinic..."],
-      type: String,
-      enum: ["Clinic №1", "Clinic №2", "Clinic №3", "Clinic №4"],
-      default: "Clinic №1",
-    },
-    role: {
-      type: String,
-      enum: ["Admin", "User", "Doctor"],
-      default: "Doctor",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Clinic",
+      required: [true, "Should be employed by a clinic..."],
     },
     isVerified: {
       type: Boolean,
@@ -108,29 +37,7 @@ const DoctorSchema = new mongoose.Schema(
       type: Array,
     },
   },
-  { timestamps: true }
-);
-// hashing passwords
-
-DoctorSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-});
-
-DoctorSchema.methods.createJWT = function () {
-  return jwt.sign(
-    { doctorId: this._id, role: this.role, isVerified: this.isVerified },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: process.env.JWT_LIFETIME,
-    }
-  );
-};
-DoctorSchema.methods.comparePassword = async function (doctorPassword) {
-  const isMatch = await bcrypt.compare(doctorPassword, this.password);
-  return isMatch;
-};
+  { timestamps: true }, { collection: 'doctors' });
 
 DoctorSchema.statics.generateTimeSlots = function (
   startTime,
@@ -138,21 +45,23 @@ DoctorSchema.statics.generateTimeSlots = function (
   interval
 ) {
   let timeSlots = [];
-  startTime = dayjs(startTime, "HH:mm");
-  console.log(startTime);
-  endTime = dayjs(endTime, "HH:mm");
-  if (startTime.isSame(endTime)) {
+  // In order for the function to properly work i had to set the date to 1970-01-01
+  let start =  dayjs(`1970-01-01T${startTime}:00`);
+  let end = dayjs(`1970-01-01T${endTime}:00`);
+  if (start.isSame(end)) {
     return new BadRequest("End time can not be equal to start time");
   }
-  if (startTime.isAfter(endTime)) {
+  if (start.isAfter(end)) {
     return new BadRequest("End time can not be less than start time");
   }
-  while (startTime < endTime) {
-    timeSlots.push(startTime.format("HH:mm"));
-    startTime = startTime.add(interval, "minute");
+  while (start < end) {
+    timeSlots.push(start.format("HH:mm"));
+    start = start.add(interval, "minute");
   }
 
   return timeSlots;
 };
 
-export default mongoose.model("Doctor", DoctorSchema);
+
+
+export default User.discriminator("Doctor", DoctorSchema);

@@ -1,24 +1,27 @@
-import React from "react";
+import { getAllUsers } from "features/Admin/User/getAll/allUsersSlice";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { CardUser } from "shared/Card";
-import { useAppContext } from "context/appContext";
-import { useEffect } from "react";
 import styled from "styled-components";
 export const UsersContainer = () => {
-  const { users, getUsers, numOfPages, totalUsers, isLoading } =
-    useAppContext();
+  const { users, isLoading } = useSelector(
+    (store) => store.allUsers
+  );
+  const dispatch = useDispatch();
   useEffect(() => {
-    getUsers();
+    dispatch(getAllUsers());
   }, []);
+
   if (isLoading) {
     return <h5>Loading...</h5>;
   }
-  if (totalUsers === 0) {
+  if (users.length === 0) {
     return <h2>No users to display....</h2>;
   }
   return (
     <Wrapper>
       <h5>
-        {totalUsers} user{totalUsers > 1 ? "s were" : " was"} found
+        {users.length} user{users.length > 1 ? "s were" : " was"} found
       </h5>
       <div className="users">
         {users.map((user) => {

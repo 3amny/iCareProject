@@ -1,43 +1,52 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { FormRow } from "shared/Input";
-import { Alert } from "shared/Alert";
-import { useAppContext } from "context/appContext";
+import { FormRow, FormRowSelect } from "shared/Input";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { initialState, list } from "./lib";
+import { list } from "./lib";
+import {
+  fetchSpecialtiesOptions,
+  handleChange,
+  toggleMember,
+} from "features/Doctor/Auth/doctorSlice";
 import Wrapper from "./Wrapper";
-
+import { useDispatch, useSelector } from "react-redux";
+import { fetchClinicsOptions } from "features/Doctor/Auth/doctorSlice";
+import { loginDoctor, registerDoctor } from "features/Doctor/Auth/doctorSlice";
 const DoctorSignPage = () => {
-  const [values, setValues] = useState(initialState);
-  const navigate = useNavigate();
   const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    docType,
+    clinic,
+    password,
+    experience,
+    startTime,
+    endTime,
+    interval,
+    isMember,
+    clinicsOptions,
+    specialtiesOptions,
     doctor,
     isLoading,
-    showAlert,
-    displayAlert,
-    registerDoctor,
-    loginDoctor,
-  } = useAppContext();
-  const toggleMember = () => {
-    setValues({ ...values, isMember: !values.isMember });
-  };
-  const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
+  } = useSelector((store) => store.doctor);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchClinicsOptions());
+    dispatch(fetchSpecialtiesOptions());
+  }, []);
+
+  const handleDoctorInput = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    dispatch(handleChange({ name, value }));
   };
   const onSubmit = (e) => {
     e.preventDefault();
-    const {
-      firstName,
-      lastName,
-      password,
-      email,
-      phone,
-      experience,
-      isMember,
-      startTime,
-      endTime,
-      interval,
-    } = values;
+
     if (
       !email ||
       !password ||
@@ -45,31 +54,38 @@ const DoctorSignPage = () => {
         (!firstName ||
           !lastName ||
           !email ||
+          !docType ||
+          !clinic ||
           !password ||
           !phone ||
           !experience ||
           !startTime ||
           !endTime))
     ) {
-      displayAlert();
+      toast.error("Please fill out the fields");
       return;
     }
 
-    const currentDoctor = {
-      firstName,
-      lastName,
-      password,
-      email,
-      phone,
-      experience,
-      startTime,
-      endTime,
-      interval,
-    };
     if (isMember) {
-      loginDoctor(currentDoctor);
+      dispatch(loginDoctor({ email: email, password: password }));
+      return;
     } else {
-      registerDoctor(currentDoctor);
+      dispatch(
+        registerDoctor({
+          firstName,
+          lastName,
+          password,
+          email,
+          docType,
+          clinic,
+          phone,
+          experience,
+          startTime,
+          endTime,
+          interval,
+        })
+      );
+      return;
     }
   };
   useEffect(() => {
@@ -82,64 +98,79 @@ const DoctorSignPage = () => {
   return (
     <Wrapper>
       <form className="form" onSubmit={onSubmit}>
-        <h5>{values.isMember ? "SING IN" : "SIGN UP"}</h5>
-        {showAlert && <Alert />}
-        {!values.isMember && [
+        <h5>{isMember ? "SING IN" : "SIGN UP"}</h5>
+        {!isMember && [
           <FormRow
             key={list.firstname}
             type="text"
             name="firstName"
             labelText="First Name"
-            value={values.firstName}
-            handleChange={handleChange}
+            value={firstName}
+            handleChange={handleDoctorInput}
           />,
           <FormRow
             key={list.lastname}
             type="text"
             labelText="Last Name"
             name="lastName"
-            value={values.lastName}
-            handleChange={handleChange}
+            value={lastName}
+            handleChange={handleDoctorInput}
           />,
           <FormRow
             key={list.phone}
             type="text"
             labelText="Phone"
             name="phone"
-            value={values.phone}
-            handleChange={handleChange}
+            value={phone}
+            handleChange={handleDoctorInput}
+          />,
+          <FormRowSelect
+            key={list.docType}
+            labelText="Specialty"
+            name="docType"
+            value={docType}
+            handleChange={handleDoctorInput}
+            list={specialtiesOptions}
+          />,
+          <FormRowSelect
+            key={list.clinic}
+            labelText="Clinic"
+            name="clinic"
+            value={clinic}
+            handleChange={handleDoctorInput}
+            list={clinicsOptions}
           />,
           <FormRow
             key={list.experience}
             type="text"
             labelText="Experience"
             name="experience"
-            value={values.experience}
-            handleChange={handleChange}
+            value={experience}
+            handleChange={handleDoctorInput}
           />,
           <FormRow
             key={list.startTime}
             type="time"
             labelText="Start Time"
             name="startTime"
-            value={values.startTime}
-            handleChange={handleChange}
+            value={startTime}
+            handleChange={handleDoctorInput}
           />,
           <FormRow
             key={list.endTime}
             type="time"
             labelText="End Time"
             name="endTime"
-            value={values.endTime}
-            handleChange={handleChange}
+            value={endTime}
+            handleChange={handleDoctorInput}
           />,
           <FormRow
             key={list.interval}
             type="text"
             labelText="Appointment duration"
             name="interval"
-            value={values.interval}
-            handleChange={handleChange}
+            value={interval}
+            handleChange={handleDoctorInput}
           />,
         ]}
 
@@ -148,24 +179,28 @@ const DoctorSignPage = () => {
           type="email"
           name="email"
           labelText="Email"
-          value={values.email}
-          handleChange={handleChange}
+          value={email}
+          handleChange={handleDoctorInput}
         />
         <FormRow
           key={list.password}
           type="password"
           labelText="Password"
           name="password"
-          value={values.password}
-          handleChange={handleChange}
+          value={password}
+          handleChange={handleDoctorInput}
         />
         <button type="submit" className="btn btn-block" disabled={isLoading}>
           Submit
         </button>
         <p>
-          {values.isMember ? "Not a member yet? " : "Already a member? "}
-          <button type="button" onClick={toggleMember} className="member-btn">
-            {values.isMember ? "Sign up " : "Sign in"}
+          {isMember ? "Not a member yet? " : "Already a member? "}
+          <button
+            type="button"
+            onClick={() => dispatch(toggleMember())}
+            className="member-btn"
+          >
+            {isMember ? "Sign up " : "Sign in"}
           </button>
         </p>
       </form>
@@ -173,5 +208,4 @@ const DoctorSignPage = () => {
   );
 };
 
-
-export default DoctorSignPage
+export default DoctorSignPage;

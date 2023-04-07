@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import dayjs from "dayjs";
-import { useAppContext } from "context/appContext";
+import { useDispatch } from "react-redux";
+import { deleteDoctorAdmin, setEditDoctor } from "features/Admin/Doctor/CRUD/doctorAdminSlice";
+
 export const CardDoctor = ({
   firstName,
   lastName,
@@ -18,9 +20,8 @@ export const CardDoctor = ({
   docType,
   clinic,
 }) => {
-  const { setEditDoctor, deleteDoctorAdmin } = useAppContext();
   let date = dayjs(createdAt).format("MMMM D, YYYY");
-  console.log(setEditDoctor);
+  const dispatch = useDispatch();
   return (
     <Wrapper className="container">
       <div className="doctor-primary-info">
@@ -73,14 +74,33 @@ export const CardDoctor = ({
         <Link
           to="/admin/doctors/edit"
           className="btn edit-btn"
-          onClick={() => setEditDoctor(_id)}
+          onClick={() =>
+            dispatch(
+              setEditDoctor({
+                firstName,
+                lastName,
+                phone,
+                role,
+                dateOfBirth,
+                experience,
+                startTime,
+                endTime,
+                interval,
+                email,
+                editClinicId: _id,
+                createdAt,
+                docType,
+                clinic,
+              })
+            )
+          }
         >
           Edit
         </Link>
         <button
           type="button"
           className="btn delete-btn"
-          onClick={() => deleteDoctorAdmin(_id)}
+          onClick={() => dispatch(deleteDoctorAdmin(_id))}
         >
           Delete
         </button>

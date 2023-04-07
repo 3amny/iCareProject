@@ -1,15 +1,18 @@
 import React from "react";
-import { useAppContext } from "context/appContext";
+import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import styled from "styled-components";
 import { CardDoctor } from "shared/Card/component/CardDoctor/CardDoctor/CardDoctor";
+import { useSelector } from "react-redux";
+import { getAllDoctors } from "features/Admin/Doctor/getAll/allDoctorsSlice";
 export const DoctorsContainer = () => {
-  const { doctors, getDoctors, numOfPages, totalDoctors, isLoading } =
-    useAppContext();
+  const { doctors, totalDoctors, isLoading } = useSelector(
+    (store) => store.allDoctors
+  );
+  const dispatch = useDispatch();
   useEffect(() => {
-    getDoctors();
+    dispatch(getAllDoctors());
   }, []);
-
   if (isLoading) {
     return <h5>Loading...</h5>;
   }
