@@ -4,12 +4,25 @@ import checkRolePermission from "../utils/checkRolePermission.js";
 import { BadRequest, NotFound } from "../error/index.js";
 
 const getAll = async (req, res) => {
-  checkRolePermission(req.user, "642509136383af1ca69c2e99");
-  const doctors = await Doctor.find();
+  const doctors = await Doctor.find()
+    .populate("docType", "name")
+    .populate("clinic", "name");
   res.status(StatusCodes.OK).json({
     doctors,
     totalDoctors: doctors.length,
     numOfPages: 1,
+  });
+};
+const getById = async (req, res) => {
+  const { id: doctorId } = req.params;
+  const doctor = await Doctor.findOne({ _id: doctorId })
+    .populate("docType", "name")
+    .populate("clinic", "name");
+  if (!doctor) {
+    throw new NotFound(`No doctor with id ${doctorId}`);
+  }
+  res.status(StatusCodes.OK).json({
+    doctor,
   });
 };
 
@@ -60,4 +73,4 @@ const deleteDoctor = async (req, res) => {
   await doctor.remove();
   res.status(StatusCodes.OK).json({ msg: "Success! User is removed!" });
 };
-export { getAll, deleteDoctor, updateDoctor };
+export { getAll, deleteDoctor, updateDoctor, getById };

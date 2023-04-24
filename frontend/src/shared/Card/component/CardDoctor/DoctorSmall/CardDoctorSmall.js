@@ -34,6 +34,7 @@ const Wrapper = styled.div`
     border-radius: var(--borderRadius);
     box-shadow: var(--shadow-3);
     padding: 10px 20px;
+    background-color: white;
   }
 
   .doc-image img {

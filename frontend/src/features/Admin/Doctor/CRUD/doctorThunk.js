@@ -5,15 +5,16 @@ import {
   hideLoading,
   showLoading,
 } from "../getAll/allDoctorsSlice";
-import { clearValues } from "./doctorAdminSlice";
+import { clearValues } from "./doctorSlice";
 
 export const updateDoctorAdminThunk = async (
   { doctor, doctorId },
   thunkAPI
 ) => {
   try {
+    
     const response = await apiFetch.patch(
-      `/admin/doctors/${doctorId}`,
+      `/doctors/${doctorId}`,
       doctor,
       authUserHeader(thunkAPI)
     );
@@ -23,11 +24,12 @@ export const updateDoctorAdminThunk = async (
     return thunkAPI.rejectWithValue(error.response.data.msg);
   }
 };
+
 export const deleteDoctorAdminThunk = async (doctorId, thunkAPI) => {
   thunkAPI.dispatch(showLoading());
   try {
     const response = await apiFetch.delete(
-      `/admin/doctors/${doctorId}`,
+      `/doctors/${doctorId}`,
       authUserHeader(thunkAPI)
     );
     thunkAPI.dispatch(getAllDoctors());

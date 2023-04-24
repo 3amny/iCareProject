@@ -11,65 +11,53 @@ import {
   loginDoctorThunk,
   registerDoctorThunk,
   updateDoctorThunk,
-} from "./doctorThunk";
+} from "./doctorAuthThunk";
 import { getAllClinics } from "features/Admin/Clinic/getAll/allClinicsSlice";
 import { getAllSpecialties } from "features/Admin/Specialties/specialtySlice";
 const initialState = {
   doctor: getUserFromLocalStorage(),
   token: getTokenFromLocalStorage(),
   role: getRoleFromLocalStorage(),
-  firstName: "",
-  lastName: "",
-  password: "",
-  email: "",
-  phone: "",
-  docType: "",
-  experience: "",
-  isMember: false,
-  startTime: "",
-  endTime: "",
-  interval: "",
-  clinic: "",
-  specialtiesOptions: [],
   clinicsOptions: [],
+  specialtiesOptions: [],
   isLoading: false,
 };
 export const registerDoctor = createAsyncThunk(
-  "doctor/registerDoctor",
+  "doctorAuth/registerDoctor",
   async (doctor, thunkAPI) => {
     return registerDoctorThunk("/doctor/auth/register", doctor, thunkAPI);
   }
 );
 
 export const loginDoctor = createAsyncThunk(
-  "doctor/loginDoctor",
+  "doctorAuth/loginDoctor",
   async (doctor, thunkAPI) => {
     return loginDoctorThunk("/doctor/auth/login", doctor, thunkAPI);
   }
 );
 
 export const updateDoctor = createAsyncThunk(
-  "doctor/updateDoctor",
+  "doctorAuth/updateDoctor",
   async (doctor, thunkAPI) => {
     return updateDoctorThunk("/doctor/auth/update", doctor, thunkAPI);
   }
 );
 export const fetchClinicsOptions = createAsyncThunk(
-  "doctor/fetchClinicsOptions",
+  "doctorAuth/fetchClinicsOptions",
   async (_, { dispatch }) => {
     const response = await dispatch(getAllClinics());
     return response.payload;
   }
 );
 export const fetchSpecialtiesOptions = createAsyncThunk(
-  "doctor/fetchSpecialtiesOptions",
+  "doctorAuth/fetchSpecialtiesOptions",
   async (_, { dispatch }) => {
     const response = await dispatch(getAllSpecialties());
     return response.payload;
   }
 );
-const doctorSlice = createSlice({
-  name: "doctor",
+const doctorAuthSlice = createSlice({
+  name: "doctorAuth",
   initialState,
   reducers: {
     logoutDoctor: (state) => {
@@ -150,5 +138,6 @@ const doctorSlice = createSlice({
   },
 });
 
-export const { logoutDoctor, handleChange, toggleMember } = doctorSlice.actions;
-export default doctorSlice.reducer;
+export const { logoutDoctor, handleChange, toggleMember } =
+  doctorAuthSlice.actions;
+export default doctorAuthSlice.reducer;

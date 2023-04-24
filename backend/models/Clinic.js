@@ -35,12 +35,6 @@ const ClinicSchema = new mongoose.Schema(
       type: String,
       default: "Street",
     },
-    reviews: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Review",
-      },
-    ],
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

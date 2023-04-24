@@ -9,7 +9,7 @@ export const ProfileSigned = ({
   btnColor,
   icon,
   btnClass,
-  onClick
+  onPress
 }) => {
 
   return (
@@ -26,7 +26,7 @@ export const ProfileSigned = ({
           color={btnColor}
           className={btnClass}
           icon={icon}
-          onClick={onClick}
+          onClick={onPress}
         />
       </div>
     </div>

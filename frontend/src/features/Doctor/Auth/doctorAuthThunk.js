@@ -1,5 +1,5 @@
 import apiFetch from "utils/requests/axios";
-import { logoutDoctor } from "./doctorSlice";
+import { logoutDoctor } from "./doctorAuthSlice";
 
 export const registerDoctorThunk = async (url, doctor, thunkAPI) => {
   try {

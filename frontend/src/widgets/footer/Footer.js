@@ -10,7 +10,7 @@ export const Footer = () => {
         <div className="primary-footer-wrapper">
           <div className="primary-footer-logo-social">
             <Link to="/">
-              <Logo />
+              <Logo fillColor=" #f5f5f5" />
             </Link>
             <SocialList />
           </div>
@@ -27,7 +27,7 @@ export const Footer = () => {
 };
 
 const Wrapper = styled.footer`
-  background-color: var(--grey-50);
+  background-color: var(--primary-700);
   padding-block: var(--size-500);
   svg {
     width: 100px;
@@ -50,10 +50,10 @@ const Wrapper = styled.footer`
     flex-direction: column;
     align-items: center;
     gap: var(--size-400);
-    i {
+    .icons svg {
       width: var(--size-600);
       aspect-ratio: 1;
-      color: var(--fontColor);
+      color: #fff;
     }
   }
   .primary-footer-copyrights {
@@ -63,14 +63,14 @@ const Wrapper = styled.footer`
     justify-content: space-evenly;
     font-weight: 600;
     font-size: 12px;
-    color: var(--fontColor);
+    color: #fff;
   }
   .social-list {
     display: flex;
     gap: var(--size-600);
   }
-  .social-list a:where(:hover, :focus) i {
-    color: var(--primary-700);
+  .icons svg :where(:hover, :focus){
+    color: var(--primary-500);
   }
 
   @media (min-width: 45em) {
@@ -83,11 +83,6 @@ const Wrapper = styled.footer`
       justify-content: space-between;
       gap: var(--size-400);
 
-      i {
-        width: var(--size-600);
-        aspect-ratio: 1;
-        color: var(--fontColor);
-      }
     }
   }
 

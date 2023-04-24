@@ -33,12 +33,10 @@ export const Root = (
       <Route path="account/signup" element={<SignupPageAsync />} />
       <Route path="account/signin" element={<SigninPageAsync />} />
       <Route path="account/details" element={<AccountDetailsAsync />} />
-      <Route path="api/clinics" element={<ClinicPageAsync />}>
-        <Route path=":clinicId" element={<ClinicsPageAsync />} />
-      </Route>
-      <Route path="api/doctors" element={<DoctorsPageAsync />}>
-        <Route path=":doctorId" element={<DoctorPageAsync />} />
-      </Route>
+      <Route path="api/clinics" element={<ClinicsPageAsync />} />
+      <Route path="api/clinics/:id" element={<ClinicPageAsync />} />
+      <Route path="api/doctors" element={<DoctorsPageAsync />}></Route>
+      <Route path="api/doctors/:id" element={<DoctorPageAsync />} />
       <Route path="*" element={<ErrorPage />} />
       <Route path="account/doctor/signup" element={<DoctorSignPageAsync />} />
     </Route>

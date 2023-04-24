@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
-import { getAllDoctorsThunk } from "./allDoctorsThunk";
+import { getAllDoctorsThunk, getDoctorByIdThunk } from "./allDoctorsThunk";
 
 const initialStateFilter = {
   search: "",
@@ -12,6 +12,7 @@ const initialStateFilter = {
 const initialState = {
   isLoading: true,
   doctors: [],
+  currentDoctor: null,
   totalDoctors: 0,
   numOfPages: 1,
   page: 1,
@@ -21,6 +22,10 @@ export const getAllDoctors = createAsyncThunk(
   "allDoctors/getAllDoctors",
   getAllDoctorsThunk
 );
+export const getDoctorById = createAsyncThunk(
+  "allDoctors/getDoctorById",
+  getDoctorByIdThunk
+)
 
 const allDoctorsSlice = createSlice({
   name: "allDoctors",
@@ -46,9 +51,21 @@ const allDoctorsSlice = createSlice({
       .addCase(getAllDoctors.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
+      })
+      .addCase(getDoctorById.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getDoctorById.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.currentDoctor = payload.doctor;
+      })
+      .addCase(getDoctorById.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload);
       });
   },
 });
 
-export const { showLoading, hideLoading } = allDoctorsSlice.actions;
+export const { showLoading, hideLoading } =
+  allDoctorsSlice.actions;
 export default allDoctorsSlice.reducer;

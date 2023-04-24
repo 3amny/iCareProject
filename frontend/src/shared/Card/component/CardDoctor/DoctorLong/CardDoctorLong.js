@@ -1,19 +1,31 @@
 import React from "react";
-import profile from "./../../../../../assets/images/profile.jpg";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
+export const CardDoctorLong = ({
+  _id,
+  firstName,
+  lastName,
+  docType,
+  clinic,
+  experience,
+}) => {
 
-export const CardDoctorLong = () => {
   return (
     <Wrapper>
       <div className="doc-container">
         <div className="doc-image">
-          <img src={profile} alt="doctor" />
+          <Link to={`/api/doctors/${_id}`} className="button muted-button">
+            <div className="main-icon">{firstName.charAt(0)}</div>
+          </Link>
         </div>
+
         <div className="doc-profile">
           <div className="doc-name">
-            <h3>Dr. Robert Henry</h3>
-            <p className="doc-speciality">Cardiologist</p>
-            <p>Hospital</p>
+            <h4>
+              Dr.{firstName} {lastName}
+            </h4>
+            <p className="doc-speciality">{docType}</p>
+            <p>{clinic}</p>
           </div>
           <hr
             style={{
@@ -23,10 +35,16 @@ export const CardDoctorLong = () => {
           />
           <div className="doc-details">
             <div className="doc-exp">
-              <p>5 years of experience</p>
+              <p>{experience}</p>
             </div>
             <div className="doc-rating">
               stars <span>(102)</span>
+            </div>
+            <div className="link">
+              <Link to={`/api/doctors/${_id}`} className="button muted-button">
+                {" "}
+                See more
+              </Link>
             </div>
           </div>
         </div>
@@ -49,14 +67,24 @@ const Wrapper = styled.div`
     margin: 2rem auto;
     transition: var(--transition);
   }
-
+  .main-icon {
+    width: clamp(60px, 10vw, 80px);
+    height: clamp(60px, 10vw, 80px);
+    display: grid;
+    place-items: center;
+    background: var(--primary-500);
+    border-radius: var(--borderRadius);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-right: 1.5rem;
+  }
   .doc-image {
-    display: flex;
+    padding: 1rem 1.5rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
     align-items: center;
-    img {
-      max-width: clamp(100px, 30vw, 200px);
-      width: 150px;
-    }
   }
   .doc-name {
     h3 {
@@ -68,4 +96,28 @@ const Wrapper = styled.div`
     margin-top: 5px;
     color: var(--fontColor);
   }
+  .doc-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: minmax(auto);
+  }
+  .doc-exp {
+    grid-column: 1;
+  }
+  .doc-rating {
+    grid-column: 1;
+  }
+  .doc-link {
+    grid-column: 2;
+    text-align: end;
+  }
+  @media screen and (max-width: 45em) {
+  .doc-details {
+    display: block;
+  }
+  
+  .doc-exp, .doc-rating, .doc-link {
+    grid-column: auto;
+  }
+}
 `;

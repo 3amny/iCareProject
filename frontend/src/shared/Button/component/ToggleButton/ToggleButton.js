@@ -10,7 +10,6 @@ export const ToggleButton = ({ type, onClick, isOpened, className }) => {
         ) : (
           <RxHamburgerMenu className="nav-open" size={20} />
         )}
-        <span className="sr-only">Menu</span>
       </button>
     </>
   );

@@ -1,6 +1,5 @@
 export const ProfileSignedNav = ({
   firstName,
-  lastName,
   icon,
   expandProfile,
 }) => {
@@ -10,7 +9,7 @@ export const ProfileSignedNav = ({
         {icon}
         <div className="profile-details">
           <div className="name">
-            {firstName} {lastName}
+            {firstName}
           </div>
         </div>
       </div>

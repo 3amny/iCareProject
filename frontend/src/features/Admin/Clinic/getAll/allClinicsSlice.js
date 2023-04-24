@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import { getAllClinicsThunk } from "./allClinicsThunk";
+import { getAllClinicsThunk, getClinicByIdThunk } from "./allClinicsThunk";
+
 const initialStateFilter = {
   search: "",
   searchStatus: "all",
@@ -10,6 +11,7 @@ const initialStateFilter = {
 const initialState = {
   isLoading: true,
   clinics: [],
+  currentClinic: null,
   totalClinics: 0,
   numOfPages: 1,
   page: 1,
@@ -20,6 +22,10 @@ export const getAllClinics = createAsyncThunk(
   getAllClinicsThunk
 );
 
+export const getClinicById = createAsyncThunk(
+  "allClinics/getClinicById",
+  getClinicByIdThunk
+);
 const allClinicsSlice = createSlice({
   name: "allClinics",
   initialState,
@@ -39,8 +45,20 @@ const allClinicsSlice = createSlice({
       .addCase(getAllClinics.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.clinics = payload.clinics;
+        state.totalClinics = payload.totalClinics;
       })
       .addCase(getAllClinics.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload);
+      })
+      .addCase(getClinicById.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getClinicById.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.currentClinic = payload.clinic;
+      })
+      .addCase(getClinicById.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
       });

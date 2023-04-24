@@ -67,7 +67,7 @@ export const CardClinic = ({
             dispatch(
               setEditClinic({
                 editClinicId: _id,
-                organization,
+                name,
                 email,
                 city,
                 street,

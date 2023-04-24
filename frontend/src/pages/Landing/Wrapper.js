@@ -157,6 +157,7 @@ const Wrapper = styled.main`
     box-shadow: var(--shadow-3);
     padding: 10px 20px;
     border-top: 2px solid var(--primary-700);
+    background-color: white;
   }
   .card-container:hover {
     box-shadow: var(--shadow-4);

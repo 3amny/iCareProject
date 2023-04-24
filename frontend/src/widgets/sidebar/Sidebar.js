@@ -13,7 +13,7 @@ import { logoutUser } from "features/User/Auth/userSlice";
 export const Sidebar = () => {
   const [isOpened, setIsOpened] = useState(false);
   const openSidebar = () => setIsOpened(!isOpened);
-
+  const { user} = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   return (
@@ -41,12 +41,12 @@ export const Sidebar = () => {
             />
           </nav>
           <ProfileSigned
-            firstName="John"
-            lastName="Wattson"
+            firstName={user.firstName}
+            lastName={user.lastName}
             type="button"
             icon={<MdLogout />}
             btnClass="profile-logout"
-            onClick={() => dispatch(logoutUser())}
+            onPress={() => dispatch(logoutUser())}
           />
         </div>
       </div>

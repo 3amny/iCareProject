@@ -21,6 +21,19 @@ const getAllClinics = async (req, res) => {
     numOfPages: 1,
   });
 };
+
+const getById = async (req, res) => {
+  const { id: clinicId } = req.params;
+  const clinic = await Clinic.findOne({ _id: clinicId });
+  if (!clinic) {
+    throw new NotFound(`No doctor with id ${clinicId}`);
+  }
+  res.status(StatusCodes.OK).json({
+    clinic,
+  });
+};
+
+
 const updateClinic = async (req, res) => {
   const { id: clinicId } = req.params;
   const { name, email, phone, street, city } = req.body;
@@ -51,4 +64,4 @@ const deleteClinic = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: "Success! Clinic was removed" });
 };
 
-export { createClinic, getAllClinics, updateClinic, deleteClinic };
+export { createClinic, getAllClinics, updateClinic, deleteClinic, getById };

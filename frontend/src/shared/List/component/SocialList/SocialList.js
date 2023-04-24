@@ -7,8 +7,8 @@ export const SocialList = () => {
       const { id, icon, label, url } = link;
       return (
         <li key={id} aria-label={label}>
-          <a href={url} rel="noreferrer" target="_blank">
-            <i className={icon}></i>
+          <a href={url} rel="noreferrer" target="_blank" className="icons">
+            {icon}
           </a>
         </li>
       );

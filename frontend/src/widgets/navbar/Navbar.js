@@ -71,7 +71,6 @@ export const Navbar = () => {
               <div className="nav-profile">
                 <ProfileSignedNav
                   firstName={user.firstName}
-                  lastName={user.lastName}
                   icon={<FiUser className="nav-userIcon" />}
                   expandProfile={openProfileInfo}
                 />
@@ -175,7 +174,7 @@ const Wrapper = styled.header`
     align-items: center;
   }
   .profile .nav-userIcon {
-    margin-right: 2px;
+    margin-right: 10px;
     color: white;
   }
   .profile-content {

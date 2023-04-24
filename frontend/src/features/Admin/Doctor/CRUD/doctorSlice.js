@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import {
   deleteDoctorAdminThunk,
   updateDoctorAdminThunk,
-} from "./doctorAdminThunk";
+} from "./doctorThunk";
 
 const initialState = {
   firstName: "",

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { CardClinic } from "shared/Card/component/CardClinic/CardClinic";
+import { CardClinic } from "shared/Card/component/CardClinic/CardClinic/CardClinic";
 import { IoAddCircleSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 

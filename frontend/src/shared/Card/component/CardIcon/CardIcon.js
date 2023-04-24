@@ -26,6 +26,7 @@ const Wrapper = styled.div`
     align-items: flex-start;
     flex-direction: column;
     text-align: start;
+    background: white;
   }
 
   .card-icon {

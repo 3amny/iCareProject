@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import Wrapper from "./Wrapper.js";
 import { useDispatch, useSelector } from "react-redux";
-import { store } from "store.js";
 import { registerUser } from "features/User/Auth/userSlice.js";
 const initialState = {
   firstName: "",

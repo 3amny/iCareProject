@@ -41,7 +41,8 @@ html {
   --black: #222;
   --white: #fff;
   --red-light: #f8d7da;
-  --red-dark: #842029;
+
+  --red-dark: #c01f2c;
   --green-light: #d1e7dd;
   --green-dark: #0f5132;
 
@@ -53,7 +54,7 @@ html {
   --fontColor: #404040;
   --fontSmColor: #a7a7a7;
   /* rest of the vars */
-  --backgroundColor: var(--white);
+  --backgroundColor: #fafafa;
   --textColor: var(--grey-900);
   --borderRadius: 0.25rem;
   --letterSpacing: 1px;
@@ -134,7 +135,9 @@ h4 {
 h5 {
   font-size: 1.25rem;
 }
-
+.mt-1 {
+  margin-top: 0.25rem;
+}
 small,
 .text-small {
   font-size: var(--small-text);
@@ -309,10 +312,9 @@ ul {
   margin: 0 auto;
 }
 /* title */
-
-.title {
+/* .title {
   text-align: center;
-}
+} */
 
 .title-underline {
   background: var(--primary-500);
@@ -337,15 +339,56 @@ ul {
   min-height: 100vh;
 }
 
-.coffee-info {
-  text-align: center;
-  text-transform: capitalize;
-  margin-bottom: 1rem;
-  letter-spacing: var(--letterSpacing);
+.btn-i {
+  padding: 0.5em 1em;
+  background: var(--primary-600);
+  border: none;
+  color: white;
+  border-radius: 0.5em;
+  font-size: 0.75em;
+  cursor: pointer;
 }
-.coffee-info span {
-  display: block;
+
+.btn-i:hover,
+.btn-i:focus-visible {
+  color: var(--primary-700);
 }
-.coffee-info a {
-  color: var(--primary-500);
+
+.btn-i.icon-btn {
+  background: none;
+  color: var(--primary-600);
+  padding: 0.25em;
+  display: flex;
+  align-items: center;
+}
+
+.mr-1 {
+  margin-right: 0.25em;
+}
+
+.icon-btn:hover,
+.icon-btn:focus-visible {
+  color: var(--primary-700);
+}
+
+.icon-btn-active,
+.icon-btn.danger {
+  color: #df3543;
+}
+
+.icon-btn-active {
+  position: relative;
+}
+
+.icon-btn-active::before {
+  content: "\00D7";
+  position: absolute;
+  font-size: 0.75em;
+  width: 1em;
+  height: 1em;
+  color: white;
+  background-color: var(--primary-600);
+  border-radius: 50%;
+  bottom: 0.1em;
+  right: 0.1em;
 }

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
-import { deleteDoctorAdmin, setEditDoctor } from "features/Admin/Doctor/CRUD/doctorAdminSlice";
+import { deleteDoctorAdmin, setEditDoctor } from "features/Admin/Doctor/CRUD/doctorSlice";
 
 export const CardDoctor = ({
   firstName,

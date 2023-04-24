@@ -10,7 +10,7 @@ import { clearValues } from "./clinicAdminSlice";
 export const createClinicAdminThunk = async (clinic, thunkAPI) => {
   try {
     const response = await apiFetch.post(
-      "/admin/clinics",
+      "/clinics",
       clinic,
       authUserHeader(thunkAPI)
     );
@@ -30,7 +30,7 @@ export const updateClinicAdminThunk = async (
 ) => {
   try {
     const response = await apiFetch.patch(
-      `/admin/clinics/${clinicId}`,
+      `/clinics/${clinicId}`,
       clinic,
       authUserHeader(thunkAPI)
     );
@@ -45,7 +45,7 @@ export const deleteClinicAdminThunk = async ({clinicId}, thunkAPI) => {
   thunkAPI.dispatch(showLoading());
   try {
     const response = await apiFetch.delete(
-      `/admin/clinics/${clinicId}`,
+      `/clinics/${clinicId}`,
       authUserHeader(thunkAPI)
     );
 

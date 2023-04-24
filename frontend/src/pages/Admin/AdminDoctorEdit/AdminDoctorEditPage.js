@@ -11,7 +11,7 @@ import {
   fetchClinicsOptions,
   fetchSpecialtiesOptions,
   fetchRolesOptions,
-} from "features/Admin/Doctor/CRUD/doctorAdminSlice";
+} from "features/Admin/Doctor/CRUD/doctorSlice";
 const AdminDoctorEditPage = () => {
   const {
     isLoading,
@@ -31,8 +31,9 @@ const AdminDoctorEditPage = () => {
     specialtiesOptions,
     rolesOptions,
     role,
-  } = useSelector((store) => store.doctorAdmin);
+  } = useSelector((store) => store.doctor);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(fetchClinicsOptions());
     dispatch(fetchSpecialtiesOptions());
@@ -137,7 +138,7 @@ const AdminDoctorEditPage = () => {
               <FormRowSelect
                 labelText="Specialty"
                 name="docType"
-                value={docType}
+                value={docType.name}
                 handleChange={handleUserInput}
                 list={specialtiesOptions}
               />

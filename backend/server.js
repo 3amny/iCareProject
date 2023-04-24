@@ -15,6 +15,8 @@ import usersRoutes from "./routes/usersRoutes.js";
 import specialtyRoutes from "./routes/specialtyRoutes.js";
 import rolesRoutes from "./routes/rolesRoutes.js";
 import appointmentsRoutes from "./routes/appointmentsRoutes.js";
+import reviewRoutes from "./routes/reviewRoutes.js";
+
 const app = express();
 if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
@@ -28,9 +30,10 @@ app.use("/api/v1/doctor/auth", authDoctorRoutes);
 app.use("/api/v1/admin/users", usersRoutes);
 app.use("/api/v1/admin/specialties", specialtyRoutes);
 app.use("/api/v1/admin/roles", rolesRoutes);
-app.use("/api/v1/admin/clinics", clinicsRoutes);
-app.use("/api/v1/admin/doctors", doctorsRoutes);
-app.use("/api/v1/appointment", appointmentsRoutes)
+app.use("/api/v1/clinics", clinicsRoutes);
+app.use("/api/v1/doctors", doctorsRoutes);
+app.use("/api/v1/:subject/:subjectId/reviews", reviewRoutes);
+app.use("/api/v1/appointment", appointmentsRoutes);
 //middleware
 
 app.use(notFoundMiddleware);
