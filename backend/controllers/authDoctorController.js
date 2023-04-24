@@ -15,6 +15,7 @@ const register = async (req, res) => {
     startTime,
     endTime,
     interval,
+    dateOfBirth,
   } = req.body;
   if (
     !firstName ||
@@ -24,7 +25,8 @@ const register = async (req, res) => {
     !phone ||
     !experience ||
     !startTime ||
-    !endTime
+    !endTime ||
+    !dateOfBirth
   ) {
     throw new BadRequest("Please provide all information");
   }
@@ -35,6 +37,7 @@ const register = async (req, res) => {
 
   req.body.timeSlots = Doctor.generateTimeSlots(startTime, endTime, interval);
   const timeSlots = req.body.timeSlots;
+  console.log(timeSlots);
   req.body.role = "6425091d6383af1ca69c2e9d";
   const role = req.body.role;
   const doctor = await Doctor.create({
@@ -51,6 +54,7 @@ const register = async (req, res) => {
     endTime,
     interval,
     timeSlots,
+    dateOfBirth,
   });
   const token = doctor.createJWT();
 
@@ -68,6 +72,7 @@ const register = async (req, res) => {
       endTime: doctor.endTime,
       interval: doctor.interval,
       timeSlots: doctor.timeSlots,
+      dateOfBirth: doctor.dateOfBirth,
     },
     token,
     role: doctor.role,
@@ -96,10 +101,25 @@ const login = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  const { firstName, lastName, email, phone, docType, clinic, experience } =
-    req.body;
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    docType,
+    clinic,
+    experience,
+    dateOfBirth,
+  } = req.body;
 
-  if (!firstName || !lastName || !email || !phone || !experience) {
+  if (
+    !firstName ||
+    !lastName ||
+    !email ||
+    !phone ||
+    !experience ||
+    !dateOfBirth
+  ) {
     throw new BadRequest("Please provide all information");
   }
 
@@ -111,6 +131,7 @@ const update = async (req, res) => {
   doctor.docType = docType;
   doctor.clinic = clinic;
   doctor.experience = experience;
+  doctor.dateOfBirth = dateOfBirth;
   await doctor.save();
 
   const token = doctor.createJWT();

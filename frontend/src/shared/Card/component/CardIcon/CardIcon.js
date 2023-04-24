@@ -18,28 +18,3 @@ export const CardIcon = ({ items }) => {
   );
 };
 
-const Wrapper = styled.div`
-  
-  .card-container {
-    padding: 20px 30px;
-    display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-    text-align: start;
-    background: white;
-  }
-
-  .card-icon {
-    font-size: 30px;
-  }
-  .card-content {
-    h3 {
-      font-size: 16px;
-      font-weight: 700;
-    }
-    p {
-      color: var(--fontSmColor);
-      font-size: 14px;
-    }
-  }
-`;

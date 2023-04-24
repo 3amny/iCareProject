@@ -20,6 +20,19 @@ export const getAllReviewsBySubjectIdThunk = async (
     return thunkAPI.rejectWithValue(error.response.data.msg);
   }
 };
+export const getAllReviewsThunk = async ({ limit }, thunkAPI) => {
+  let url = `/reviews`;
+  try {
+    const response = await apiFetch.get(url, {
+      params: {
+        limit: limit,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data.msg);
+  }
+};
 export const createReviewThunk = async (
   { subject, subjectId, comment, rating },
   thunkAPI

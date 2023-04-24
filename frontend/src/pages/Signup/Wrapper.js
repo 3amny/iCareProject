@@ -17,7 +17,7 @@ const Wrapper = styled.main`
     font-weight: 600;
   }
   p {
-    margin-right: 5px;;
+    margin-right: 5px;
     text-align: center;
   }
   .btn {
@@ -29,6 +29,14 @@ const Wrapper = styled.main`
     align-items: center;
     justify-content: center;
   }
+  .link-doc {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    p {
+      margin: 0 5px;
+    }
+  }
   .link-signin {
     color: var(--primary-700);
     text-decoration: underline;
@@ -37,4 +45,4 @@ const Wrapper = styled.main`
     font-weight: bold;
   }
 `;
-export default Wrapper
+export default Wrapper;

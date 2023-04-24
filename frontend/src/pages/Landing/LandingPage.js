@@ -1,12 +1,18 @@
 import { Link } from "react-router-dom";
-import { FormRow, Slider } from "shared/Input/index.js";
-import { useState } from "react";
 import Wrapper from "./Wrapper.js";
 import { CardIcon, CardDoctorSmall } from "shared/Card/index.js";
 import { cardItems } from "utils/constants/index.js";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllReviews } from "features/Reviews/reviewSlice.js";
+import landing from "assets/images/landing.svg";
+import landingReview from "assets/images/landing_review.svg";
 export const LandingPage = () => {
-  const [isChecked, setIsChecked] = useState(false);
-  const handleChange = () => setIsChecked(!isChecked);
+  const dispatch = useDispatch();
+  const { allReviews } = useSelector((store) => store.review);
+  useEffect(() => {
+    dispatch(getAllReviews({ limit: null }));
+  }, []);
   return (
     <Wrapper>
       <div className="container">
@@ -19,57 +25,54 @@ export const LandingPage = () => {
                 about your health
               </h2>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                <br /> sed do eiusmod tempor incididunt ut labore et dolore
-                magna aliqua.
+                Welcome to iCare, your one-stop solution for hassle-free
+                healthcare management.
+                <br /> With our easy-to-use platform, you can easily manage your
+                doctor's schedule and <br /> book appointments online from
+                anywhere, at any time.
               </p>
               <Link to="/doctors/appointment" className="link">
                 Book an appointment
               </Link>
             </div>
-            <div className="doctor-image">
-              <div className="image-container">
-                <img
-                  src="https://via.placeholder.com/150"
-                  alt="Doctor"
-                  className="circle-image"
-                />
-              </div>
-            </div>
-            <div className="search">
-              <div className="search-container">
-                <div className="search-title">
-                  <p>Find a doctor</p>
-                </div>
-                <div className="search-details">
-                  <FormRow type="name" placeholder="Doctor's name" />
-                  <FormRow type="speciality" placeholder="Speciality" />
-                  <p> Availability</p>
-                  <Slider value={isChecked} onChange={handleChange} />
-                  <button type="submit" className="btn-search">
-                    Search
-                  </button>
-                </div>
-              </div>
-            </div>
+
+            <img
+              src={landing}
+              style={{ width: "600px" }}
+              alt="Doctor"
+              className="circle-image"
+            />
           </div>
           <div className="second-section">
             <div className="section-title">
-              <h2>Our Medical Services</h2>
+              <h2>Our Advantages</h2>
             </div>
             <div className="services">
               <CardIcon items={cardItems} />
             </div>
           </div>
+          <hr />
           <div className="third-section">
+            <div className="section-title phrase">
+              <h1>
+                "Revolutionize your healthcare management with iCare - because
+                your health deserves to be hassle-free!"
+              </h1>
+              <h4>Alina Ian, CEO of iCare</h4>
+            </div>
+          </div>
+          <hr />
+          <div
+            className="fourth-section"
+            style={{
+              backgroundImage: `url(${landingReview})`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "500px",
+              
+            }}
+          >
             <div className="section-title">
-              <h2>Our Doctors</h2>
-            </div>
-            <div className="doctors">
-              <CardDoctorSmall/>
-            </div>
-            <div className="doctor-link">
-              <Link to="/api/doctors">See More</Link>
+              <h2>What people think</h2>
             </div>
           </div>
         </div>

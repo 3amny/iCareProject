@@ -15,7 +15,6 @@ export const IconButton = ({
         onClick={onClick}
       >
         {icon}
-        <span className="sr-only">Menu</span>
       </button>
     </>
   );

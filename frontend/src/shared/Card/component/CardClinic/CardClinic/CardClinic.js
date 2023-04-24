@@ -112,8 +112,18 @@ const Wrapper = styled.div`
   .checkbox {
     display: inline-flex;
     justify-content: center;
-    h5 {
+
+    p {
       margin-right: 6px;
+      margin-top: 0;
+      margin-bottom: 0;
+      span {
+        letter-spacing: 0;
+        margin-bottom: 0;
+        font-size: 18px;
+        font-weight: 700;
+        text-transform: none;
+      }
     }
   }
   .form-input-checkbox-sm {

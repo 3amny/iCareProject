@@ -12,6 +12,7 @@ export const CardUser = ({
   city,
   street,
   phone,
+  dateOfBirth,
   role,
   email,
   _id,
@@ -36,6 +37,12 @@ export const CardUser = ({
             <span>
               {firstName} {lastName}
             </span>
+          </h5>
+        </div>
+        <div className="user-birth">
+          <h5>
+            Date of Birth:
+            <span>{dayjs(dateOfBirth).format("DD/MM/YYYY")}</span>
           </h5>
         </div>
         <div className="user-location">
@@ -71,6 +78,7 @@ export const CardUser = ({
                 phone,
                 role,
                 email,
+                dateOfBirth,
               })
             )
           }

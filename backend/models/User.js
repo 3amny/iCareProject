@@ -31,6 +31,16 @@ const UserSchema = new mongoose.Schema(
     },
     dateOfBirth: {
       type: Date,
+      required: [true, "Please provide your date of birth"],
+      validate: {
+        validator: function (value) {
+          const currentDateMinus18 = new Date();
+          currentDateMinus18.setFullYear(currentDateMinus18.getFullYear() - 18);
+          return value <= currentDateMinus18;
+        },
+        message: "You must be at least 18 years old to register",
+      },
+      unique: false,
     },
     password: {
       type: String,
@@ -50,7 +60,7 @@ const UserSchema = new mongoose.Schema(
     role: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Role",
-      default: "642509196383af1ca69c2e9b"
+      default: "642509196383af1ca69c2e9b",
     },
     city: {
       type: String,

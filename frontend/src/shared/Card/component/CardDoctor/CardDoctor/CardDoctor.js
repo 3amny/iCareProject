@@ -2,7 +2,10 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
-import { deleteDoctorAdmin, setEditDoctor } from "features/Admin/Doctor/CRUD/doctorSlice";
+import {
+  deleteDoctorAdmin,
+  setEditDoctor,
+} from "features/Admin/Doctor/CRUD/doctorSlice";
 
 export const CardDoctor = ({
   firstName,
@@ -22,6 +25,7 @@ export const CardDoctor = ({
 }) => {
   let date = dayjs(createdAt).format("MMMM D, YYYY");
   const dispatch = useDispatch();
+
   return (
     <Wrapper className="container">
       <div className="doctor-primary-info">
@@ -41,16 +45,18 @@ export const CardDoctor = ({
             </span>
           </h5>
           <h5>
-            <span>Specialty: {docType}</span>
+            Specialty: <span> {docType ? docType.name : ""}</span>
           </h5>
           <h5>
-            <span>Experience: {experience}</span>
+            Experience: <span>{experience}</span>
           </h5>
           <h5>
-            <span>Clinic: {clinic}</span>
+            Clinic: <span>{clinic ? clinic.name : ""}</span>
           </h5>
         </div>
-        <h5>DOB: {dateOfBirth}</h5>
+        <h5>
+          Date of Birth: <span>{dayjs(dateOfBirth).format("DD/MM/YYYY")}</span>
+        </h5>
         <h5>
           Phone: <span>{phone}</span>
         </h5>

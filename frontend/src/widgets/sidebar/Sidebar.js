@@ -13,9 +13,9 @@ import { logoutUser } from "features/User/Auth/userSlice";
 export const Sidebar = () => {
   const [isOpened, setIsOpened] = useState(false);
   const openSidebar = () => setIsOpened(!isOpened);
-  const { user} = useSelector((store) => store.user);
+  const { user } = useSelector((store) => store.user);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
   return (
     <Wrapper className={isOpened ? "active" : null}>
       <div className="container">
@@ -198,11 +198,24 @@ const Wrapper = styled.aside`
     opacity: 1;
     pointer-events: auto;
   }
-  .profile .profile-details img {
+  .profile .profile-details .main-icon {
     object-fit: cover;
     height: 45px;
     width: 45px;
     border-radius: 12px;
+  }
+  .main-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(160px, 5vw, 200px);
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #fefefe;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--primary-500);
   }
   .profile .profile-details .name {
     margin-left: 10px;

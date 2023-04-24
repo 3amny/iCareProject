@@ -1,5 +1,4 @@
 import { Route } from "react-router-dom";
-import { AboutPageAsync } from "pages/About/AboutPage.async.js";
 import { SharedLayout } from "pages/SharedLayout/SharedLayout";
 import { LandingPage } from "pages/Landing/LandingPage";
 import { SigninPageAsync } from "pages/Signin/SigninPage.async";
@@ -13,7 +12,7 @@ import { AdminDashboardAsync } from "pages/Admin/AdminDashboard/AdminDashboard.a
 import { AdminSharedLayout } from "pages/Admin/AdminSharedLayout/AdminSharedLayout";
 import { DoctorSignPageAsync } from "pages/Doctor/DoctorSingUp/DoctorSignPage.async";
 import { ErrorPage } from "pages/Error/ErrorPage";
-import { ProtectedRouteAdmin } from "./ProtectedRoutes";
+import { ProtectedRouteAdmin, ProtectedRouteUser } from "./ProtectedRoutes";
 import { AdminUsersAsync } from "pages/Admin/AdminUsers/AdminUsersPage.async";
 import { AdminUserEditAsync } from "pages/Admin/AdminUserEdit/AdminUserEditPage.async";
 import { AdminDoctorsAsync } from "pages/Admin/AdminDoctors/AdminDoctorsPage.async";
@@ -24,20 +23,29 @@ import RolesPage from "pages/Admin/Roles/RolesPage";
 import { CreateRoleAsync } from "pages/Admin/CreateRole/CreateRolePage.async";
 import { SpecialtiesPageAsync } from "pages/Admin/Specialties/SpecialtiesPage.async";
 import { CreateSpecialtyAsync } from "pages/Admin/CreateSpecialty/CreateSpecialtyPage.async";
+import { CalendarAsync } from "pages/Calendar/CalendarPage.async";
+import { AboutPage } from "pages/About/AboutPage";
 
 export const Root = (
   <>
     <Route path="/" element={<SharedLayout />}>
       <Route index element={<LandingPage />} />
-      <Route path="about" element={<AboutPageAsync />} />
+      <Route path="about" element={<AboutPage />} />
       <Route path="account/signup" element={<SignupPageAsync />} />
       <Route path="account/signin" element={<SigninPageAsync />} />
-      <Route path="account/details" element={<AccountDetailsAsync />} />
+      <Route
+        path="account/details"
+        element={
+          <ProtectedRouteUser>
+            <AccountDetailsAsync />
+          </ProtectedRouteUser>
+        }
+      />
       <Route path="api/clinics" element={<ClinicsPageAsync />} />
       <Route path="api/clinics/:id" element={<ClinicPageAsync />} />
       <Route path="api/doctors" element={<DoctorsPageAsync />}></Route>
       <Route path="api/doctors/:id" element={<DoctorPageAsync />} />
-      <Route path="*" element={<ErrorPage />} />
+      <Route path="api/doctors/:id/appointment" element={<CalendarAsync />} />
       <Route path="account/doctor/signup" element={<DoctorSignPageAsync />} />
     </Route>
     <Route
@@ -61,5 +69,6 @@ export const Root = (
       <Route path="specialties" element={<SpecialtiesPageAsync />} />
       <Route path="specialties/create" element={<CreateSpecialtyAsync />} />
     </Route>
+    <Route path="*" element={<ErrorPage />} />
   </>
 );

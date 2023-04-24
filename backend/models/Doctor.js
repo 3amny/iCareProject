@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import dayjs from "dayjs";
 import BadRequest from "../error/bad-request.js";
 import User from "./User.js";
+import Appointment from "./Appointment.js";
 
 const DoctorSchema = new mongoose.Schema(
   {
@@ -37,7 +38,9 @@ const DoctorSchema = new mongoose.Schema(
       type: Array,
     },
   },
-  { timestamps: true }, { collection: 'doctors' });
+  { timestamps: true },
+  { collection: "doctors" }
+);
 
 DoctorSchema.statics.generateTimeSlots = function (
   startTime,
@@ -46,8 +49,9 @@ DoctorSchema.statics.generateTimeSlots = function (
 ) {
   let timeSlots = [];
   // In order for the function to properly work i had to set the date to 1970-01-01
-  let start =  dayjs(`1970-01-01T${startTime}:00`);
+  let start = dayjs(`1970-01-01T${startTime}:00`);
   let end = dayjs(`1970-01-01T${endTime}:00`);
+
   if (start.isSame(end)) {
     return new BadRequest("End time can not be equal to start time");
   }
@@ -62,6 +66,38 @@ DoctorSchema.statics.generateTimeSlots = function (
   return timeSlots;
 };
 
+DoctorSchema.methods.getAvailableTimeSlots = async function (date) {
+  const startOfDate = dayjs(date).startOf("date").toDate();
+  const endOfDate = dayjs(date).endOf("date").toDate();
 
+  const appointments = await Appointment.find({
+    doctor: this._id,
+    startDate: { $gte: startOfDate },
+    endDate: { $lt: endOfDate },
+  });
+
+  const availableTimeSlots = this.timeSlots
+    .filter((slot) => {
+      const slotDateTime = dayjs(`${date}T${slot}`).toDate();
+      for (const a of appointments) {
+        const aStart = dayjs(a.startDate).toDate();
+        const aEnd = dayjs(a.endDate).toDate();
+        if (slotDateTime >= aStart && slotDateTime < aEnd) {
+          return false;
+        }
+      }
+      return true;
+    })
+    .map((slot) => {
+      const startDateTime = dayjs(`${date}T${slot}`);
+      const endDateTime = startDateTime.add(this.interval, "minute");
+
+      return {
+        startTime: startDateTime.format("HH:mm"),
+        endTime: endDateTime.format("HH:mm"),
+      };
+    });
+  return availableTimeSlots;
+};
 
 export default User.discriminator("Doctor", DoctorSchema);

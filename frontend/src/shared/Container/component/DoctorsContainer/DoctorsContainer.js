@@ -28,10 +28,7 @@ export const DoctorsContainer = () => {
       </h5>
       <div className="doctors">
         {doctors.map((doctor) => {
-          return <CardDoctor key={doctor._id}
-          {...doctor}
-          docType={doctor.docType ? doctor.docType.name : ""}
-          clinic={doctor.clinic ? doctor.clinic.name : ""}/>;
+          return <CardDoctor key={doctor._id} {...doctor} />;
         })}
       </div>
     </Wrapper>

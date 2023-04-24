@@ -6,6 +6,7 @@
 
 /* fonts */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap");
 
 html {
   font-size: 100%;
@@ -49,10 +50,11 @@ html {
   /* fonts  */
   --headingFont: "Roboto Condensed", Sans-Serif;
   --bodyFont: "Inter", Sans-Serif;
+  --landingFont: "Oxygen", sans-serif;
   --small-text: 0.875rem;
   --extra-small-text: 0.7em;
   --fontColor: #404040;
-  --fontSmColor: #a7a7a7;
+  --fontSmColor: #979696;
   /* rest of the vars */
   --backgroundColor: #fafafa;
   --textColor: var(--grey-900);
@@ -92,7 +94,26 @@ body {
   color: var(--textColor);
   overflow-x: hidden;
 }
+body.active-modal {
+  overflow-y: hidden;
+}
 
+.modal,
+.overlay {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.overlay {
+  background: rgba(49, 49, 49, 0.8);
+}
+.modal {
+  z-index: 99999;
+}
 main {
   min-height: calc(100vh - 7rem);
   padding: 2rem;

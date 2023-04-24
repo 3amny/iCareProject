@@ -32,7 +32,7 @@ const getUser = async (req, res) => {
 const updateUser = async (req, res) => {
   checkRolePermission(req.user, "642509136383af1ca69c2e99");
   const { id: userId } = req.params;
-  const { firstName, lastName, email, phone, city, street, role } = req.body;
+  const { firstName, lastName, email, phone, city, street, role, dateOfBirth } = req.body;
   if (
     !firstName ||
     !lastName ||
@@ -40,7 +40,8 @@ const updateUser = async (req, res) => {
     !phone ||
     !city ||
     !street ||
-    !role
+    !role ||
+    !dateOfBirth
   ) {
     throw new BadRequest("Please provide all information");
   }

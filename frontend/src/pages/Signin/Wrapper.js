@@ -30,6 +30,14 @@ const Wrapper = styled.main`
     align-items: center;
     justify-content: center;
   }
+  .link-doc {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    p {
+      margin: 0 5px;
+    }
+  }
   .link-signup {
     color: var(--primary-700);
     text-decoration: underline;

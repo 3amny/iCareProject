@@ -9,14 +9,15 @@ export const ProfileSigned = ({
   btnColor,
   icon,
   btnClass,
-  onPress
+  onPress,
 }) => {
-
   return (
     <div className="profile-content">
       <div className="profile">
         <div className="profile-details">
-          <img src={profileImage} alt="user_image" />
+          <div className="main-icon" alt="user_image">
+            {firstName.charAt(0)}
+          </div>
           <div className="name">
             {firstName} {lastName}
           </div>

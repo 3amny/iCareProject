@@ -5,8 +5,8 @@ import { BadRequest, NotFound } from "../error/index.js";
 
 const getAll = async (req, res) => {
   const doctors = await Doctor.find()
-    .populate("docType", "name")
-    .populate("clinic", "name");
+  .populate({ path: "docType", select: "name" })
+  .populate({ path: "clinic", select: "name", model: "Clinic" });
   res.status(StatusCodes.OK).json({
     doctors,
     totalDoctors: doctors.length,
@@ -45,7 +45,14 @@ const updateDoctor = async (req, res) => {
     clinic,
   } = req.body;
   console.log(req.body);
-  if (!firstName || !lastName || !email || !phone || !experience) {
+  if (
+    !firstName ||
+    !lastName ||
+    !email ||
+    !phone ||
+    !experience ||
+    !dateOfBirth
+  ) {
     throw new BadRequest("Please provide all information");
   }
 

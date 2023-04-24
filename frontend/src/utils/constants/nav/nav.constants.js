@@ -29,9 +29,4 @@ export const navLinks = [
     text: "About",
     url: "/about",
   },
-  {
-    id: 4,
-    text: "Contact",
-    url: "/contact",
-  },
 ];

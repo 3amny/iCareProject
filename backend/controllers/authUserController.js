@@ -1,17 +1,26 @@
 import User from "../models/User.js";
 import { StatusCodes } from "http-status-codes";
 import { BadRequest, UnAuthenticated } from "../error/index.js";
-
-
+import checkPermissions from "../utils/checkPermissions.js";
 const register = async (req, res) => {
-  const { firstName, lastName, email, password, phone, role } = req.body;
-  if (!firstName || !lastName || !email || !password || !phone) {
+  const { firstName, lastName, email, password, phone, role, dateOfBirth } =
+    req.body;
+  if (
+    !firstName ||
+    !lastName ||
+    !email ||
+    !password ||
+    !phone ||
+    !dateOfBirth
+  ) {
     throw new BadRequest("Please provide all information");
   }
+
   const emailIsInUse = await User.findOne({ email });
   if (emailIsInUse) {
     throw new BadRequest("Email is already in use");
   }
+
   const user = await User.create({
     firstName,
     lastName,
@@ -19,6 +28,7 @@ const register = async (req, res) => {
     password,
     phone,
     role,
+    dateOfBirth,
   });
   const token = user.createJWT();
   res.status(StatusCodes.CREATED).json({
@@ -30,6 +40,7 @@ const register = async (req, res) => {
       role: user.role,
       city: user.city,
       street: user.street,
+      dateOfBirth: user.dateOfBirth,
     },
     token,
     role: user.role,
@@ -37,37 +48,50 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      throw new BadRequest("Please provide all values");
-    }
-    const user = await User.findOne({ email }).select("+password");
-    if (!user) {
-      throw new UnAuthenticated("Invalid Credentials");
-    }
-    const isPasswordCorrect = await user.comparePassword(password);
-    if (!isPasswordCorrect) {
-      throw new UnAuthenticated("Invalid Credentials");
-    }
-    const token = user.createJWT();
-    user.password = undefined;
-    res.status(StatusCodes.OK).json({
-      user,
-      token,
-      role: user.role,
-    });
+  const { email, password } = req.body;
+  if (!email || !password) {
+    throw new BadRequest("Please provide all values");
+  }
+  const user = await User.findOne({ email }).select("+password");
+  if (!user) {
+    throw new UnAuthenticated("Invalid Credentials");
+  }
+  if (user.role !== "642509196383af1ca69c2e9b") {
+    throw new BadRequest("Please use different form");
+  }
+  const isPasswordCorrect = await user.comparePassword(password);
+  if (!isPasswordCorrect) {
+    throw new UnAuthenticated("Invalid Credentials");
+  }
+  const token = user.createJWT();
+  user.password = undefined;
+  res.status(StatusCodes.OK).json({
+    user,
+    token,
+    role: user.role,
+  });
 };
 
 const update = async (req, res) => {
-  const { firstName, lastName, email, phone, city, street } = req.body;
+  const { firstName, lastName, email, phone, city, street, dateOfBirth } =
+    req.body;
 
-  if (!firstName || !lastName || !email || !phone || !city || !street) {
+  if (
+    !firstName ||
+    !lastName ||
+    !email ||
+    !phone ||
+    !city ||
+    !street ||
+    !dateOfBirth
+  ) {
     throw new BadRequest("Please provide all information");
   }
 
   const user = await User.findOne({ _id: req.user.userId });
 
   user.email = email;
+  user.dateOfBirth = dateOfBirth;
   user.firstName = firstName;
   user.lastName = lastName;
   user.phone = phone;

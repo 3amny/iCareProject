@@ -2,9 +2,8 @@ import {
   FaHospital,
   FaUserAlt,
   FaUserMd,
-  FaCalendarCheck,
   FaHospitalUser,
-  FaUserFriends
+  FaUserFriends,
 } from "react-icons/fa";
 
 export const adminSideBarLinks = [
@@ -25,12 +24,6 @@ export const adminSideBarLinks = [
     text: "Doctor",
     url: "/admin/doctors",
     icon: <FaUserMd />,
-  },
-  {
-    id: 4,
-    text: "Appointment",
-    url: "/admin/appointments",
-    icon: <FaCalendarCheck />,
   },
   {
     id: 5,

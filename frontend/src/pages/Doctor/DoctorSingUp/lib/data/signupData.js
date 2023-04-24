@@ -11,4 +11,5 @@ export const list = {
   startTime: 9,
   endTime: 10,
   interval: 11,
+  dateOfBirth: 12,
 };

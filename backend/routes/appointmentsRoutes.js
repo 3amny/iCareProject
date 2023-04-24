@@ -1,14 +1,24 @@
-import express  from "express";
+import express from "express";
 import {
   createAppointment,
+  getAvailiableTimeSlots,
+  updateAppointment,
+  deleteAppointment,
   getAllAppointments,
 } from "../controllers/appointmentController.js";
 import auth from "../middleware/auth.js";
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
-router.route('/').post(auth,createAppointment).get(getAllAppointments);
+router
+  .route("/")
+  .post(auth, createAppointment)
+  .get(auth, getAvailiableTimeSlots);
+router.route("/user-appointments").get(auth, getAllAppointments);
 // :id
-//router.route('/:id').delete(deleteAppointment).patch(updateAppointment);
+router
+  .route("/:appointmentId")
+  .delete(auth, deleteAppointment)
+  .patch(auth, updateAppointment);
 
 export default router;

@@ -75,6 +75,12 @@ const SigninPage = () => {
             Sing up
           </Link>
         </div>
+        <div className="link-doc">
+          <p>Are you a doctor?</p>
+          <Link to="/account/signin" className="link-signin">
+            Come here
+          </Link>
+        </div>
       </form>
     </Wrapper>
   );

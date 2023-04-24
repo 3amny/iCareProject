@@ -4,7 +4,6 @@ import { logoutDoctor } from "./doctorAuthSlice";
 export const registerDoctorThunk = async (url, doctor, thunkAPI) => {
   try {
     const response = await apiFetch.post(url, doctor);
-    console.log(response);
     return response.data;
   } catch (error) {
     if (error.response.status === 401) {

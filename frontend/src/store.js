@@ -7,6 +7,7 @@ import roleSlice from "features/Admin/Roles/RoleSlice";
 import specialtySlice from "features/Admin/Specialties/specialtySlice";
 import userAdminSlice from "features/Admin/User/CRUD/userAdminSlice";
 import allUsersSlice from "features/Admin/User/getAll/allUsersSlice";
+import appointmentSlice from "features/Appointment/appointmentSlice";
 import doctorAuthSlice from "features/Doctor/Auth/doctorAuthSlice";
 import reviewSlice from "features/Reviews/reviewSlice";
 import userSlice from "features/User/Auth/userSlice";
@@ -24,5 +25,6 @@ export const store = configureStore({
     allClinics: allClinicsSlice,
     specialty: specialtySlice,
     review: reviewSlice,
+    appointment: appointmentSlice,
   },
 });

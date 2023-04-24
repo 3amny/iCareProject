@@ -2,7 +2,6 @@ import { StatusCodes } from "http-status-codes";
 import checkRolePermission from "../utils/checkRolePermission.js";
 import { BadRequest, NotFound } from "../error/index.js";
 import Review from "../models/Review.js";
-import Doctor from "../models/Doctor.js";
 import User from "../models/User.js";
 import checkPermissions from "../utils/checkPermissions.js";
 import getModel from "../middleware/model.js";
@@ -52,6 +51,18 @@ const getReviewsBySubjectId = async (req, res) => {
       .json({ error: "Server Error" });
   }
 };
+const getAllReviews = async (req, res) => {
+  try {
+    const limit = req.query.limit || 10; // default limit to 10 if not provided in query params
+    const reviews = await Review.find().limit(limit);
+    res.status(StatusCodes.OK).json({ reviews });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: "Server Error" });
+  }
+};
 
 const updateReview = async (req, res) => {
   const { reviewId } = req.params;
@@ -90,4 +101,10 @@ const deleteReview = async (req, res) => {
     message: "Review deleted successfully",
   });
 };
-export { deleteReview, updateReview, createReview, getReviewsBySubjectId };
+export {
+  deleteReview,
+  updateReview,
+  createReview,
+  getReviewsBySubjectId,
+  getAllReviews,
+};

@@ -1,11 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import { authUserHeader } from "utils/requests/authHeaders";
-import {
-  getAllClinics,
-  hideLoading,
-  showLoading,
-} from "../getAll/allClinicsSlice";
+
 
 import {
   createClinicAdminThunk,

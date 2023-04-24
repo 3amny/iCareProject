@@ -39,6 +39,7 @@ const AdminDoctorEditPage = () => {
     dispatch(fetchSpecialtiesOptions());
     dispatch(fetchRolesOptions());
   }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!firstName || !lastName || !phone || !email || !experience) {
@@ -73,29 +74,6 @@ const AdminDoctorEditPage = () => {
     <Wrapper>
       <form className="form">
         <div className="account">
-          <div className="account-img-container">
-            <h5 className="account-title">Profile image</h5>
-            <div className="account-img-form">
-              <img
-                src={profileImage}
-                alt="user_image"
-                className="account-img"
-              />
-              <div className="account-img-upload">
-                <input
-                  type="file"
-                  id="fileElem"
-                  multiple
-                  accept="image/*"
-                  className="visually-hidden"
-                />
-                <label htmlFor="fileElem" className="account-img-label">
-                  <i className="fa-solid fa-pen" />
-                  <p>Edit</p>
-                </label>
-              </div>
-            </div>
-          </div>
           <div className="account-details-container">
             <h5 className="account-title">Profile Details</h5>
             <div className="account-details-form">
@@ -118,7 +96,11 @@ const AdminDoctorEditPage = () => {
                 type="date"
                 labelText="Date of Birth"
                 name="dateOfBirth"
-                value={dateOfBirth}
+                value={
+                  dateOfBirth
+                    ? new Date(dateOfBirth).toISOString().slice(0, 10)
+                    : ""
+                }
                 handleChange={handleUserInput}
               />
               <FormRow
@@ -138,14 +120,14 @@ const AdminDoctorEditPage = () => {
               <FormRowSelect
                 labelText="Specialty"
                 name="docType"
-                value={docType.name}
+                value={docType._id}
                 handleChange={handleUserInput}
                 list={specialtiesOptions}
               />
               <FormRowSelect
                 labelText="Clinic"
                 name="clinic"
-                value={clinic}
+                value={clinic._id}
                 handleChange={handleUserInput}
                 list={clinicsOptions}
               />

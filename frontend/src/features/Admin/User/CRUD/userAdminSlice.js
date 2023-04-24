@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
 import { updateUserAdminThunk, deleteUserAdminThunk } from "./userAdminThunk";
+import { getAllRoles } from "features/Admin/Roles/RoleSlice";
 
 const initialState = {
   editUserId: "",
@@ -13,6 +14,7 @@ const initialState = {
   city: "",
   steet: "",
   role: "",
+  dateOfBirth: null,
   rolesOptions: [],
   isLoading: false,
 };
@@ -64,13 +66,13 @@ const userAdminSlice = createSlice({
         state.isLoading = false;
         toast.error(payload);
       })
-      .addCase(fetchRolesOptions.fulfilled, (state, { payload }) => {
+      .addCase(fetchRolesOptions.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.rolesOptions = payload.roles;
+        state.rolesOptions = action.payload.roles;
       })
-      .addCase(fetchRolesOptions.rejected, ({ payload }) => {
-        console.log(action.error.message);
-        toast.error(payload);
+      .addCase(fetchRolesOptions.rejected, (state, action) => {
+        console.log(action.payload.error.message);
+        toast.error(action.payload);
       });
   },
 });

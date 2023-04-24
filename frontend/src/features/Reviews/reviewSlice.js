@@ -4,6 +4,7 @@ import {
   createReviewThunk,
   deleteReviewThunk,
   getAllReviewsBySubjectIdThunk,
+  getAllReviewsThunk,
   updateReviewThunk,
 } from "./reviewThunk";
 
@@ -15,6 +16,7 @@ const initialState = {
   totalReviews: 0,
   comment: "",
   review: 0,
+  allReviews: [],
   reviews: [],
 };
 
@@ -34,6 +36,10 @@ export const updateReview = createAsyncThunk(
 export const deleteReview = createAsyncThunk(
   "review/deleteReview",
   deleteReviewThunk
+);
+export const getAllReviews = createAsyncThunk(
+  "review/getAllReviews",
+  getAllReviewsThunk
 );
 
 const reviewSlice = createSlice({
@@ -97,6 +103,17 @@ const reviewSlice = createSlice({
         state.reviews = payload.reviews;
       })
       .addCase(getAllReviewsBySubjectId.rejected, (state, { payload }) => {
+        state.Loading = false;
+        toast.error(payload);
+      })
+      .addCase(getAllReviews.pending, (state) => {
+        state.Loading = true;
+      })
+      .addCase(getAllReviews.fulfilled, (state, { payload }) => {
+        state.Loading = false;
+        state.allReviews = payload.reviews;
+      })
+      .addCase(getAllReviews.rejected, (state, { payload }) => {
         state.Loading = false;
         toast.error(payload);
       });

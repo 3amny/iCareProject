@@ -12,6 +12,7 @@ const initialState = {
   password: "",
   email: "",
   phone: "",
+  dateOfBirth: "",
 };
 
 const SignupPage = () => {
@@ -28,8 +29,16 @@ const SignupPage = () => {
   };
   const onSubmit = (e) => {
     e.preventDefault();
-    const { firstName, lastName, password, email, phone } = values;
-    if (!email || !password || !firstName || !lastName || !phone) {
+    const { firstName, lastName, password, email, phone, dateOfBirth } = values;
+    console.log(dateOfBirth);
+    if (
+      !email ||
+      !password ||
+      !firstName ||
+      !lastName ||
+      !phone ||
+      !dateOfBirth
+    ) {
       toast.error("Please fill out the fields");
       return;
     }
@@ -40,6 +49,7 @@ const SignupPage = () => {
         password,
         email,
         phone,
+        dateOfBirth,
       })
     );
   };
@@ -69,6 +79,13 @@ const SignupPage = () => {
           labelText="Last Name"
           name="lastName"
           value={values.lastName}
+          handleChange={handleChange}
+        />
+        <FormRow
+          type="date"
+          labelText="Date of Birth"
+          name="dateOfBirth"
+          value={values.dateOfBirth}
           handleChange={handleChange}
         />
 
@@ -101,6 +118,12 @@ const SignupPage = () => {
           <p>Already a memeber? </p>
           <Link to="/account/signin" className="link-signin">
             Sing in
+          </Link>
+        </div>
+        <div className="link-doc">
+          <p>Are you a doctor?</p>
+          <Link to="/account/signin" className="link-signin">
+            Come here
           </Link>
         </div>
       </form>

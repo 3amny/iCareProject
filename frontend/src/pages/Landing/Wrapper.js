@@ -8,7 +8,7 @@ const Wrapper = styled.main`
   }
   .main-section {
     display: grid;
-    grid-template-columns: 70% 30%;
+    grid-template-columns: 60% 40%;
     margin-bottom: 35px;
   }
   .catch-phrase {
@@ -36,39 +36,14 @@ const Wrapper = styled.main`
     background: var(--primary-600);
     color: white;
     box-shadow: var(--shadow-3);
-    a{
+    a {
       color: white;
     }
   }
   .doctor-image {
     z-index: -1;
   }
-  .image-container {
-    position: relative;
-    width: 250px;
-    height: 250px;
-    top: 30px;
-    left: -20px;
-  }
 
-  .image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-    margin: 5px;
-  }
-
-  .image-container::before {
-    content: "";
-    position: absolute;
-    top: -20px;
-    left: -20px;
-    width: 300px;
-    height: 300px;
-    border: 20px solid var(--grey-50);
-    border-radius: 50%;
-  }
   .search {
     display: flex;
     position: relative;
@@ -146,6 +121,7 @@ const Wrapper = styled.main`
     display: grid;
     grid-template-columns: 23.5% 23.5% 23.5% 23.5%;
     gap: 20px;
+    margin-bottom: 20px;
   }
   .card-container {
     display: flex;
@@ -175,6 +151,7 @@ const Wrapper = styled.main`
     p {
       color: var(--fontSmColor);
       font-size: 14px;
+      font-weight: 600;
     }
   }
   .third-section {
@@ -182,6 +159,35 @@ const Wrapper = styled.main`
     display: flex;
     align-items: center;
     flex-direction: column;
+  }
+  hr {
+    width: 100%;
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid var(--primary-700);
+    margin: 1em 0;
+    padding: 0;
+  }
+  .phrase {
+    display: flex;
+    flex-direction: column;
+    h1 {
+      font-family: var(--landingFont);
+      font-weight: 700;
+      color: var(--primary-700);
+    }
+    h4 {
+      text-align: end;
+    }
+  }
+  .fourth-section {
+    margin-top: 35px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  
+
   }
 
   @media screen and (max-width: 45em) {
@@ -199,12 +205,12 @@ const Wrapper = styled.main`
       top: 0px;
       left: 0px;
     }
-    .card{
+    .card {
       display: grid;
       grid-template-columns: 50% 50%;
     }
-    .section-title{
-      h2{
+    .section-title {
+      h2 {
         font-size: 30px;
       }
     }

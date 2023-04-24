@@ -2,15 +2,14 @@ import React from "react";
 import { useState } from "react";
 import Wrapper from "./Wrapper";
 import { FormRow } from "shared/Input";
-import { store } from "store";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { updateUser } from "features/User/Auth/userSlice";
-
+import dayjs from "dayjs";
 const AccountDetailsPage = () => {
   const { isLoading, user } = useSelector((store) => store.user);
   const dispatch = useDispatch();
-
+  const date = dayjs(user?.dateOfBirth).format("YYYY-MM-DD");
   const [userData, setUserData] = useState({
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
@@ -18,6 +17,7 @@ const AccountDetailsPage = () => {
     email: user?.email || "",
     city: user?.city || "",
     street: user?.street || "",
+    dateOfBirth: date || null,
   });
 
   const handleChange = (e) => {
@@ -28,8 +28,18 @@ const AccountDetailsPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { firstName, lastName, phone, email, city, street } = userData;
-    if (!email || !firstName || !lastName || !phone || !city || !street) {
+    const { firstName, lastName, phone, email, city, street, dateOfBirth } =
+      userData;
+
+    if (
+      !email ||
+      !firstName ||
+      !lastName ||
+      !phone ||
+      !city ||
+      !street ||
+      !dateOfBirth
+    ) {
       toast.error(`Please fill out all fields`);
       return;
     }
@@ -55,7 +65,13 @@ const AccountDetailsPage = () => {
           value={userData.lastName}
           handleChange={handleChange}
         />
-
+        <FormRow
+          type="date"
+          labelText="Date of Birth"
+          name="dateOfBirth"
+          value={userData.dateOfBirth}
+          handleChange={handleChange}
+        />
         <FormRow
           type="text"
           labelText="Phone"

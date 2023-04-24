@@ -26,6 +26,7 @@ const initialState = {
   startTime: "",
   endTime: "",
   interval: "",
+  dateOfBirth: "",
 };
 const DoctorSignPage = () => {
   const [values, setValues] = useState(initialState);
@@ -59,6 +60,7 @@ const DoctorSignPage = () => {
       startTime,
       endTime,
       interval,
+      dateOfBirth,
     } = values;
     if (
       !email ||
@@ -73,7 +75,8 @@ const DoctorSignPage = () => {
           !phone ||
           !experience ||
           !startTime ||
-          !endTime))
+          !endTime ||
+          !dateOfBirth))
     ) {
       toast.error("Please fill out the fields");
       return;
@@ -96,6 +99,7 @@ const DoctorSignPage = () => {
           startTime,
           endTime,
           interval,
+          dateOfBirth,
         })
       );
       return;
@@ -127,6 +131,14 @@ const DoctorSignPage = () => {
             labelText="Last Name"
             name="lastName"
             value={values.lastName}
+            handleChange={handleDoctorInput}
+          />,
+          <FormRow
+            key={list.dateOfBirth}
+            type="date"
+            labelText="Date of Birth"
+            name="dateOfBirth"
+            value={values.dateOfBirth}
             handleChange={handleDoctorInput}
           />,
           <FormRow
