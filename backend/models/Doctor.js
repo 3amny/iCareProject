@@ -42,6 +42,10 @@ const DoctorSchema = new mongoose.Schema(
   { collection: "doctors" }
 );
 
+DoctorSchema.virtual("name").get(function () {
+  return `${this.firstName} ${this.lastName}`;
+});
+
 DoctorSchema.statics.generateTimeSlots = function (
   startTime,
   endTime,

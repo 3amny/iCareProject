@@ -3,5 +3,12 @@ import { LinkButton } from "./component/LinkButton/LinkButton.js";
 import { IconButton } from "./component/IconButton/IconButton.js";
 import { CommentIcon } from "./component/CommentIcon/CommentIcon.js";
 import { TimeButton } from "./component/TimeButton/TimeButton.js";
-
-export { ToggleButton, LinkButton, IconButton, CommentIcon, TimeButton };
+import { PageButtons } from "./component/PageButtons/PageButtons.js";
+export {
+  ToggleButton,
+  LinkButton,
+  IconButton,
+  CommentIcon,
+  TimeButton,
+  PageButtons,
+};

@@ -108,13 +108,13 @@ const DoctorSignPage = () => {
   useEffect(() => {
     if (doctor) {
       setTimeout(() => {
-        navigate(`/`);
+        navigate(`/doctor`);
       }, 2000);
     }
   }, [doctor, navigate]);
   return (
     <Wrapper>
-      <form className="form" onSubmit={onSubmit}>
+      <form className="form doctor" onSubmit={onSubmit}>
         <h5>{isMember ? "SING IN" : "SIGN UP"}</h5>
         {!isMember && [
           <FormRow
@@ -156,6 +156,7 @@ const DoctorSignPage = () => {
             value={values.docType}
             handleChange={handleDoctorInput}
             list={specialtiesOptions}
+            isRequried={true}
           />,
           <FormRowSelect
             key={list.clinic}
@@ -164,6 +165,7 @@ const DoctorSignPage = () => {
             value={values.clinic}
             handleChange={handleDoctorInput}
             list={clinicsOptions}
+            isRequried={true}
           />,
           <FormRow
             key={list.experience}

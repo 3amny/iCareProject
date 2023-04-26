@@ -14,11 +14,38 @@ const createClinic = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ clinic });
 };
 const getAllClinics = async (req, res) => {
-  const clinics = await Clinic.find();
-  res.status(StatusCodes.OK).json({
+  const { search, sort } = req.query;
+  const queryObject = {};
+  if (search) {
+    queryObject.name = { $regex: search, $options: "i" };
+  }
+  let result = Clinic.find(queryObject);
+  if (sort === "latest") {
+    result = result.sort("-createdAt");
+  }
+  if (sort === "oldest") {
+    result = result.sort("createdAt");
+  }
+  if (sort === "a-z") {
+    result = result.sort("name");
+  }
+  if (sort === "z-a") {
+    result = result.sort("-name");
+  }
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.page) || 10;
+  const skip = (page - 1) * limit;
+
+  result = result.skip(skip).limit(limit);
+
+  const clinics = await result;
+  const totalClinics = await Clinic.countDocuments(queryObject);
+  const numOfPages = Math.ceil(totalClinics / limit);
+
+  res.status(StatusCodes.OK).json({ 
     clinics,
-    totalClinics: clinics.length,
-    numOfPages: 1,
+    totalClinics,
+    numOfPages,
   });
 };
 
@@ -32,7 +59,6 @@ const getById = async (req, res) => {
     clinic,
   });
 };
-
 
 const updateClinic = async (req, res) => {
   const { id: clinicId } = req.params;

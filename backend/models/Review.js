@@ -23,7 +23,7 @@ const ReviewSchema = new mongoose.Schema(
     on: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "onModel",
+      refPath: "onModel",
     },
     onModel: {
       type: String,
@@ -35,4 +35,16 @@ const ReviewSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+ReviewSchema.pre(/^find/, function (next) {
+  const modelName = this.getQuery().onModel?.toLowerCase();
+  if (modelName) {
+    this.populate({
+      path: "on",
+      select: "name",
+      match: { onModel: modelName },
+    });
+  }
+  next();
+});
 export default mongoose.model("Review", ReviewSchema);

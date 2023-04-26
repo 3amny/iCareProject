@@ -4,8 +4,7 @@ import { getAllClinicsThunk, getClinicByIdThunk } from "./allClinicsThunk";
 
 const initialStateFilter = {
   search: "",
-  searchStatus: "all",
-  searchType: "all",
+  sort: "latest",
   sortOptions: ["latest", "oldest", "a-z", "z-a"],
 };
 const initialState = {
@@ -15,6 +14,7 @@ const initialState = {
   totalClinics: 0,
   numOfPages: 1,
   page: 1,
+  ...initialStateFilter,
 };
 
 export const getAllClinics = createAsyncThunk(
@@ -36,6 +36,17 @@ const allClinicsSlice = createSlice({
     hideLoading: (state) => {
       state.isLoading = false;
     },
+    clearFilters: (state) => {
+      return { ...state, ...initialStateFilter };
+    },
+    handleChange: (state, { payload: { name, value } }) => {
+      state.page = 1;
+      state[name] = value;
+    },
+    changePage: (state, { payload }) => {
+      state.page = payload;
+    },
+    clearClinicsState: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -46,6 +57,7 @@ const allClinicsSlice = createSlice({
         state.isLoading = false;
         state.clinics = payload.clinics;
         state.totalClinics = payload.totalClinics;
+        state.numOfPages = payload.numOfPages;
       })
       .addCase(getAllClinics.rejected, (state, { payload }) => {
         state.isLoading = false;
@@ -65,5 +77,12 @@ const allClinicsSlice = createSlice({
   },
 });
 
-export const { showLoading, hideLoading } = allClinicsSlice.actions;
+export const {
+  showLoading,
+  hideLoading,
+  handleChange,
+  clearFilters,
+  clearClinicsState,
+  changePage
+} = allClinicsSlice.actions;
 export default allClinicsSlice.reducer;

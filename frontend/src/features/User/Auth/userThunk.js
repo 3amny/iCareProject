@@ -1,7 +1,10 @@
 import apiFetch from "utils/requests/axios";
 import { logoutUser } from "./userSlice";
-
-export const registerUserThunk = async (url, user, thunkAPI) => {
+import { clearDoctorsState } from "features/Admin/Doctor/getAll/allDoctorsSlice";
+import { clearValues } from "features/Admin/Specialties/specialtySlice";
+import { clearClinicsState } from "features/Admin/Clinic/getAll/allClinicsSlice";
+export const registerUserThunk = async (user, thunkAPI) => {
+  const url = "/auth/register";
   try {
     const response = await apiFetch.post(url, user);
     return response.data;
@@ -14,7 +17,8 @@ export const registerUserThunk = async (url, user, thunkAPI) => {
   }
 };
 
-export const loginUserThunk = async (url, user, thunkAPI) => {
+export const loginUserThunk = async (user, thunkAPI) => {
+  const url = "/auth/login";
   try {
     const response = await apiFetch.post(url, user);
     return response.data;
@@ -23,7 +27,8 @@ export const loginUserThunk = async (url, user, thunkAPI) => {
   }
 };
 
-export const updateUserThunk = async (url, user, thunkAPI) => {
+export const updateUserThunk = async (user, thunkAPI) => {
+  const url = "/auth/update";
   try {
     const response = await apiFetch.patch(url, user, {
       headers: {
@@ -33,5 +38,17 @@ export const updateUserThunk = async (url, user, thunkAPI) => {
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data.msg);
+  }
+};
+
+export const clearUserStoreThunk = async (message, thunkAPI) => {
+  try {
+    thunkAPI.dispatch(logoutUser(message));
+    thunkAPI.dispatch(clearDoctorsState());
+    thunkAPI.dispatch(clearValues());
+    thunkAPI.dispatch(clearClinicsState());
+    return Promise.resolve();
+  } catch (error) {
+    return Promise.reject;
   }
 };

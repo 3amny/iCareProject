@@ -1,135 +1,71 @@
 import React from "react";
-import { HiXMark } from "react-icons/hi2";
 import { TimeSlotList } from "shared/List";
 import styled from "styled-components";
-
-import { Textarea } from "shared/Input";
-import { handleChange } from "features/Appointment/appointmentSlice";
-import { useDispatch } from "react-redux";
-import dayjs from "dayjs";
 export const TimeSlotsModal = ({
-  handleClose,
   timeSlots,
-  notes,
   handleTimeSet,
-  startDate,
-  endDate,
-  isReady,
-  handleSubmit,
+  onBackTime,
+  onConfirmTime,
 }) => {
-  const dispatch = useDispatch();
-  const handleInput = (e) => {
-    const name = e.target.name;
-    const value =
-      e.target.type === "checkbox" ? e.target.checked : e.target.value;
-    dispatch(handleChange({ name, value }));
-  };
   return (
-    <Wrapper className="modal">
-      <div className="overlay" />
-      <div className="modal-content">
-        <div className="modal-title">
-          <h5>
-            {!isReady ? "Choose time slots" : "Confirm the appointment date"}
-          </h5>
+    <Wrapper>
+      <div className="content">
+        <TimeSlotList timeSlots={timeSlots} onClick={handleTimeSet} />
+        <div className="buttons">
+          <button className="btn-danger" onClick={onBackTime}>
+            Go back
+          </button>
+          <button className="btn-success" onClick={onConfirmTime}>
+            Confirm
+          </button>
         </div>
-        <button onClick={handleClose} className="modal-toggle">
-          <HiXMark size={18} />
-        </button>
-        {!isReady ? (
-          <TimeSlotList timeSlots={timeSlots} onClick={handleTimeSet} />
-        ) : (
-          <div className="modal-confirm">
-            <div className="modal-ap-data">
-              <p>
-                <span>Appointment date: </span>
-                {startDate ? dayjs(startDate).format("DD MMM YYYY") : null}
-              </p>
-              <p>
-                <span> Start time: </span>
-                {startDate ? dayjs(startDate).format("HH:mm") : null}
-              </p>
-              <p>
-                <span>End time: </span>
-                {endDate ? dayjs(endDate).format("HH:mm") : null}
-              </p>
-            </div>
-            <div className="modal-notes">
-              <Textarea
-                name="notes"
-                value={notes}
-                onChange={handleInput}
-                className="notes"
-              />
-            </div>
-            <div className="buttons">
-              <button type="submit" className="btn" onClick={handleSubmit}>
-                Confirm
-              </button>
-              <button type="button" className="btn" onClick={handleClose}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  .time-stack {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    column-gap: 100px;
-    row-gap: 10px;
-  }
-  .time {
+  .btn-close {
     display: flex;
+    margin: 20px 0px;
     align-items: center;
     justify-content: center;
   }
-  .modal-title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    h5 {
-      margin-bottom: 10px;
-      font-size: 20px;
-      font-weight: 600;
-    }
-  }
+
   .btn-time {
     cursor: pointer;
-    color: var(--white);
-    background: var(--primary-500);
-    border: transparent;
+    color: var(--primary-600);
+    width: clamp(200px, 30vw, 400px);
+    height: clamp(20px, 10vw, 40px);
+    background: white;
+    border: 1px solid var(--primary-600);
     border-radius: var(--borderRadius);
     letter-spacing: var(--letterSpacing);
-    padding: 0.4rem 0.35rem;
+    padding: 0.5rem 0.4rem;
+    box-shadow: var(--shadow-3);
     p {
       font-size: 15px;
+      font-weight: 600;
       text-align: center;
       margin-bottom: 0;
       margin-top: 0;
     }
   }
-  .modal-content {
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    line-height: 1.5;
-    background: #f1f1f1;
-    padding: 14px 50px;
-    border-radius: 3px;
-    max-width: clamp(400px, 30vw, 800px);
+  .btn-time:hover {
+    background: var(--primary-600);
+    color: white;
+  }
+  .btn-time.active {
+    background: var(--primary-700);
+    color: white;
+  }
+  .content {
+    margin-top: 30px;
   }
 
   .modal-toggle {
     top: 18px;
     display: block;
-    position: fixed;
     right: var(--size-400);
     background: transparent;
     border: none;
@@ -154,9 +90,22 @@ const Wrapper = styled.div`
       }
     }
   }
+  .time-stack {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 100px;
+    row-gap: 10px;
+    margin-bottom: 20px;
+  }
+  .time {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
   }
   .modal-notes {
     display: flex;

@@ -1,28 +1,42 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { CardClinic } from "shared/Card/component/CardClinic/CardClinic/CardClinic";
 import { IoAddCircleSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-
-import { getAllClinics } from "features/Admin/Clinic/getAll/allClinicsSlice";
+import {
+  changePage,
+} from "features/Admin/Clinic/getAll/allClinicsSlice";
+import { PageButtons } from "shared/Button";
 
 export const ClinicsContainer = () => {
-  const { clinics, totalClinics, isLoading } = useSelector(
+  const { clinics, totalClinics, isLoading, numOfPages, page } = useSelector(
     (store) => store.allClinics
   );
- 
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getAllClinics());
-  }, []);
 
   if (isLoading) {
     return <h5>Loading...</h5>;
   }
-  if (clinics.length === 0) {
-    return <h2>No clinic to display....</h2>;
+
+  if (totalClinics === 0) {
+    return <h2>No doctors to display....</h2>;
   }
+
+  const nextPage = () => {
+    let newPage = page + 1;
+    if (newPage > numOfPages) {
+      newPage = 1;
+    }
+    dispatch(changePage(newPage));
+  };
+
+  const prevPage = () => {
+    let newPage = page - 1;
+    if (newPage < numOfPages) {
+      newPage = numOfPages;
+    }
+    dispatch(changePage(newPage));
+  };
 
   return (
     <Wrapper>
@@ -35,12 +49,20 @@ export const ClinicsContainer = () => {
           Add clinic
         </Link>
       </div>
-
       <div className="clinics">
         {clinics.map((clinic) => {
           return <CardClinic key={clinic._id} {...clinic} />;
         })}
       </div>
+      {numOfPages > 1 && (
+        <PageButtons
+          numOfPages={numOfPages}
+          page={page}
+          nextPage={nextPage}
+          prevPage={prevPage}
+          changePage={(pageNum) => dispatch(changePage(pageNum))}
+        />
+      )}
     </Wrapper>
   );
 };

@@ -5,6 +5,7 @@ export const FormRowSelect = ({
   labelText,
   readOnly,
   list,
+  isRequried,
 }) => {
   return (
     <div className="form-row">
@@ -16,11 +17,15 @@ export const FormRowSelect = ({
         value={value}
         onChange={handleChange}
         className="form-select"
-      >  <option value="">----Select----</option>
-        {list.map((item) => {
+      >
+        {isRequried ? <option value="all">---Select---</option> : null}
+        {list.map((item, i) => {
           return (
-            <option key={item._id} value={item._id}>
-              {item.name}
+            <option
+              key={item._id ? item._id : i}
+              value={item._id ? item._id : item}
+            >
+              {item.name ? item.name : item}
             </option>
           );
         })}

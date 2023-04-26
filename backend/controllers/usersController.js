@@ -4,7 +4,10 @@ import checkRolePermission from "../utils/checkRolePermission.js";
 
 const getAllUsers = async (req, res) => {
   checkRolePermission(req.user, "642509136383af1ca69c2e99");
-  const users = await User.find();
+  const users = await User.find({ role: "642509196383af1ca69c2e9b" }).populate({
+    path: "role",
+    select: "name",
+  });
   // includes all users expect the requested one
   const filteredUsers = users.filter(
     (user) => user._id.toString() !== req.user.userId.toString()
@@ -32,7 +35,8 @@ const getUser = async (req, res) => {
 const updateUser = async (req, res) => {
   checkRolePermission(req.user, "642509136383af1ca69c2e99");
   const { id: userId } = req.params;
-  const { firstName, lastName, email, phone, city, street, role, dateOfBirth } = req.body;
+  const { firstName, lastName, email, phone, city, street, role, dateOfBirth } =
+    req.body;
   if (
     !firstName ||
     !lastName ||

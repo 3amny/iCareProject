@@ -53,8 +53,19 @@ const getReviewsBySubjectId = async (req, res) => {
 };
 const getAllReviews = async (req, res) => {
   try {
-    const limit = req.query.limit || 10; // default limit to 10 if not provided in query params
-    const reviews = await Review.find().limit(limit);
+    const limit = req.query.limit || 10;
+    const reviews = await Review.find()
+      .limit(limit)
+      .populate({
+        path: "createdBy",
+        select: "firstName lastName",
+        model: "User",
+      })
+      .populate({
+        path: "on",
+        select: "name",
+      })
+      .exec();
     res.status(StatusCodes.OK).json({ reviews });
   } catch (error) {
     console.error(error);

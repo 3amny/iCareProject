@@ -1,5 +1,4 @@
-import styled from 'styled-components'
-
+import styled from "styled-components";
 
 const Wrapper = styled.main`
   display: grid;
@@ -12,19 +11,29 @@ const Wrapper = styled.main`
   }
   .form {
     max-width: 400px;
-    border-top: 5px solid var(--primary-500);
+    background: var(--primary-600);
+    box-shadow: var(--shadow-3);
+  }
+  .form-input {
+    background: var(--backgroundColor);
+    border: 1px solid var(--grey-200);
   }
   h5 {
     text-align: center;
     font-weight: 600;
+    color: var(--white);
   }
   p {
     margin: 0;
     margin-top: 1rem;
     text-align: center;
+    color: var(--white);
   }
   .btn {
     margin-top: 1rem;
+    background: var(--primary-400);
+    font-weight: 600;
+    color: var(--white);
   }
   .member-btn {
     background-color: transparent;
@@ -33,12 +42,13 @@ const Wrapper = styled.main`
     cursor: pointer;
     overflow: hidden;
     outline: none;
-    color: var(--primary-700);
+    color: var(--white);
     text-decoration: underline;
   }
-  .form-label{
-    font-weight:bold;
+  .form-label {
+    font-weight: bold;
+    color: var(--white);
   }
 `;
 
-export default Wrapper
+export default Wrapper;

@@ -6,6 +6,7 @@ import { getDoctorById } from "features/Admin/Doctor/getAll/allDoctorsSlice.js";
 import { ReviewSection } from "widgets/ReviewSection/ReviewSection.js";
 import { createReview, updateReview } from "features/Reviews/reviewSlice.js";
 import { DoctorProfile } from "shared/Profile/index.js";
+import { toast } from "react-toastify";
 
 const initialState = {
   comment: "",
@@ -20,7 +21,7 @@ const DoctorPage = () => {
   useEffect(() => {
     dispatch(getDoctorById(id));
   }, [id]);
-
+  const { user } = useSelector((store) => store.user);
   const { isLoading, currentDoctor } = useSelector((store) => store.allDoctors);
   const { comment, rating, editReviewId, reviews, isEditing, Loading } =
     useSelector((store) => store.review);
@@ -37,6 +38,10 @@ const DoctorPage = () => {
   };
   const onCreateSubmit = (e) => {
     e.preventDefault();
+    if (!user) {
+      toast.error("Authorization required");
+      return;
+    }
     const { comment, rating } = values;
     if (!comment || !rating) {
       toast.error("Please fill out all fields");

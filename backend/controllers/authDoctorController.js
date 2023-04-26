@@ -16,6 +16,7 @@ const register = async (req, res) => {
     endTime,
     interval,
     dateOfBirth,
+
   } = req.body;
   if (
     !firstName ||
@@ -63,6 +64,7 @@ const register = async (req, res) => {
       email: doctor.email,
       firstName: doctor.firstName,
       lastName: doctor.lastName,
+
       phone: doctor.phone,
       docType: doctor.docType,
       role: doctor.role,
@@ -84,7 +86,11 @@ const login = async (req, res) => {
   if (!email || !password) {
     throw new BadRequest("Please provide all values");
   }
-  const doctor = await Doctor.findOne({ email }).select("+password");
+  const doctor = await Doctor.findOne({ email })
+    .populate({ path: "docType", select: "name" })
+    .populate({ path: "clinic", select: "name", model: "Clinic" })
+    .select("+password");
+
   if (!doctor) {
     throw new UnAuthenticated("Invalid Credentials");
   }
@@ -132,6 +138,7 @@ const update = async (req, res) => {
   doctor.clinic = clinic;
   doctor.experience = experience;
   doctor.dateOfBirth = dateOfBirth;
+
   await doctor.save();
 
   const token = doctor.createJWT();

@@ -56,8 +56,9 @@ const login = async (req, res) => {
   if (!user) {
     throw new UnAuthenticated("Invalid Credentials");
   }
-  if (user.role !== "642509196383af1ca69c2e9b") {
-    throw new BadRequest("Please use different form");
+
+  if (user.role === "6425091d6383af1ca69c2e9d") {
+    throw new BadRequest("Please use a different form");
   }
   const isPasswordCorrect = await user.comparePassword(password);
   if (!isPasswordCorrect) {
@@ -73,8 +74,15 @@ const login = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  const { firstName, lastName, email, phone, city, street, dateOfBirth } =
-    req.body;
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    city,
+    street,
+    dateOfBirth,
+  } = req.body;
 
   if (
     !firstName ||

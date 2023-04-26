@@ -1,27 +1,31 @@
-import { getAllUsers } from "features/Admin/User/getAll/allUsersSlice";
+import {
+  changePage,
+  getAllUsers,
+} from "features/Admin/User/getAll/allUsersSlice";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { PageButtons } from "shared/Button";
 import { CardUser } from "shared/Card";
 import styled from "styled-components";
 export const UsersContainer = () => {
-  const { users, isLoading } = useSelector(
+  const { users, totalUsers, isLoading } = useSelector(
     (store) => store.allUsers
   );
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllUsers());
   }, []);
-
   if (isLoading) {
     return <h5>Loading...</h5>;
   }
-  if (users.length === 0) {
+  if (totalUsers === 0) {
     return <h2>No users to display....</h2>;
   }
+
   return (
     <Wrapper>
       <h5>
-        {users.length} user{users.length > 1 ? "s were" : " was"} found
+        {totalUsers} user{users.length > 1 ? "s were" : " was"} found
       </h5>
       <div className="users">
         {users.map((user) => {

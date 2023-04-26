@@ -3,8 +3,7 @@ import profileImage from "assets/images/profile.jpg";
 import { IconButton } from "shared/Button";
 
 export const ProfileSigned = ({
-  firstName,
-  lastName,
+  user,
   type,
   btnColor,
   icon,
@@ -16,10 +15,10 @@ export const ProfileSigned = ({
       <div className="profile">
         <div className="profile-details">
           <div className="main-icon" alt="user_image">
-            {firstName.charAt(0)}
+            {user.firstName.charAt(0)}
           </div>
           <div className="name">
-            {firstName} {lastName}
+            {user.firstName} {user.lastName}
           </div>
         </div>
         <IconButton

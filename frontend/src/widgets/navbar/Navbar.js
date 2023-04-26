@@ -6,7 +6,7 @@ import { Logo } from "shared/Image";
 import { LinkButton, ToggleButton } from "shared/Button";
 import { NavList } from "shared/List";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutUser } from "features/User/Auth/userSlice";
+import { clearStoreUser } from "features/User/Auth/userSlice";
 import { ProfileSignedNav } from "shared/Profile";
 import { MdLogout } from "react-icons/md";
 import { FiUser } from "react-icons/fi";
@@ -21,7 +21,7 @@ export const Navbar = () => {
   const openProfileInfo = () => setIsOpenedProfile(!isOpenedProfile);
   const dispatch = useDispatch();
 
-  const { user} = useSelector((store) => store.user);
+  const { user } = useSelector((store) => store.user);
   return (
     <Wrapper data-overlay={isOpened}>
       <div className="container">
@@ -85,7 +85,9 @@ export const Navbar = () => {
                       </Link>
                       <button
                         className="profile-logout"
-                        onClick={() => dispatch(logoutUser())}
+                        onClick={() =>
+                          dispatch(clearStoreUser("Logging out..."))
+                        }
                       >
                         <MdLogout className="logout-icon" />
                         Logout
@@ -196,7 +198,10 @@ const Wrapper = styled.header`
     gap: var(--size-400);
     position: absolute;
     margin-top: 5px;
-    padding: 0.2rem 0.75rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 5px;
+    border: 1px solid var(--primary-600);
+    background: var(--backgroundColor);
   }
   .list .logout-icon {
     margin-right: 5px;

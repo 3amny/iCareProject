@@ -11,6 +11,7 @@ import {
   loginUserThunk,
   registerUserThunk,
   updateUserThunk,
+  clearUserStoreThunk,
 } from "./userThunk";
 
 const initialState = {
@@ -22,31 +23,24 @@ const initialState = {
 
 export const registerUser = createAsyncThunk(
   "user/registerUser",
-  async (user, thunkAPI) => {
-    return registerUserThunk("/auth/register", user, thunkAPI);
-  }
+  registerUserThunk
 );
 
-export const loginUser = createAsyncThunk(
-  "user/loginUser",
-  async (user, thunkAPI) => {
-    return loginUserThunk("/auth/login", user, thunkAPI);
-  }
-);
+export const loginUser = createAsyncThunk("user/loginUser", loginUserThunk);
 
-export const updateUser = createAsyncThunk(
-  "user/updateUser",
-  async (user, thunkAPI) => {
-    return updateUserThunk("/auth/update", user, thunkAPI);
-  }
+export const updateUser = createAsyncThunk("user/updateUser", updateUserThunk);
+export const clearStoreUser = createAsyncThunk(
+  "user/clearStoreUser",
+  clearUserStoreThunk
 );
-
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     logoutUser: (state) => {
       state.user = null;
+      state.role = null;
+      state.token = null;
       removeUserFromLocalStorage();
     },
   },
@@ -97,6 +91,9 @@ const userSlice = createSlice({
       .addCase(updateUser.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
+      })
+      .addCase(clearStoreUser.rejected, (state, { payload }) => {
+        toast.error("There was an error");
       });
   },
 });

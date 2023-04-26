@@ -15,9 +15,6 @@ export const CardClinicLong = ({ name, phone, city, street, _id }) => {
           <div className="clinic-name">
             <h4>{name}</h4>
           </div>
-          <div className="clinic-rating">
-            stars <span>(102)</span>
-          </div>
           <hr
             style={{
               color: "var(--primary-700)",

@@ -3,4 +3,10 @@ import { CardDoctorSmall } from "./component/CardDoctor/DoctorSmall/CardDoctorSm
 import { CardDoctorLong } from "./component/CardDoctor/DoctorLong/CardDoctorLong";
 import { CardUser } from "./component/CardUser/CardUser";
 import { CardClinicLong } from "./component/CardClinic/CardClinicLong/CardClinicLong";
-export { CardIcon, CardDoctorSmall, CardDoctorLong, CardUser, CardClinicLong };
+export {
+  CardIcon,
+  CardDoctorSmall,
+  CardDoctorLong,
+  CardUser,
+  CardClinicLong,
+};

@@ -60,7 +60,7 @@ export const CardUser = ({
           Email: <span>{email}</span>
         </h5>
         <h5>
-          Role: <span>{role}</span>
+          Role: <span>{role.name}</span>
         </h5>
       </div>
       <div className="user-actions">

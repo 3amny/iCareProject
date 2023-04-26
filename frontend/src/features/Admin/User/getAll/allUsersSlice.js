@@ -2,12 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import apiFetch from "utils/requests/axios";
 import { getAllUsersThunk } from "./allUsersThunk";
-const initialStateFilter = {
-  search: "",
-  searchStatus: "all",
-  searchType: "all",
-  sortOptions: ["latest", "oldest", "a-z", "z-a"],
-};
+
 const initialState = {
   isLoading: true,
   users: [],
@@ -40,6 +35,7 @@ const allUsersSlice = createSlice({
       .addCase(getAllUsers.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.users = payload.users;
+        state.totalUsers = payload.totalUsers;
       })
       .addCase(getAllUsers.rejected, (state, { payload }) => {
         state.isLoading = false;

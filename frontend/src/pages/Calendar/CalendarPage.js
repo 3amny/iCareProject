@@ -1,27 +1,28 @@
 import React, { useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
-import interactionPlugin from "@fullcalendar/interaction"; // for selectable
+import interactionPlugin from "@fullcalendar/interaction";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import styled from "styled-components";
 import dayjs from "dayjs";
+import timeManagement from "assets/images/time_management.svg";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAvailableTimeSlots,
   setDate,
   setFinalDateValues,
-  setIsReady,
   setTimeSlots,
   clearValues,
   createAppointment,
+  handleChange,
 } from "features/Appointment/appointmentSlice";
-import { TimeSlotsModal } from "widgets/timeSlotsModal/timeSlotsModal";
+import { TimeSlotsModal } from "widgets/TimeSlotsModal/TimeSlotsModal";
 import { toast } from "react-toastify";
+import { ConfirmForm } from "widgets";
 
 const CalendarPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const [isOpen, setIsOpen] = useState(false);
 
   const {
     timeSlots,
@@ -31,23 +32,59 @@ const CalendarPage = () => {
     endTime,
     startDate,
     endDate,
-    isReady,
     notes,
   } = useSelector((store) => store.appointment);
 
-  const dateClickHandler = (e) => {
-    const date = dayjs(e.date).format("YYYY-MM-DD");
-    dispatch(getAvailableTimeSlots({ doctorId: id, chosenDate: date }));
+  const [isTimeSlotsLoaded, setIsTimeSlotsLoaded] = useState(false);
+  const [isTimeConfirmed, setIsTimeConfirmed] = useState(false);
+
+  const dateClickHandler = (arg) => {
+    const date = dayjs(arg.date).format("YYYY-MM-DD");
     dispatch(setDate({ date }));
-    if (isLoading != true && timeSlots != null) {
-      setIsOpen(true);
+    dispatch(getAvailableTimeSlots({ doctorId: id, chosenDate: date }));
+  };
+
+  useEffect(() => {
+    if (timeSlots.length > 0 && isLoading === false) {
+      setIsTimeSlotsLoaded(true);
+    }
+  }, [timeSlots, isLoading]);
+
+  const handleTimeSlotBack = (e) => {
+    e.preventDefault();
+    setIsTimeSlotsLoaded(false);
+    dispatch(clearValues());
+  };
+  const handleConfirmBack = (e) => {
+    e.preventDefault();
+    setIsTimeSlotsLoaded(false);
+    setIsTimeConfirmed(false);
+    dispatch(clearValues());
+  };
+  const handleTimeSet = (startTime, endTime) => {
+    dispatch(setTimeSlots({ startTime, endTime }));
+  };
+
+  let startDateValues;
+  let endDateValues;
+
+  const handleTimeConfirm = () => {
+    if (startTime && endTime) {
+      setIsTimeConfirmed(true);
+      if (date) {
+        startDateValues = dayjs(`${date}T${startTime}:00`).format(
+          "YYYY-MM-DDTHH:mm:ss.SSSZ"
+        );
+        endDateValues = dayjs(`${date}T${endTime}:00`).format(
+          "YYYY-MM-DDTHH:mm:ss.SSSZ"
+        );
+        dispatch(setFinalDateValues({ startDateValues, endDateValues }));
+      }
     }
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if ((!date, !startTime, !endTime)) {
-      toast.error("Please provide all values ");
-    }
     dispatch(
       createAppointment({
         doctorId: id,
@@ -58,57 +95,69 @@ const CalendarPage = () => {
     );
   };
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.classList.add("active-modal");
-    } else {
-      document.body.classList.remove("active-modal");
-    }
-  }, [isOpen]);
-
-  const handleTimeSet = (startTime, endTime) => {
-    dispatch(setTimeSlots({ startTime, endTime }));
-  };
-
-  if (date && startTime && endTime && !isReady) {
-    const startDateValues = dayjs(`${date}T${startTime}:00`).toISOString();
-    const endDateValues = dayjs(`${date}T${endTime}:00`).toISOString();
-
-    dispatch(setFinalDateValues({ startDateValues, endDateValues }));
-    dispatch(setIsReady());
+  if (isLoading) {
+    return <h5>Loading....</h5>;
   }
-
-  const handleClose = () => {
-    setIsOpen(false);
-    dispatch(clearValues());
+  const handleInput = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    dispatch(handleChange({ name, value }));
   };
-
   return (
-    <Wrapper>
+    <Wrapper
+      style={
+        isTimeSlotsLoaded && !isTimeConfirmed
+          ? {
+              backgroundImage: `url(${timeManagement})`,
+              backgroundSize: "45%",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center 100px",
+            }
+          : null
+      }
+    >
       <div className="container">
         <div className="title">
-          <h5>Choose date</h5>
+          <h5>
+            {isTimeSlotsLoaded
+              ? isTimeConfirmed
+                ? "Confirm the appointment"
+                : `Choose time slot for ${dayjs(date).format("DD MMM YYYY")}`
+              : "Choose the date"}
+          </h5>
         </div>
-        <FullCalendar
-          plugins={[dayGridPlugin, interactionPlugin]}
-          initialView="dayGridMonth"
-          dateClick={(e) => dateClickHandler(e)}
-          selectable={true}
-          weekends={false}
-        />
-        {isOpen && !isLoading ? (
-          <TimeSlotsModal
-            handleTimeSet={(starTime, endTime) =>
-              handleTimeSet(starTime, endTime)
-            }
-            isReady={isReady}
-            handleClose={handleClose}
-            timeSlots={timeSlots}
-            startDate={startDate}
-            endDate={endDate}
-            handleSubmit={handleSubmit}
+        {isTimeSlotsLoaded ? (
+          <div>
+            {isTimeConfirmed ? (
+              <ConfirmForm
+                notes={notes}
+                handleInput={(e) => handleInput(e)}
+                endTime={endTime}
+                startTime={startTime}
+                date={date}
+                handleClose={handleConfirmBack}
+                handleSubmit={handleSubmit}
+              />
+            ) : (
+              <TimeSlotsModal
+                handleTimeSet={(startTime, endTime) =>
+                  handleTimeSet(startTime, endTime)
+                }
+                timeSlots={timeSlots}
+                onBackTime={handleTimeSlotBack}
+                onConfirmTime={handleTimeConfirm}
+              />
+            )}
+          </div>
+        ) : (
+          <FullCalendar
+            plugins={[dayGridPlugin, interactionPlugin]}
+            initialView="dayGridMonth"
+            dateClick={dateClickHandler}
+            selectable={true}
+            weekends={false}
           />
-        ) : null}
+        )}
       </div>
     </Wrapper>
   );
@@ -120,9 +169,13 @@ const Wrapper = styled.main`
     align-items: center;
     justify-content: center;
     padding: 0.5rem 0.15rem;
-    border: 2px solid var(--primary-600);
+    border: 2px solid var(--primary-500);
     box-shadow: var(--shadow-2);
+    margin-top: 20px;
+    margin-bottom: 40px;
+    background: var(--primary-600);
     h5 {
+      color: white;
       margin-bottom: 0;
       font-size: 20px;
       font-weight: 600;
@@ -170,6 +223,54 @@ const Wrapper = styled.main`
   }
   .fc-day-other-month {
     opacity: 0.7;
+  }
+
+  .img-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .time-img {
+      width: 50%;
+      transform: scale(-1, 1);
+    }
+  }
+
+  .ap-data {
+    p {
+      margin-top: 5px;
+      margin-bottom: 10px;
+      span {
+        font-weight: bold;
+      }
+    }
+  }
+  .buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-notes {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .notes {
+    flex-grow: 1;
+    resize: none;
+    height: 80px;
+    border-radius: 0.5em;
+    padding: 0.5em;
+    font-size: inherit;
+    font-family: inherit;
+    border: 2px solid var(--primary-500);
+    line-height: 1.4;
+    width: 500px;
+    height: 200px;
+  }
+  .notes:focus {
+    border-color: var(--primary-700);
+    outline: none;
   }
 `;
 export default CalendarPage;

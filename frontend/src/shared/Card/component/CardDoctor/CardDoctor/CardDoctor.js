@@ -113,7 +113,7 @@ export const CardDoctor = ({
       </div>
     </Wrapper>
   );
-};
+};  
 
 const Wrapper = styled.div`
   border-top: 2px solid var(--primary-700);

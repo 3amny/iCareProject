@@ -58,6 +58,43 @@ const createAppointment = async (req, res, next) => {
     return next(err);
   }
 };
+const getAppointmentsByUserId = async (req, res) => {
+  const { userId } = req.user;
+  const appointments = await Appointment.find({ createdBy: userId })
+    .populate("doctor")
+    .populate({
+      path: "doctor",
+      populate: {
+        path: "docType",
+        select: "name",
+      },
+      select: "-createdAt -updatedAt -__v",
+    })
+    .populate({
+      path: "doctor",
+      populate: {
+        path: "clinic",
+        select: "name street",
+      },
+      select: "-createdAt -updatedAt -__v",
+    })
+    .exec();
+  res.status(StatusCodes.OK).json({
+    appointments,
+    totalAppointments: appointments.length,
+  });
+};
+const getAppointmentsByDoctorId = async (req, res) => {
+  const { doctorId } = req.doctor;
+  console.log(req.doctor);
+  const appointments = await Appointment.find({ doctor: doctorId }).populate(
+    "createdBy"
+  );
+  res.status(StatusCodes.OK).json({
+    appointments,
+    totalAppointments: appointments.length,
+  });
+};
 
 const getAvailiableTimeSlots = async (req, res, next) => {
   const { doctorId } = req.params;
@@ -88,62 +125,65 @@ const getAllAppointments = async (req, res) => {
   });
 };
 
-const updateAppointment = async (req, res, next) => {
-  const { doctorId, appointmentId } = req.params;
-  const { startDate, endDate, notes } = req.body;
-
+const updateAppointmentStatus = async (req, res) => {
+  const { appointmentId } = req.params;
+  const { status } = req.body;
+  console.log(appointmentId);
+  console.log(status);
   try {
-    if (!startDate || !endDate) {
-      throw new BadRequest("Please provide all neccessary information");
-    }
-    // Check if the doctor exists
-    const doctor = await Doctor.findOne({ _id: doctorId });
-    if (!doctor) {
-      throw new NotFound(`Doctor with id ${doctorId} was not found`);
-    }
-
-    // Check if the time slot is available for the specific date
-    const appointment = await Appointment.findOne({ _id: appointmentId });
-    if (!appointment) {
-      throw new NotFound(`No appointment with id ${appointmentId}`);
-    }
-    const allowedRoles = [
-      "642509136383af1ca69c2e99",
-      "6425091d6383af1ca69c2e9d",
-    ];
-    checkPermissions(req.user, appointment.createdBy, allowedRoles);
-    const updatedAppointment = await Review.findOneAndUpdate(
+    const newAppointment = await Appointment.updateOne(
       { _id: appointmentId },
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
+      { $set: { status: status } }
     );
-    res.status(StatusCodes.OK).json({ updatedAppointment });
+    res.status(StatusCodes.OK).json({ newAppointment });
   } catch (err) {
-    return next(err);
+    console.error(err);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      message: "Error updating appointment status",
+    });
   }
 };
-const deleteAppointment = async (req, res) => {
-  const { appointmentId } = req.params;
 
-  const appointment = await Appointment.findOne({ _id: appointmentId });
+const deleteUserAppointment = async (req, res) => {
+  const { appointmentId } = req.params;
+  const { userId } = req.user;
+  const appointment = await Appointment.findOne({
+    _id: appointmentId,
+    createdBy: userId,
+  });
   if (!appointment) {
-    throw new NotFound(`No review with ${reviewId}`);
+    throw new NotFound(`No appointment with ${userId}`);
   }
 
-  const allowedRoles = ["642509136383af1ca69c2e99", "6425091d6383af1ca69c2e9d"];
-  checkPermissions(req.user, appointment.createdBy, allowedRoles);
-  await review.remove();
+  await appointment.remove();
   res.status(StatusCodes.OK).json({
     message: "Review deleted successfully",
   });
 };
+const deleteDoctorAppointment = async (req, res) => {
+  const { appointmentId } = req.params;
+  const { doctorId } = req.doctor;
+  const appointment = await Appointment.findOne({
+    _id: appointmentId,
+    doctor: doctorId,
+  });
+  if (!appointment) {
+    throw new NotFound(`No appointment with ${appointmentId}`);
+  }
+
+  await appointment.remove();
+  res.status(StatusCodes.OK).json({
+    message: "Review deleted successfully",
+  });
+};
+
 export {
   createAppointment,
   getAvailiableTimeSlots,
-  updateAppointment,
-  deleteAppointment,
+  updateAppointmentStatus,
+  deleteUserAppointment,
+  deleteDoctorAppointment,
   getAllAppointments,
+  getAppointmentsByUserId,
+  getAppointmentsByDoctorId,
 };

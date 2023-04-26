@@ -4,15 +4,50 @@ import checkRolePermission from "../utils/checkRolePermission.js";
 import { BadRequest, NotFound } from "../error/index.js";
 
 const getAll = async (req, res) => {
-  const doctors = await Doctor.find()
-  .populate({ path: "docType", select: "name" })
-  .populate({ path: "clinic", select: "name", model: "Clinic" });
+  const { search, docType, clinic, sort } = req.query;
+  const queryObject = {};
+  if (search) {
+    queryObject.firstName = { $regex: search, $options: "i" };
+    queryObject.lastName = { $regex: search, $options: "i" };
+  }
+  if (docType !== "all") {
+    queryObject.docType = docType;
+  }
+  if (clinic !== "all") {
+    queryObject.clinic = clinic;
+  }
+  let result = Doctor.find(queryObject)
+    .populate({ path: "docType", select: "name" })
+    .populate({ path: "clinic", select: "name", model: "Clinic" });
+  if (sort === "latest") {
+    result = result.sort("-createdAt");
+  }
+  if (sort === "oldest") {
+    result = result.sort("createdAt");
+  }
+  if (sort === "a-z") {
+    result = result.sort("firstName");
+  }
+  if (sort === "z-a") {
+    result = result.sort("-firstName");
+  }
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.page) || 10;
+  const skip = (page - 1) * limit;
+
+  result = result.skip(skip).limit(limit);
+
+  const doctors = await result;
+  const totalDoctors = await Doctor.countDocuments(queryObject);
+  const numOfPages = Math.ceil(totalDoctors / limit);
+
   res.status(StatusCodes.OK).json({
     doctors,
-    totalDoctors: doctors.length,
-    numOfPages: 1,
+    totalDoctors,
+    numOfPages,
   });
 };
+
 const getById = async (req, res) => {
   const { id: doctorId } = req.params;
   const doctor = await Doctor.findOne({ _id: doctorId })

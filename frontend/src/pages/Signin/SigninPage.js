@@ -77,7 +77,7 @@ const SigninPage = () => {
         </div>
         <div className="link-doc">
           <p>Are you a doctor?</p>
-          <Link to="/account/signin" className="link-signin">
+          <Link to="/account/doctor/signup" className="link-signin">
             Come here
           </Link>
         </div>

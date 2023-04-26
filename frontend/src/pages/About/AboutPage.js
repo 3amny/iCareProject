@@ -1,7 +1,16 @@
 import Wrapper from "./Wrapper";
+import about from "assets/images/about.svg"
+import team_work from "assets/images/team_work.svg"
 export const AboutPage = () => {
   return (
-    <Wrapper>
+    <Wrapper
+      style={{
+        backgroundImage: `url(${team_work})`,
+        backgroundSize: "30%",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center 400px",
+      }}
+    >
       <div className="container">
         <h3 className="title"> About us</h3>
         <p className="text">

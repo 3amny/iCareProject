@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { FaClinicMedical } from "react-icons/fa";
+import { MdOutlineWork } from "react-icons/md";
 export const CardDoctorLong = ({
   _id,
   firstName,
@@ -9,67 +11,66 @@ export const CardDoctorLong = ({
   clinic,
   experience,
 }) => {
-
   return (
     <Wrapper>
-      <div className="doc-container">
-        <div className="doc-image">
-          <Link to={`/api/doctors/${_id}`} className="button muted-button">
-            <div className="main-icon">{firstName.charAt(0)}</div>
-          </Link>
+      <header>
+        <Link to={`/api/doctors/${_id}`} className="button muted-button">
+          <div className="main-icon">{firstName.charAt(0)}</div>
+        </Link>
+        <div className="info">
+          <h5>
+            Dr. {firstName} {lastName}
+          </h5>
+          <p>{docType}</p>
         </div>
-
-        <div className="doc-profile">
-          <div className="doc-name">
-            <h4>
-              Dr.{firstName} {lastName}
-            </h4>
-            <p className="doc-speciality">{docType}</p>
-            <p>{clinic}</p>
+      </header>
+      <div className="content">
+        <div className="content-center">
+          <div className="details">
+            <span className="icon">
+              <FaClinicMedical />
+            </span>
+            <span className="text">{clinic} </span>
           </div>
-          <hr
-            style={{
-              color: "var(--primary-700)",
-              backgroundColor: "var(--primary-700)",
-            }}
-          />
-          <div className="doc-details">
-            <div className="doc-exp">
-              <p>{experience}</p>
-            </div>
-            <div className="doc-rating">
-              stars <span>(102)</span>
-            </div>
-            <div className="link">
-              <Link to={`/api/doctors/${_id}`} className="button muted-button">
-                {" "}
-                See more
-              </Link>
-            </div>
+          <div className="details">
+            <span className="icon">
+              <MdOutlineWork />
+            </span>
+            <span className="text">{experience} </span>
           </div>
         </div>
+        <footer>
+          <div className="actions">
+            <Link to={`/api/doctors/${_id}`} className="btn">
+              See more
+            </Link>
+          </div>
+        </footer>
       </div>
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
-  .doc-container {
+const Wrapper = styled.article`
+  background: var(--white);
+  border-radius: var(--borderRadius);
+  display: grid;
+  grid-template-rows: 1fr auto;
+
+  box-shadow: var(--shadow-2);
+  header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--grey-100);
     display: grid;
-    grid-template-columns: 150px 1fr;
-    gap: 2%;
-    width: 60vw;
-    max-width: clamp(var(--fixed-width), 60vw, var(--fluid-width));
-    background: var(--white);
-    border-radius: var(--borderRadius);
-    box-shadow: var(--shadow-3);
-    padding: 2rem 2.5rem;
-    margin: 2rem auto;
-    transition: var(--transition);
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    h5 {
+      letter-spacing: 0;
+    }
   }
   .main-icon {
-    width: clamp(60px, 10vw, 80px);
-    height: clamp(60px, 10vw, 80px);
+    width: 60px;
+    height: 60px;
     display: grid;
     place-items: center;
     background: var(--primary-500);
@@ -78,46 +79,58 @@ const Wrapper = styled.div`
     font-weight: 700;
     text-transform: uppercase;
     color: var(--white);
-    margin-right: 1.5rem;
+    margin-right: 2rem;
   }
-  .doc-image {
-    padding: 1rem 1.5rem;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-  }
-  .doc-name {
-    h3 {
-      margin-bottom: 0;
+  .info {
+    h5 {
+      margin-bottom: 0.25rem;
+    }
+    p {
+      margin: 0;
+      text-transform: capitalize;
+      color: var(--grey-400);
+      letter-spacing: var(--letterSpacing);
     }
   }
-  p {
-    margin-bottom: 0;
-    margin-top: 5px;
-    color: var(--fontColor);
+  .content {
+    padding: 1rem 1.5rem;
   }
-  .doc-details {
+  .content-center {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: minmax(auto);
+    grid-template-columns: 1fr;
+    row-gap: 0.5rem;
+    @media (min-width: 576px) {
+      grid-template-columns: 1fr 1fr;
+    }
+    @media (min-width: 992px) {
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 1120px) {
+      grid-template-columns: 1fr 1fr;
+    }
   }
-  .doc-exp {
-    grid-column: 1;
+  footer {
+    margin-top: 1rem;
   }
-  .doc-rating {
-    grid-column: 1;
+  &:hover .actions {
+    visibility: visible;
   }
-  .doc-link {
-    grid-column: 2;
-    text-align: end;
+  .details {
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    .icon {
+      font-size: 1rem;
+      margin-right: 1rem;
+      display: flex;
+      align-items: center;
+      svg {
+        color: var(--grey-400);
+      }
+    }
+    .text {
+      text-transform: capitalize;
+      letter-spacing: var(--letterSpacing);
+    }
   }
-  @media screen and (max-width: 45em) {
-  .doc-details {
-    display: block;
-  }
-  
-  .doc-exp, .doc-rating, .doc-link {
-    grid-column: auto;
-  }
-}
 `;

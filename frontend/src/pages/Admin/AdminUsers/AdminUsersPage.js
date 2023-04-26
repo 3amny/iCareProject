@@ -1,14 +1,10 @@
 import React from "react";
-import { SearchUser } from "shared/Search";
 import Wrapper from "./Wrapper";
 import { UsersContainer } from "shared/Container";
 const AdminUsersPage = () => {
   return (
     <Wrapper>
-      <div className="container">
-        <SearchUser />
-        <UsersContainer />
-      </div>
+      <UsersContainer />
     </Wrapper>
   );
 };

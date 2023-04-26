@@ -1,5 +1,6 @@
 import apiFetch from "utils/requests/axios";
 import { logoutDoctor } from "./doctorAuthSlice";
+import { authDoctorHeader } from "utils/requests/authDoctorHeaders";
 
 export const registerDoctorThunk = async (url, doctor, thunkAPI) => {
   try {
@@ -25,11 +26,11 @@ export const loginDoctorThunk = async (url, doctor, thunkAPI) => {
 
 export const updateDoctorThunk = async (url, doctor, thunkAPI) => {
   try {
-    const response = await apiFetch.patch(url, doctor, {
-      headers: {
-        Authorization: `Bearer ${thunkAPI.getState().doctor.token}`,
-      },
-    });
+    const response = await apiFetch.patch(
+      url,
+      doctor,
+      authDoctorHeader(thunkAPI)
+    );
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data.msg);

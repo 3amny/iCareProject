@@ -8,8 +8,17 @@ const Wrapper = styled.main`
   }
   .main-section {
     display: grid;
-    grid-template-columns: 60% 40%;
+    gap: 40px;
+    grid-template-columns: 1fr 1fr;
     margin-bottom: 35px;
+  }
+  .main-img-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-img {
+    width: 100%;
   }
   .catch-phrase {
     display: flex;
@@ -39,73 +48,6 @@ const Wrapper = styled.main`
     a {
       color: white;
     }
-  }
-  .doctor-image {
-    z-index: -1;
-  }
-
-  .search {
-    display: flex;
-    position: relative;
-    align-items: center;
-    justify-content: center;
-    left: 40px;
-    border-radius: 20px;
-    padding: 0.3rem 0.6rem;
-    box-shadow: var(--shadow-3);
-    z-index: 1;
-  }
-  .search-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: center;
-    padding: 10px 0;
-  }
-  .search-title {
-    margin: 0;
-    font-weight: bold;
-  }
-  .search p {
-    margin: 0;
-  }
-  .search-details {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .search-details p {
-    margin-right: 10px;
-    color: #5b5b5b;
-    font-weight: 500;
-  }
-  .form-row {
-    margin-right: 10px;
-    display: flex;
-    align-items: center;
-  }
-  .form-row input {
-    background: #edecec;
-  }
-  .switch-container {
-    display: flex;
-    align-items: center;
-  }
-  .switch {
-    margin-right: 10px;
-    margin-bottom: 0;
-  }
-  .form-row {
-    margin-bottom: 0;
-  }
-  .btn-search {
-    cursor: pointer;
-    color: var(--white);
-    background: var(--primary-600);
-    border: transparent;
-    border-radius: var(--borderRadius);
-    letter-spacing: var(--letterSpacing);
-    padding: 5px 10px;
   }
 
   .second-section {
@@ -186,17 +128,17 @@ const Wrapper = styled.main`
     display: flex;
     align-items: center;
     flex-direction: column;
-  
-
   }
 
   @media screen and (max-width: 45em) {
-    .doctor-image {
-      display: none;
-    }
     .main-section {
       display: flex;
       flex-direction: column;
+    }
+    .main-img-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .link {
       margin-bottom: 30px;

@@ -31,7 +31,6 @@ export const CardClinic = ({
           Created at: <span>{date}</span>
         </h5>
       </div>
-      <div className="clinic-id"></div>
       <div className="clinic-info">
         <div className="clinic-name">
           <h5>

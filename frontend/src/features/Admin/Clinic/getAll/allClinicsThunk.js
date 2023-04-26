@@ -1,7 +1,11 @@
 import { getAllReviewsBySubjectId } from "features/Reviews/reviewSlice";
 import apiFetch from "utils/requests/axios";
 export const getAllClinicsThunk = async (_, thunkAPI) => {
-  let url = "/clinics";
+  const { page, search, sort } = thunkAPI.getState().allClinics;
+  let url = `/clinics?sort=${sort}?page=${page}`;
+  if (search) {
+    url = url + `&search=${search}`;
+  }
   try {
     const response = await apiFetch.get(url);
     return response.data;

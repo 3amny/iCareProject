@@ -5,8 +5,9 @@ import styled from "styled-components";
 import { CardDoctor } from "shared/Card/component/CardDoctor/CardDoctor/CardDoctor";
 import { useSelector } from "react-redux";
 import { getAllDoctors } from "features/Admin/Doctor/getAll/allDoctorsSlice";
+import { PageButtons } from "shared/Button";
 export const DoctorsContainer = () => {
-  const { doctors, totalDoctors, isLoading } = useSelector(
+  const { doctors, totalDoctors, isLoading, numOfPages, page } = useSelector(
     (store) => store.allDoctors
   );
   const dispatch = useDispatch();
@@ -21,6 +22,21 @@ export const DoctorsContainer = () => {
       return <h2>No doctors to display....</h2>;
     }
   }
+  const nextPage = () => {
+    let newPage = page + 1;
+    if (newPage > numOfPages) {
+      newPage = 1;
+    }
+    dispatch(changePage(newPage));
+  };
+
+  const prevPage = () => {
+    let newPage = page - 1;
+    if (newPage < numOfPages) {
+      newPage = numOfPages;
+    }
+    dispatch(changePage(newPage));
+  };
   return (
     <Wrapper>
       <h5>
@@ -31,11 +47,19 @@ export const DoctorsContainer = () => {
           return <CardDoctor key={doctor._id} {...doctor} />;
         })}
       </div>
+      {numOfPages > 1 && (
+        <PageButtons
+          numOfPages={numOfPages}
+          page={page}
+          nextPage={nextPage}
+          prevPage={prevPage}
+          changePage={(pageNum) => dispatch(changePage(pageNum))}
+        />
+      )}
     </Wrapper>
   );
 };
 const Wrapper = styled.div`
-  margin-top: 4rem;
   h2 {
     text-transform: none;
   }

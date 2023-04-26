@@ -1,21 +1,13 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
 import { NavList } from "shared/List";
-import { Link, useNavigate } from "react-router-dom";
-import { adminSideBarLinks } from "utils/constants";
+import { Link } from "react-router-dom";
 import { Logo } from "shared/Image";
 import { IconButton } from "shared/Button";
 import { ProfileSigned } from "shared/Profile";
 import { MdLogout } from "react-icons/md";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { useSelector, useDispatch } from "react-redux";
-import { logoutUser } from "features/User/Auth/userSlice";
-export const Sidebar = () => {
-  const [isOpened, setIsOpened] = useState(false);
-  const openSidebar = () => setIsOpened(!isOpened);
-  const { user } = useSelector((store) => store.user);
-  const dispatch = useDispatch();
 
+export const Sidebar = ({ isOpened, user, links, logout, openSidebar }) => {
   return (
     <Wrapper className={isOpened ? "active" : null}>
       <div className="container">
@@ -34,19 +26,18 @@ export const Sidebar = () => {
           />
           <nav className="primary-navigation">
             <NavList
-              items={adminSideBarLinks}
+              items={links}
               classNameUl="sidebar-list"
               classNameLi="sidebar-el"
               span={true}
             />
           </nav>
           <ProfileSigned
-            firstName={user.firstName}
-            lastName={user.lastName}
+            user={user ? user : doctor ? doctor : null}
             type="button"
             icon={<MdLogout />}
             btnClass="profile-logout"
-            onPress={() => dispatch(logoutUser())}
+            onPress={logout}
           />
         </div>
       </div>

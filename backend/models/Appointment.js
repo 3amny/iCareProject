@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import dayjs from "dayjs";
 const appointmentSchema = new mongoose.Schema(
   {
     doctor: {
@@ -40,6 +40,11 @@ const appointmentSchema = new mongoose.Schema(
     notes: {
       type: String,
       default: "You can write notes here...",
+    },
+    status: {
+      type: String,
+      default: "Upcoming",
+      enum: ["Upcoming", "Finished", "In process"],
     },
   },
   { timestamps: true }

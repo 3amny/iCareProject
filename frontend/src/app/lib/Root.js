@@ -12,7 +12,11 @@ import { AdminDashboardAsync } from "pages/Admin/AdminDashboard/AdminDashboard.a
 import { AdminSharedLayout } from "pages/Admin/AdminSharedLayout/AdminSharedLayout";
 import { DoctorSignPageAsync } from "pages/Doctor/DoctorSingUp/DoctorSignPage.async";
 import { ErrorPage } from "pages/Error/ErrorPage";
-import { ProtectedRouteAdmin, ProtectedRouteUser } from "./ProtectedRoutes";
+import {
+  ProtectedRouteAdmin,
+  ProtectedRouteDoctor,
+  ProtectedRouteUser,
+} from "./ProtectedRoutes";
 import { AdminUsersAsync } from "pages/Admin/AdminUsers/AdminUsersPage.async";
 import { AdminUserEditAsync } from "pages/Admin/AdminUserEdit/AdminUserEditPage.async";
 import { AdminDoctorsAsync } from "pages/Admin/AdminDoctors/AdminDoctorsPage.async";
@@ -25,6 +29,11 @@ import { SpecialtiesPageAsync } from "pages/Admin/Specialties/SpecialtiesPage.as
 import { CreateSpecialtyAsync } from "pages/Admin/CreateSpecialty/CreateSpecialtyPage.async";
 import { CalendarAsync } from "pages/Calendar/CalendarPage.async";
 import { AboutPage } from "pages/About/AboutPage";
+import { AccountAppointmentsAsync } from "pages/AccountAppointments/AccountAppointments.async";
+import DoctorSharedLayout from "pages/Doctor/DoctorSharedLayout/DoctorSharedLayout";
+import DoctorAppoinments from "pages/Doctor/DoctorAppointments/DoctorAppoinments";
+import DoctorAccountDetails from "pages/Doctor/DoctorAccount/DoctorAccountDetails";
+import DoctorEditAppointmentStatus from "pages/Doctor/DoctorEditAppointmentStatus/DoctorEditAppointmentStatus";
 
 export const Root = (
   <>
@@ -41,12 +50,35 @@ export const Root = (
           </ProtectedRouteUser>
         }
       />
+      <Route
+        path="account/appointments"
+        element={
+          <ProtectedRouteUser>
+            <AccountAppointmentsAsync />
+          </ProtectedRouteUser>
+        }
+      />
       <Route path="api/clinics" element={<ClinicsPageAsync />} />
       <Route path="api/clinics/:id" element={<ClinicPageAsync />} />
       <Route path="api/doctors" element={<DoctorsPageAsync />}></Route>
       <Route path="api/doctors/:id" element={<DoctorPageAsync />} />
       <Route path="api/doctors/:id/appointment" element={<CalendarAsync />} />
       <Route path="account/doctor/signup" element={<DoctorSignPageAsync />} />
+    </Route>
+    <Route
+      path="/doctor"
+      element={
+        <ProtectedRouteDoctor>
+          <DoctorSharedLayout />
+        </ProtectedRouteDoctor>
+      }
+    >
+      <Route index element={<DoctorAppoinments />} />
+      <Route
+        path="/doctor/appointment-status"
+        element={<DoctorEditAppointmentStatus />}
+      />
+      <Route path="/doctor/account/details" element={<DoctorAccountDetails />} />
     </Route>
     <Route
       path="/admin"

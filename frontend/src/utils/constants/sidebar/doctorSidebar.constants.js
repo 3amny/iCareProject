@@ -1,16 +1,16 @@
 import { FaUserMd, FaCalendarCheck } from "react-icons/fa";
 
-export const adminSideBarLinks = [
+export const doctorSideBarLinks = [
   {
     id: 1,
-    text: "User",
-    url: "/doctor/appointments",
+    text: "Appointments",
+    url: "/doctor",
     icon: <FaCalendarCheck />,
   },
   {
     id: 2,
-    text: "Clinic",
-    url: "/doctor/users",
+    text: "Account details",
+    url: "/doctor/account/details",
     icon: <FaUserMd />,
   },
 ];

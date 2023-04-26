@@ -3,9 +3,10 @@ import { toast } from "react-toastify";
 import {
   getRoleFromLocalStorage,
   getTokenFromLocalStorage,
-  getUserFromLocalStorage,
-  removeUserFromLocalStorage,
   addUserToLocalStorage,
+  getDoctorFromLocalStorage,
+  removeDoctorFromLocalStorage,
+  addDoctorToLocalStorage,
 } from "utils/localStorage/localStorage";
 import {
   loginDoctorThunk,
@@ -15,7 +16,7 @@ import {
 import { getAllClinics } from "features/Admin/Clinic/getAll/allClinicsSlice";
 import { getAllSpecialties } from "features/Admin/Specialties/specialtySlice";
 const initialState = {
-  doctor: getUserFromLocalStorage(),
+  doctor: getDoctorFromLocalStorage(),
   token: getTokenFromLocalStorage(),
   role: getRoleFromLocalStorage(),
   clinicsOptions: [],
@@ -62,7 +63,9 @@ const doctorAuthSlice = createSlice({
   reducers: {
     logoutDoctor: (state) => {
       state.doctor = null;
-      removeUserFromLocalStorage();
+      state.role = null;
+      state.token = null;
+      removeDoctorFromLocalStorage();
     },
     toggleMember: (state) => {
       state.isMember = !state.isMember;
@@ -80,7 +83,7 @@ const doctorAuthSlice = createSlice({
         const { doctor, token, role } = payload;
         state.isLoading = false;
         state.doctor = doctor;
-        addUserToLocalStorage(doctor, token, role);
+        addDoctorToLocalStorage(doctor, token, role);
         toast.success(`Welcome, ${doctor.firstName}`);
       })
       .addCase(registerDoctor.rejected, (state, { payload }) => {
@@ -96,7 +99,7 @@ const doctorAuthSlice = createSlice({
         state.doctor = doctor;
         state.token = token;
         state.role = role;
-        addUserToLocalStorage(doctor, token, role);
+        addDoctorToLocalStorage(doctor, token, role);
         toast.success(`Welcome, ${doctor.firstName}`);
       })
       .addCase(loginDoctor.rejected, (state, { payload }) => {
@@ -112,7 +115,7 @@ const doctorAuthSlice = createSlice({
         state.doctor = doctor;
         state.token = token;
         state.role = role;
-        addUserToLocalStorage(doctor, token, role);
+        addDoctorToLocalStorage(doctor, token, role);
         toast.success(`Doctor information updated`);
       })
       .addCase(updateDoctor.rejected, (state, { payload }) => {

@@ -17,6 +17,7 @@ import rolesRoutes from "./routes/rolesRoutes.js";
 import appointmentsRoutes from "./routes/appointmentsRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import getReviewRoutes from "./routes/getReviewRoutes.js";
+import appointmentUserRoutes from "./routes/appointmentUserRoutes.js";
 const app = express();
 if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
@@ -34,6 +35,7 @@ app.use("/api/v1/clinics", clinicsRoutes);
 app.use("/api/v1/doctors", doctorsRoutes);
 app.use("/api/v1/reviews", getReviewRoutes);
 app.use("/api/v1/:subject/:subjectId/reviews", reviewRoutes);
+app.use("/api/v1/account", appointmentUserRoutes);
 app.use("/api/v1/doctors/:doctorId/appointment", appointmentsRoutes);
 //middleware
 
